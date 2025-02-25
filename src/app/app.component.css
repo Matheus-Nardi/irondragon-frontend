@@ -1,0 +1,50 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.toolbar{
+  background-color: #0077C0;
+}
+
+.toolbar span {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+
+.mat-icon {
+  color: white;
+}
+
+footer{
+  display: flex;
+  flex-direction: column;
+  background-color: #0077C0;
+  color: white;
+}
+
+footer p {
+  text-align: center;
+}
+
+footer div{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+footer ul{
+ list-style: none;
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: center;
+ gap: 1rem;
+ padding: 0;
+ margin: 0;
+ cursor: pointer;
+}
+
+.toolbar a {
+  text-decoration: none;
+  color:white;
+}
