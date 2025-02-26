@@ -1,29 +1,34 @@
-<mat-toolbar class="toolbar">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span><a href="/">{{title.toUpperCase()}}</a></span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      <mat-icon>favorite</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-      <mat-icon>share</mat-icon>
-    </button>
-</mat-toolbar>
-  
-<!-- Vincula as rotas aos componentes -->
-<router-outlet />
+<div class="container">
+  <header>
+    <mat-toolbar class="toolbar">
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span><a href="/">{{title.toUpperCase()}}</a></span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-toolbar>
+  </header>
 
+  <!-- Vincula as rotas aos componentes -->
+  <main>
+    <router-outlet />
+  </main>
 
-<footer>
-  <div>
-    <ul>
-      <li>Home</li>
-      <li>Contato</li>
-      <li>Sobre nós</li>
-      <li>FAQ</li>
-    </ul>
-  </div>
-  <p>2025 UNITINS</p>
-</footer>
+  <footer>
+    <div>
+      <ul>
+        <li>Home</li>
+        <li>Contato</li>
+        <li>Sobre nós</li>
+        <li>FAQ</li>
+      </ul>
+    </div>
+    <p>2025 UNITINS</p>
+  </footer>
+</div>

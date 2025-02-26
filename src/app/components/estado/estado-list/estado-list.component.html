@@ -1,9 +1,9 @@
-@if (estados) {
+@if (estados.length > 0) {
   <h1 class="title">Estados</h1>
 <div class="container">
   <div class="content">
     <div class="mat-elevation-z8 full-screen ">
-      <table mat-table [dataSource]="dataSource" class="full-table">
+      <table mat-table [dataSource]="dataSource" class="full-table table-background">
 
 
         <ng-container matColumnDef="id">
@@ -27,12 +27,12 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecione uma página de estados">
+      <mat-paginator class="table-background" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecione uma página de estados">
       </mat-paginator>
     </div>
   </div>
 </div>
 
 } @else {
-<h1>Estados não encontrado</h1>
+<h1 class="title">Estados não encontrado</h1>
 }
