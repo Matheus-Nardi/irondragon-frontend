@@ -1,5 +1,5 @@
 @if (estados.length > 0) {
-  <h1 class="title">Estados</h1>
+<h1 class="title">Estados</h1>
 <div class="container">
   <div class="content">
     <div class="mat-elevation-z8 full-screen ">
@@ -27,7 +27,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <mat-paginator class="table-background" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecione uma página de estados">
+      <mat-paginator class="table-background" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Selecione uma página de estados">
       </mat-paginator>
     </div>
   </div>
