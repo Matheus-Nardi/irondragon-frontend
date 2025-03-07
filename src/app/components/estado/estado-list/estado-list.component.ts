@@ -36,10 +36,4 @@ export class EstadoListComponent implements OnInit {
       this.dataSource.data = this.estados;
     })
   }
-
-  
-
-
-
-
 }
