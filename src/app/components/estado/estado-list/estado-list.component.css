@@ -23,3 +23,38 @@
 .table-background {
     background-color: #FFFF;
 }
+
+.mat-column-id{
+    width: 5em;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-nome{
+    width: 100%;
+}
+
+.mat-column-sigla{
+    width: 5em;
+    text-align: center;
+}
+
+.mat-column-acoes{
+    width: 10em;
+    text-align: center;
+}
+.action-buttons {
+    display: flex;
+    gap: 8px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.edit{
+    color: #0077C0;
+}
+
+.delete{
+    color: red;
+}

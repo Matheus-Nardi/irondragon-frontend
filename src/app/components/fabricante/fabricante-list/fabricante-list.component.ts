@@ -22,7 +22,7 @@ export class FabricanteListComponent implements OnInit, AfterViewInit {
   constructor(private fabricanteService: FabricanteService) {}
   
   ngOnInit(): void {
-    this.fabricanteService.getFabricantes().subscribe(data => {
+    this.fabricanteService.findAll().subscribe(data => {
       this.fabricantes = data;
       this.dataSource.data = this.fabricantes;
     });

@@ -11,7 +11,11 @@ export class FornecedorService {
 
   constructor(private httpClient: HttpClient, private configService: ConfigService) { }
 
-  getFornecedores(): Observable<Fornecedor[]> {
+  findAll(): Observable<Fornecedor[]> {
     return this.httpClient.get<Fornecedor[]>(`${this.configService.getApiBaseUrl()}/fornecedores`);
+  }
+
+  create(fornecedor: Fornecedor): Observable<Fornecedor> {
+    return this.httpClient.post<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores`, fornecedor);
   }
 }
