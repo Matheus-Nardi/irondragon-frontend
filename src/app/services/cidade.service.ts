@@ -11,7 +11,7 @@ export class CidadeService {
 
   constructor(private readonly httpClient: HttpClient, private readonly configService: ConfigService) { }
 
-  getCidades(): Observable<Cidade[]> {
+  findAll(): Observable<Cidade[]> {
     return this.httpClient.get<Cidade[]>(`${this.configService.getApiBaseUrl()}/cidades`);
   }
 }

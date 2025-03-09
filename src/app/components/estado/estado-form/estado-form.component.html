@@ -1,0 +1,45 @@
+<h1>Cadastro de Estado</h1>
+
+<div class="container">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="nome"
+        placeholder="Nome do estado"
+      />
+      <mat-error
+        *ngIf="
+          formGroup.get('nome') &&
+          formGroup.get('nome')?.invalid &&
+          formGroup.get('nome')?.touched
+        "
+      >
+        O nome é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sigla</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="sigla"
+        placeholder="Sigla do estado"
+      />
+      <mat-error
+        *ngIf="
+          formGroup.get('sigla') &&
+          formGroup.get('sigla')?.invalid &&
+          formGroup.get('sigla')?.touched
+        "
+      >
+        A sigla é obrigatória
+      </mat-error>
+    </mat-form-field>
+
+    <button class="submitEstado" type="submit">Adicionar estado</button>
+  </form>
+</div>

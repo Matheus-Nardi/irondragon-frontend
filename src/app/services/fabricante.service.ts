@@ -10,7 +10,7 @@ import { Fabricante } from '../models/fabricante.model';
 export class FabricanteService {
   constructor(private httpClient: HttpClient, private configService: ConfigService) {}
 
-  getFabricantes(): Observable<Fabricante[]> {
+  findAll(): Observable<Fabricante[]> {
     return this.httpClient.get<Fabricante[]>(`${this.configService.getApiBaseUrl()}/fabricantes`);
   }
 }

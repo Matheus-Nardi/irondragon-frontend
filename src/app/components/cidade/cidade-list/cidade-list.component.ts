@@ -20,7 +20,7 @@ export class CidadeListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngOnInit(): void {
-    this.cidadeService.getCidades().subscribe(data => {
+    this.cidadeService.findAll().subscribe(data => {
       this.cidades = data;
       this.dataSource.data = this.cidades;
     })
