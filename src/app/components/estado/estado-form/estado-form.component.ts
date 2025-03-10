@@ -8,10 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { EstadoService } from '../../../services/estado.service';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-estado-form',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, NgIf, MatToolbarModule, MatButtonModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, NgIf, MatToolbarModule, MatButtonModule, CommonModule],
   templateUrl: './estado-form.component.html',
   styleUrl: './estado-form.component.css',
 })
@@ -49,4 +50,5 @@ export class EstadoFormComponent {
       });
     }
   }
+
 }

@@ -2,43 +2,82 @@
 
 <div class="container">
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline">
-      <mat-label>Nome</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="nome"
-        placeholder="Nome do estado"
-      />
-      <mat-error
-        *ngIf="
-          formGroup.get('nome') &&
-          formGroup.get('nome')?.invalid &&
-          formGroup.get('nome')?.touched
-        "
-      >
-        O nome é obrigatório
-      </mat-error>
-    </mat-form-field>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="nome"
+          placeholder="Nome do estado"
+          [value]="formGroup.get('nome')?.value | titlecase"
+        />
+        @if (formGroup.get('nome')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="formGroup.get('nome')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('nome') &&
+            formGroup.get('nome')?.invalid &&
+            formGroup.get('nome')?.touched
+          "
+        >
+          O nome é obrigatório
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Sigla</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="sigla"
-        placeholder="Sigla do estado"
-      />
-      <mat-error
+      <mat-form-field appearance="outline">
+        <mat-label>Sigla</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="sigla"
+          placeholder="Sigla do estado"
+          [value]="formGroup.get('sigla')?.value | uppercase"
+        />
+        @if (formGroup.get('sigla')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="formGroup.get('sigla')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('sigla')?.touched &&
+            formGroup.get('sigla')?.hasError('required')
+          "
+        >
+          A sigla é obrigatória
+        </mat-error>
+        <mat-error
         *ngIf="
-          formGroup.get('sigla') &&
-          formGroup.get('sigla')?.invalid &&
-          formGroup.get('sigla')?.touched
+          formGroup.get('sigla')?.touched &&
+          formGroup.get('sigla')?.hasError('minlength')
         "
       >
-        A sigla é obrigatória
+        A sigla deve ter no mínimo 2 caracteres
       </mat-error>
-    </mat-form-field>
+      <mat-error
+        *ngIf="
+          formGroup.get('sigla')?.touched &&
+          formGroup.get('sigla')?.hasError('maxlength')
+        "
+      >
+        A sigla deve ter no máximo 2 caracteres
+      </mat-error>
+      </mat-form-field>
+    </div>
 
     <button class="submitEstado" type="submit">Adicionar estado</button>
   </form>

@@ -13,4 +13,8 @@ export class FabricanteService {
   findAll(): Observable<Fabricante[]> {
     return this.httpClient.get<Fabricante[]>(`${this.configService.getApiBaseUrl()}/fabricantes`);
   }
+
+  create(fabricante: Fabricante): Observable<Fabricante> {
+    return this.httpClient.post<Fabricante>(`${this.configService.getApiBaseUrl()}/fabricantes`, fabricante);
+  }
 }
