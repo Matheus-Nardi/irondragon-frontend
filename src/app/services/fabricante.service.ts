@@ -15,6 +15,19 @@ export class FabricanteService {
   }
 
   create(fabricante: Fabricante): Observable<Fabricante> {
-    return this.httpClient.post<Fabricante>(`${this.configService.getApiBaseUrl()}/fabricantes`, fabricante);
+    const telefone ={
+      codigoArea: fabricante.telefone.codigoArea,
+      numero: fabricante.telefone.numero,
+    }
+    const data = {
+      nome: fabricante.nome,
+      email: fabricante.email,
+      telefone: telefone,
+    }
+    return this.httpClient.post<Fabricante>(`${this.configService.getApiBaseUrl()}/fabricantes`, data);
+  }
+
+  delete(fabricante: Fabricante): Observable<void> {
+    return this.httpClient.delete<void>(`${this.configService.getApiBaseUrl()}/fabricantes/${fabricante.id}`);
   }
 }
