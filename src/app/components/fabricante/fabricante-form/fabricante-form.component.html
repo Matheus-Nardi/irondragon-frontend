@@ -1,4 +1,4 @@
-<h1>Cadastro de fabricante</h1>
+<h1>Cadastro de Fabricante</h1>
 
 <div class="container">
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
@@ -39,8 +39,7 @@
           matInput
           type="text"
           formControlName="email"
-          placeholder="email@email.comf"
-          [value]="formGroup.get('email')?.value | uppercase"
+          placeholder="email@email.com"
         />
         @if (formGroup.get('email')?.value) {
         <button
@@ -97,6 +96,22 @@
           >
             O código de área é obrigatório
           </mat-error>
+          <mat-error
+            *ngIf="
+              formGroup.get('codigoArea')?.touched &&
+              formGroup.get('codigoArea')?.hasError('minlength')
+            "
+          >
+            O código de área deve ter no mínimo 2 dígitos
+          </mat-error>
+          <mat-error
+          *ngIf="
+            formGroup.get('codigoArea')?.touched &&
+            formGroup.get('codigoArea')?.hasError('maxlength')
+          "
+        >
+          O código de área deve ter no máximo 2 dígitos
+        </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="numero">
@@ -123,8 +138,16 @@
               formGroup.get('numero')?.hasError('required')
             "
           >
-            O código de área é obrigatório
+            O número é obrigatório
           </mat-error>
+          <mat-error
+          *ngIf="
+            formGroup.get('numero')?.touched &&
+            formGroup.get('numero')?.hasError('pattern')
+          "
+        >
+          O número deve conter 8 ou 9 dígitos
+        </mat-error>
         </mat-form-field>
       </div>
     </div>

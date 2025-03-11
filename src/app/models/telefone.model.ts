@@ -7,7 +7,7 @@ export interface ITelefone {
 }
 
 export class Telefone {
-    id!: number;
+    id?: number;
     codigoArea!: string;
     numero!: string;
 
