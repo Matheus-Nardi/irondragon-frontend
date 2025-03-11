@@ -13,4 +13,13 @@ export class EstadoService {
   getEstados(): Observable<Estado[]> {
     return this.httpClient.get<Estado[]>(`${this.configService.getApiBaseUrl()}/estados`);
   }
+
+  delete(estado: Estado): Observable<any> {
+    return this.httpClient.delete(`${this.configService.getApiBaseUrl()}/estados/${estado.id}`);
+  }
+
+  create(estado: Estado): Observable<Estado>{
+    return this.httpClient.post<Estado>(`${this.configService.getApiBaseUrl()}/estados` , estado);
+  }
+  
 }

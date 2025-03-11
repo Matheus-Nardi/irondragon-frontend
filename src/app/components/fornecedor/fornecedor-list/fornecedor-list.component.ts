@@ -12,7 +12,7 @@ import { Fornecedor } from '../../../models/fornecedor.model';
   styleUrl: './fornecedor-list.component.css'
 })
 export class FornecedorListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ["id", "nome", "email"];
+  displayedColumns: string[] = ["id", "nome", "email", "telefone"];
   fornecedores: Fornecedor[] = [];
 
   dataSource = new MatTableDataSource<Fornecedor>();
@@ -22,7 +22,7 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
   constructor(private fornecedorService: FornecedorService) {}
 
   ngOnInit(): void {
-    this.fornecedorService.getFornecedores().subscribe(data => {
+    this.fornecedorService.findAll().subscribe(data => {
       this.fornecedores = data;
       this.dataSource.data = this.fornecedores;
     });

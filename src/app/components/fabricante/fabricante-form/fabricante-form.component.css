@@ -1,0 +1,56 @@
+h1 {
+  text-align: center;
+  font-weight: 400;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70vh;
+  align-items: center;
+  gap: 16px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+.submitFabricante {
+  background: #f86f03;
+  border-radius: 5px;
+  font-size: large;
+  text-transform: uppercase;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  width: 30%;
+}
+
+.telefone-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.codigoArea {
+  width: 40%;
+}
+.numero {
+  width: 80%;
+}
+
+.snack-bar-success {
+  background-color: green;
+  color: white;
+}
