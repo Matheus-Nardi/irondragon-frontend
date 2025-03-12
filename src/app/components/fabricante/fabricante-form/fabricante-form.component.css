@@ -54,3 +54,11 @@ form {
   background-color: green;
   color: white;
 }
+
+
+/* Remove o fundo cinza do snackbar */
+.custom-snackbar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+

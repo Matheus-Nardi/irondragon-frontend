@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component , inject} from '@angular/core';
+import { Component , inject, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,8 @@ import { FabricanteService } from '../../../services/fabricante.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timeout } from 'rxjs';
+import { SnackbarComponent } from '../../snackbar/snackbar.component';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-fabricante-form',
@@ -18,22 +20,15 @@ import { timeout } from 'rxjs';
   styleUrl: './fabricante-form.component.css'
 })
 export class FabricanteFormComponent {
-
-  private _snackBar = inject(MatSnackBar);
   
-    openSnackBar() {
-      this._snackBar.open("Fabricante cadastrado com sucesso", "OK", {
-        duration: 3500,
-        panelClass: ['snack-bar-success']
-      });
-    }
 
   formGroup: FormGroup;
   
     constructor(
       private formBuilder: FormBuilder,
       private fabricanteService: FabricanteService,
-      private router: Router
+      private router: Router,
+      private snackbarService: SnackbarService
     ) {
       this.formGroup = this.formBuilder.group({
         nome: ['', Validators.required],
@@ -62,13 +57,18 @@ export class FabricanteFormComponent {
         this.fabricanteService.create(novoFabricante).subscribe({
           next: (fabricante) => {
             console.log('Fabricante cadastrado com sucesso');
-            this.openSnackBar();
+            this.snackbarService.showSuccess("Fabricante cadastrado com sucesso");
             this.router.navigateByUrl('/fabricantes');
           },
           error: (err) => {
             console.error('Erro ao cadastrar o fabricante' + JSON.stringify(err));
+            this.snackbarService.showError("Erro ao cadastrar o fabricante");
           },
         });
       }
     }
+
+    
+
+   
 }

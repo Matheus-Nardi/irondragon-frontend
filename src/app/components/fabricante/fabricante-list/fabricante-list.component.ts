@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { Fabricante } from '../../../models/fabricante.model';
 import { FabricanteService } from '../../../services/fabricante.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { DialogService } from '../../../services/dialog.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-fabricante-list',
@@ -26,7 +28,7 @@ export class FabricanteListComponent implements OnInit, AfterViewInit {
 
  
 
-  constructor(private fabricanteService: FabricanteService,  private dialog: MatDialog) {}
+  constructor(private fabricanteService: FabricanteService,  private dialogService: DialogService, private snackbarService: SnackbarService) {}
   
   
   ngOnInit(): void {
@@ -50,25 +52,26 @@ export class FabricanteListComponent implements OnInit, AfterViewInit {
 
  
 
-  openConfirmDialog(fabricante: Fabricante): void {
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        width: '300px',
-        data: { fabricante },
-      });
-  
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("Resultado do modal: " ,result)
-        if (result) {
-          this.deletefabricante(fabricante);
-        }
-      });
-    }
+  onDeleteFabricante(fabricante: Fabricante): void {
+    this.dialogService.openConfirmDialog(
+      'Deletar Fabricante',
+      'Você realmente deseja deletar este fabricante?',
+      'warning'
+    ).subscribe(result => {
+      if (result) {
+        this.deletefabricante(fabricante);
+      }
+    });
+  }
   
     deletefabricante(fabricante: Fabricante): void {
       this.fabricanteService.delete(fabricante).subscribe({
         next: () => {
-          console.log('Fabricante  deletado com sucesso');
+          console.log('Fabricante deletado com sucesso');
+          this.snackbarService.showSuccess('Fabricante deletado com sucesso');
+        setTimeout(() => {
           window.location.reload();
+        }, 1000);
         },
         error: (err) => {
           console.error('Erro ao deletar o fabricante', err);
