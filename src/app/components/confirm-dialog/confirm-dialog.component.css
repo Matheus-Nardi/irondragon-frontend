@@ -1,3 +1,23 @@
-button {
-    margin-right: 8px;
-  }
+.custom-dialog {
+  text-align: center;
+  padding: 20px;
+}
+
+.dialog-icon {
+  color: #ff9800; 
+  margin-bottom: 10px;
+  font-size: 30px;
+  display: block;
+  text-align: center;
+  width: auto;
+  height: auto;
+}
+mat-dialog-content {
+  font-size: 16px;
+  color: #333;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: space-around;
+}

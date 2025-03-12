@@ -2,3 +2,18 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Remove o fundo cinza da snackbar */
+.mat-mdc-snack-bar-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-width: auto !important;
+  }
+  
+  /* Remove o fundo interno da snackbar */
+  .mdc-snackbar__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  

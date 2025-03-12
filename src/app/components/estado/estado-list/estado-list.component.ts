@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { Estado } from '../../../models/estado.model';
 import { EstadoService } from '../../../services/estado.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { DialogService } from '../../../services/dialog.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-estado-list',
@@ -38,7 +40,8 @@ export class EstadoListComponent implements OnInit {
   //Para injeção de dependencia e declarar variaveis
   constructor(
     private estadoService: EstadoService,
-    private dialog: MatDialog
+    private dialogService: DialogService,
+    private snackbarService: SnackbarService
   ) {}
 
   // Entender o subscribe
@@ -50,14 +53,12 @@ export class EstadoListComponent implements OnInit {
     });
   }
 
-  openConfirmDialog(estado: Estado): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '300px',
-      data: { estado },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("Resultado do modal: " ,result)
+  onDeleteEstado(estado: Estado) {
+    this.dialogService.openConfirmDialog(
+      'Deletar Estado',
+      'Você realmente deseja deletar este estado?',
+      'warning'
+    ).subscribe(result => {
       if (result) {
         this.deleteEstado(estado);
       }
@@ -68,7 +69,10 @@ export class EstadoListComponent implements OnInit {
     this.estadoService.delete(estado).subscribe({
       next: () => {
         console.log('Estado deletado com sucesso');
-        window.location.reload();
+        this.snackbarService.showSuccess('Estado deletado com sucesso');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       },
       error: (err) => {
         console.error('Erro ao deletar o estado', err);
