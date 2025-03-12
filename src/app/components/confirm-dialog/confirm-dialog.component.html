@@ -1,8 +1,10 @@
-<h2 mat-dialog-title>Deletar item</h2>
-<mat-dialog-content>
-    Você realmente deseja deletar esse item ?
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close (click)="onConfirmClick()">Sim</button>
-  <button mat-button mat-dialog-close cdkFocusInitial (click)="onCancelClick()">Não</button>
-</mat-dialog-actions>
+<div class="custom-dialog">
+  <mat-icon class="dialog-icon">{{ data.icon }}</mat-icon>
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content>{{ data.message }}</mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Cancelar</button>
+    <button mat-button color="primary" (click)="onConfirmClick()">Confirmar</button>
+  </mat-dialog-actions>
+</div>

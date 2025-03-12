@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { EstadoService } from '../../../services/estado.service';
 import {CommonModule} from '@angular/common';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-estado-form',
@@ -22,7 +23,8 @@ export class EstadoFormComponent {
   constructor(
     private fb: FormBuilder,
     private estadoService: EstadoService,
-    private router: Router
+    private router: Router,
+    private snackbarService: SnackbarService,
   ) {
     this.formGroup = this.fb.group({
       nome: ['', Validators.required],
@@ -42,10 +44,12 @@ export class EstadoFormComponent {
       this.estadoService.create(novoEstado).subscribe({
         next: (estado) => {
           console.log('Estado cadastrado com sucesso');
+          this.snackbarService.showSuccess('Estado cadastrado com sucesso');
           this.router.navigateByUrl('/estados');
         },
         error: (err) => {
           console.error('Erro ao cadastrar o estado' + JSON.stringify(err));
+          this.snackbarService.showError('Erro ao cadastrar o estado');
         },
       });
     }
