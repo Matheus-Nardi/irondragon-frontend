@@ -10,7 +10,7 @@ import { ConfigService } from './config.service';
 export class EstadoService {
   constructor(private httpClient: HttpClient, private configService: ConfigService) { }
 
-  getEstados(): Observable<Estado[]> {
+  findAll(): Observable<Estado[]> {
     return this.httpClient.get<Estado[]>(`${this.configService.getApiBaseUrl()}/estados`);
   }
 
@@ -18,7 +18,7 @@ export class EstadoService {
     return this.httpClient.delete(`${this.configService.getApiBaseUrl()}/estados/${estado.id}`);
   }
 
-  create(estado: Estado): Observable<Estado>{
+  create(estado: Estado): Observable<Estado> {
     return this.httpClient.post<Estado>(`${this.configService.getApiBaseUrl()}/estados` , estado);
   }
   

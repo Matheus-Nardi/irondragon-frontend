@@ -1,1 +1,50 @@
-<p>cidade-form works!</p>
+<h1>Cadastro de Cidade</h1>
+
+<div class="container">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="nome"
+          placeholder="Nome da cidade"
+          [value]="formGroup.get('nome')?.value | titlecase"
+        />
+        @if (formGroup.get('nome')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="formGroup.get('nome')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('nome') &&
+            formGroup.get('nome')?.invalid &&
+            formGroup.get('nome')?.touched
+          "
+        >
+          O nome é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="estado"
+                    placeholder="Selecione um estado"
+                    [value]="formGroup.get('estado')?.value">
+            <mat-option *ngFor="let estado of estados" [value]="estado">
+                {{ estado.nome }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button class="submit" type="submit">Adicionar cidade</button>
+  </form>
+</div>
