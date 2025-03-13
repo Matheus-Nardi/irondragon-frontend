@@ -47,7 +47,7 @@ export class EstadoListComponent implements OnInit {
   // Entender o subscribe
   // Para a inicialização do componente - Lógica de Inicialização
   ngOnInit(): void {
-    this.estadoService.getEstados().subscribe((data) => {
+    this.estadoService.findAll().subscribe((data) => {
       this.estados = data;
       this.dataSource.data = this.estados;
     });
