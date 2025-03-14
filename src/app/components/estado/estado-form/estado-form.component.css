@@ -21,22 +21,20 @@ form {
 }
 
 
+
 .input-container{
   display: flex;
   flex-direction: column;
   width: 30%;
 }
-
-
-mat-card-actions{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  gap: 10px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-mat-icon{
-  text-align: center;
+.submitEstado {
+  background: #f86f03;
+  border-radius: 5px;
+  font-size: large;
+  text-transform: uppercase;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  width: 30%;
 }

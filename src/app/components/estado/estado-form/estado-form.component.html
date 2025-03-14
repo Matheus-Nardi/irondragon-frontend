@@ -61,43 +61,24 @@
           A sigla é obrigatória
         </mat-error>
         <mat-error
-          *ngIf="
-            formGroup.get('sigla')?.touched &&
-            formGroup.get('sigla')?.hasError('minlength')
-          "
-        >
-          A sigla deve ter no mínimo 2 caracteres
-        </mat-error>
-        <mat-error
-          *ngIf="
-            formGroup.get('sigla')?.touched &&
-            formGroup.get('sigla')?.hasError('maxlength')
-          "
-        >
-          A sigla deve ter no máximo 2 caracteres
-        </mat-error>
+        *ngIf="
+          formGroup.get('sigla')?.touched &&
+          formGroup.get('sigla')?.hasError('minlength')
+        "
+      >
+        A sigla deve ter no mínimo 2 caracteres
+      </mat-error>
+      <mat-error
+        *ngIf="
+          formGroup.get('sigla')?.touched &&
+          formGroup.get('sigla')?.hasError('maxlength')
+        "
+      >
+        A sigla deve ter no máximo 2 caracteres
+      </mat-error>
       </mat-form-field>
-    
+    </div>
 
-    <mat-card-actions>
-      <button
-        mat-raised-button
-        type="submit"
-        [disabled]="formGroup.invalid"
-
-      >
-        Salvar
-      </button>
-      <button
-        mat-raised-button
-        (click)="onDeleteEstado($event)"
-        [disabled]="formGroup.invalid"
-        color="warn"
-      >
-        Excluir
-      </button>
-      <button mat-raised-button routerLink="/estados">Cancelar</button>
-    </mat-card-actions>
-  </div>
+    <button class="submitEstado" type="submit">Adicionar estado</button>
   </form>
 </div>
