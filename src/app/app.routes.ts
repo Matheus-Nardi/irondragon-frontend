@@ -7,12 +7,19 @@ import { EstadoFormComponent } from './components/estado/estado-form/estado-form
 import { CidadeFormComponent } from './components/cidade/cidade-form/cidade-form.component';
 import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
 import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
+import { estadoResolver } from './resolvers/estado/estado.resolver';
 
 export const routes: Routes = [
   {
     path: 'estados',
     component: EstadoListComponent,
     title: 'Lista de Estados',
+  },
+  {
+    path: 'estados/edit/:id',
+    component: EstadoFormComponent,
+    title: 'Editar Estado',
+    resolve: {estado: estadoResolver}
   },
   {
     path: 'estados/create',
