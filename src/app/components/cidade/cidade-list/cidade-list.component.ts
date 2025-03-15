@@ -10,10 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-cidade-list',
-  imports: [MatTableModule, MatPaginatorModule, MatPaginator, MatIconModule, MatButtonModule, RouterLink, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatPaginator, MatIconModule, MatButtonModule, RouterLink, MatDialogModule, MatCardModule],
   templateUrl: './cidade-list.component.html',
   styleUrl: './cidade-list.component.css'
 })
