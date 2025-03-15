@@ -7,6 +7,7 @@ import { EstadoFormComponent } from './components/estado/estado-form/estado-form
 import { CidadeFormComponent } from './components/cidade/cidade-form/cidade-form.component';
 import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
 import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
+import { cidadeResolver } from './components/cidade/cidade.resolver';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,12 @@ export const routes: Routes = [
     path: 'cidades/create',
     component: CidadeFormComponent,
     title: 'Nova Cidade',
+  },
+  {
+    path: 'cidades/edit/:id',
+    component: CidadeFormComponent,
+    title: 'Editar Cidade',
+    resolve: {cidade: cidadeResolver}
   },
   {
     path: 'fabricantes',

@@ -1,50 +1,46 @@
 <h1>Cadastro de Cidade</h1>
 
 <div class="container">
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="nome"
-          placeholder="Nome da cidade"
-          [value]="formGroup.get('nome')?.value | titlecase"
-        />
-        @if (formGroup.get('nome')?.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="formGroup.get('nome')?.setValue('')"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-        <mat-error
-          *ngIf="
-            formGroup.get('nome') &&
-            formGroup.get('nome')?.invalid &&
-            formGroup.get('nome')?.touched
-          "
-        >
-          O nome é obrigatório
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Estado</mat-label>
-        <mat-select formControlName="estado"
-                    placeholder="Selecione um estado"
-                    [value]="formGroup.get('estado')?.value">
-            <mat-option *ngFor="let estado of estados" [value]="estado">
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="formGroup">
+        <div class="input-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput type="text" formControlName="nome" placeholder="Nome da cidade"
+              [value]="formGroup.get('nome')?.value | titlecase" />
+            @if (formGroup.get('nome')?.value) {
+            <button matSuffix mat-icon-button aria-label="Clear" (click)="formGroup.get('nome')?.setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error *ngIf="
+                formGroup.get('nome') &&
+                formGroup.get('nome')?.invalid &&
+                formGroup.get('nome')?.touched
+              ">
+              O nome é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado" placeholder="Selecione um estado"
+              [value]="formGroup.get('estado')?.value">
+              <mat-option *ngFor="let estado of estados" [value]="estado">
                 {{ estado.nome }}
-            </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="formGroup.invalid">Adicionar</button>
 
-    <button class="submit" type="submit">Adicionar cidade</button>
-  </form>
+      <button mat-raised-button color="primary" (click)="onDelete()" [disabled]="formGroup.invalid">Excluir</button>
+
+      <button mat-raised-button [disabled]="formGroup.invalid">Cancelar</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
