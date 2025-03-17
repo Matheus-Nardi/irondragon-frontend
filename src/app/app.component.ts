@@ -4,16 +4,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
+import { SidenavComponent } from "./components/sidenav/sidenav.component";
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet, 
-    MatToolbarModule, 
-    MatButtonModule, 
-    MatIconModule, 
-    MatTableModule
-  ],
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    SidenavComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
