@@ -1,0 +1,53 @@
+<mat-sidenav-container>
+
+  <mat-sidenav #sidenav [(opened)]="opened" mode="over">
+    <div class="sidenav-header">
+      Painel administrativo
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <mat-nav-list>
+      @for (item of navData; track $index) {
+        <a mat-list-item [routerLink]="item.routeLink" (click)="sidenav.toggle()">
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Conteúdo principal -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">IRONDRAGON</span>
+      <span class="example-spacer"></span>
+  
+      
+      <div class="search-container">
+        <mat-form-field class="example-form-field">
+          <input matInput type="text" placeholder="Pesquise o processador dos seus sonhos">
+          <button matSuffix mat-icon-button aria-label="Clear">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+  
+     
+      <span class="example-spacer"></span>
+  
+     
+      <button mat-icon-button><mat-icon>favorite</mat-icon></button>
+      <button mat-icon-button><mat-icon>shopping_cart</mat-icon></button>
+    </mat-toolbar>
+
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+  
+</mat-sidenav-container>
