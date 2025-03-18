@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
-import { EstadoListComponent } from './components/estado/estado-list/estado-list.component';
-import { CidadeListComponent } from './components/cidade/cidade-list/cidade-list.component';
-import { FabricanteListComponent } from './components/fabricante/fabricante-list/fabricante-list.component';
-import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
-import { EstadoFormComponent } from './components/estado/estado-form/estado-form.component';
 import { CidadeFormComponent } from './components/cidade/cidade-form/cidade-form.component';
-import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
-import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
+import { CidadeListComponent } from './components/cidade/cidade-list/cidade-list.component';
+import { cidadeResolver } from './components/cidade/cidade.resolver';
+import { EstadoFormComponent } from './components/estado/estado-form/estado-form.component';
+import { EstadoListComponent } from './components/estado/estado-list/estado-list.component';
 import { estadoResolver } from './components/estado/estado.resolver';
+import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
+import { FabricanteListComponent } from './components/fabricante/fabricante-list/fabricante-list.component';
 import { fabricanteResolver } from './components/fabricante/fabricante.resolver';
+import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
+import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
+import { fornecedorResolver } from './components/fornecedor/fornecedor.resolver';
 
 export const routes: Routes = [
   {
@@ -38,6 +40,12 @@ export const routes: Routes = [
     title: 'Nova Cidade',
   },
   {
+    path: 'cidades/edit/:id',
+    component: CidadeFormComponent,
+    title: 'Editar Cidade',
+    resolve: {cidade: cidadeResolver}
+  },
+  {
     path: 'fabricantes',
     component: FabricanteListComponent,
     title: 'Lista de Fabricantes',
@@ -61,6 +69,12 @@ export const routes: Routes = [
   {
     path: 'fornecedores/create',
     component: FornecedorFormComponent,
-    title: 'Novo Fornecedor',
+    title: 'Novo Fornecedor'
   },
+  {
+    path: 'fornecedores/edit/:id',
+    component: FornecedorFormComponent,
+    title: 'Editar Fornecedor',
+    resolve: {fornecedor: fornecedorResolver}
+  }
 ];
