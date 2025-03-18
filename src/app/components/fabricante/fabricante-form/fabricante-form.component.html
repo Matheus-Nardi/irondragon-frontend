@@ -1,157 +1,180 @@
 <h1>Cadastro de Fabricante</h1>
 
-<div class="container">
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="nome"
-          placeholder="Nome do fabricante"
-          [value]="formGroup.get('nome')?.value | titlecase"
-        />
-        @if (formGroup.get('nome')?.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="formGroup.get('nome')?.setValue('')"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-        <mat-error
-          *ngIf="
-            formGroup.get('nome') &&
-            formGroup.get('nome')?.invalid &&
-            formGroup.get('nome')?.touched
-          "
-        >
-          O nome é obrigatório
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="email"
-          placeholder="email@email.com"
-        />
-        @if (formGroup.get('email')?.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="formGroup.get('email')?.setValue('')"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-        <mat-error
-          *ngIf="
-            formGroup.get('email')?.touched &&
-            formGroup.get('email')?.hasError('required')
-          "
-        >
-          O email é obrigatório
-        </mat-error>
-        <mat-error
-          *ngIf="
-            formGroup.get('email')?.touched &&
-            formGroup.get('email')?.hasError('email')
-          "
-        >
-          O email deve ser válido
-        </mat-error>
-      </mat-form-field>
-
-      <div class="telefone-container">
-        <mat-form-field appearance="outline" class="codigoArea">
-          <mat-label>DDD</mat-label>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="formGroup">
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Nome</mat-label>
           <input
             matInput
-            type="tel"
-            formControlName="codigoArea"
-            placeholder="63"
+            type="text"
+            formControlName="nome"
+            placeholder="Nome do fabricante"
+            [value]="formGroup.get('nome')?.value | titlecase"
           />
-          @if (formGroup.get('codigoArea')?.value) {
+          @if (formGroup.get('nome')?.value) {
           <button
             matSuffix
             mat-icon-button
             aria-label="Clear"
-            (click)="formGroup.get('telefone')?.setValue('')"
+            (click)="formGroup.get('nome')?.setValue('')"
           >
             <mat-icon>close</mat-icon>
           </button>
           }
           <mat-error
             *ngIf="
-              formGroup.get('codigoArea')?.touched &&
-              formGroup.get('codigoArea')?.hasError('required')
+              formGroup.get('nome') &&
+              formGroup.get('nome')?.invalid &&
+              formGroup.get('nome')?.touched
             "
           >
-            O código de área é obrigatório
+            O nome é obrigatório
           </mat-error>
-          <mat-error
-            *ngIf="
-              formGroup.get('codigoArea')?.touched &&
-              formGroup.get('codigoArea')?.hasError('minlength')
-            "
-          >
-            O código de área deve ter no mínimo 2 dígitos
-          </mat-error>
-          <mat-error
-          *ngIf="
-            formGroup.get('codigoArea')?.touched &&
-            formGroup.get('codigoArea')?.hasError('maxlength')
-          "
-        >
-          O código de área deve ter no máximo 2 dígitos
-        </mat-error>
         </mat-form-field>
-
-        <mat-form-field appearance="outline" class="numero">
-          <mat-label>Número</mat-label>
+  
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Email</mat-label>
           <input
             matInput
-            type="tel"
-            formControlName="numero"
-            placeholder="999999999"
+            type="text"
+            formControlName="email"
+            placeholder="email@email.com"
           />
-          @if (formGroup.get('numero')?.value) {
+          @if (formGroup.get('email')?.value) {
           <button
             matSuffix
             mat-icon-button
             aria-label="Clear"
-            (click)="formGroup.get('numero')?.setValue('')"
+            (click)="formGroup.get('email')?.setValue('')"
           >
             <mat-icon>close</mat-icon>
           </button>
           }
           <mat-error
+            *ngIf="
+              formGroup.get('email')?.touched &&
+              formGroup.get('email')?.hasError('required')
+            "
+          >
+            O email é obrigatório
+          </mat-error>
+          <mat-error
+            *ngIf="
+              formGroup.get('email')?.touched &&
+              formGroup.get('email')?.hasError('email')
+            "
+          >
+            O email deve ser válido
+          </mat-error>
+        </mat-form-field>
+        <div class="telefone-container">
+      <mat-form-field appearance="outline" class="codigoArea">
+            <mat-label>DDD</mat-label>
+            <input
+              matInput
+              type="tel"
+              formControlName="codigoArea"
+              placeholder="63"
+            />
+            @if (formGroup.get('codigoArea')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="formGroup.get('telefone')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('codigoArea')?.touched &&
+                formGroup.get('codigoArea')?.hasError('required')
+              "
+            >
+              O código de área é obrigatório
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formGroup.get('codigoArea')?.touched &&
+                formGroup.get('codigoArea')?.hasError('minlength')
+              "
+            >
+              O código de área deve ter no mínimo 2 dígitos
+            </mat-error>
+            <mat-error
+            *ngIf="
+              formGroup.get('codigoArea')?.touched &&
+              formGroup.get('codigoArea')?.hasError('maxlength')
+            "
+          >
+            O código de área deve ter no máximo 2 dígitos
+          </mat-error>
+          </mat-form-field>
+  
+          
+
+         
+          <mat-form-field appearance="outline" class="numero">
+            <mat-label>Número</mat-label>
+            <input
+              matInput
+              type="tel"
+              formControlName="numero"
+              placeholder="999999999"
+            />
+            @if (formGroup.get('numero')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="formGroup.get('numero')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('numero')?.touched &&
+                formGroup.get('numero')?.hasError('required')
+              "
+            >
+              O número é obrigatório
+            </mat-error>
+            <mat-error
             *ngIf="
               formGroup.get('numero')?.touched &&
-              formGroup.get('numero')?.hasError('required')
+              formGroup.get('numero')?.hasError('pattern')
             "
           >
-            O número é obrigatório
+            O número deve conter 8 ou 9 dígitos
           </mat-error>
-          <mat-error
-          *ngIf="
-            formGroup.get('numero')?.touched &&
-            formGroup.get('numero')?.hasError('pattern')
-          "
-        >
-          O número deve conter 8 ou 9 dígitos
-        </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+          </mat-form-field>
+        </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button routerLink="/fabricantes">CANCELAR</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="salvar()"
+      [disabled]="formGroup.invalid"
+    >
+      SALVAR
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      [disabled]="formGroup.invalid"
+      (click)="excluir()"
+    >
+      EXCLUIR
+    </button>
+  </mat-card-actions>
+</mat-card>
 
-    <button class="submitFabricante" type="submit">Adicionar fabricante</button>
-  </form>
-</div>
+
+

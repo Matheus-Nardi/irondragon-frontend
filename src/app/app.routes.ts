@@ -7,6 +7,8 @@ import { EstadoFormComponent } from './components/estado/estado-form/estado-form
 import { CidadeFormComponent } from './components/cidade/cidade-form/cidade-form.component';
 import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
 import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
+import { estadoResolver } from './components/estado/estado.resolver';
+import { fabricanteResolver } from './components/fabricante/fabricante.resolver';
 
 export const routes: Routes = [
   {
@@ -18,6 +20,12 @@ export const routes: Routes = [
     path: 'estados/create',
     component: EstadoFormComponent,
     title: 'Novo Estado',
+  },
+  {
+    path: 'estados/edit/:id',
+    component: EstadoFormComponent,
+    title: 'Editar Estado',
+    resolve: { estado: estadoResolver },
   },
   {
     path: 'cidades',
@@ -40,6 +48,12 @@ export const routes: Routes = [
     title: 'Novo fabricante',
   },
   {
+    path: 'fabricantes/edit/:id',
+    component: FabricanteFormComponent,
+    title: 'Editar Fabricante',
+    resolve: { fabricante: fabricanteResolver },
+  },
+  {
     path: 'fornecedores',
     component: FornecedorListComponent,
     title: 'Lista de Fornecedores',
@@ -47,6 +61,6 @@ export const routes: Routes = [
   {
     path: 'fornecedores/create',
     component: FornecedorFormComponent,
-    title: 'Novo Fornecedor'
-  }
+    title: 'Novo Fornecedor',
+  },
 ];
