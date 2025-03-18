@@ -13,6 +13,8 @@ export class Telefone {
 
     public static valueOf(telefone: ITelefone): Telefone{
         const novoTelefone = new Telefone();
+        
+        novoTelefone.id = telefone.id;
         novoTelefone.codigoArea = telefone.codigoArea;
         novoTelefone.numero = telefone.numero;
         return novoTelefone;

@@ -24,21 +24,37 @@ export class CidadeFormComponent implements OnInit {
   formGroup: FormGroup;
   estados: Estado[] = [];
 
-  constructor(private formBuilder: FormBuilder, private cidadeService: CidadeService, private router: Router, private estadoService: EstadoService, private activatedRoute: ActivatedRoute) {
-    const cidade = this.activatedRoute.snapshot.data['cidade'];
-
-    const estado = this.estados.find(e => e.id === (cidade?.estado?.id));
-
+  constructor(
+    private formBuilder: FormBuilder, 
+    private cidadeService: CidadeService, 
+    private router: Router, 
+    private estadoService: EstadoService, 
+    private activatedRoute: ActivatedRoute
+  ) {
     this.formGroup = this.formBuilder.group({
-      nome: [(cidade && cidade.id) ? cidade.nome : '', Validators.required],
-      estado: [(estado && estado.id) ? estado : null, Validators.required]
+      id: [null],
+      nome: ['', Validators.required],
+      estado: [null, Validators.required]
     })
   }
 
   ngOnInit() {
     this.estadoService.findAll().subscribe((data) => {
       this.estados = data;
+      this.initializeForm();
     });
+  }
+
+  initializeForm(): void {
+    const cidade = this.activatedRoute.snapshot.data['cidade'];
+
+    const estado = this.estados.find(e => e.id === (cidade?.estado?.id) || null);
+
+    this.formGroup = this.formBuilder.group({
+      id: [(cidade && cidade.id) ? cidade.id : null],
+      nome: [(cidade && cidade.id) ? cidade.nome : '', Validators.required],
+      estado: [(estado && estado.id) ? estado : null, Validators.required]
+    })
   }
 
   onSubmit() {
@@ -61,7 +77,7 @@ export class CidadeFormComponent implements OnInit {
             this.router.navigateByUrl('/cidades');
           },
           error: (err) => {
-            console.log(`Erro ao cadastrar a cidade ${JSON.stringify(err)}`);
+            console.log(`Erro ao atualizar a cidade ${JSON.stringify(err)}`);
           }
         });
       }

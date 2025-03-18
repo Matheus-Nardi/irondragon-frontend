@@ -8,6 +8,7 @@ import { CidadeFormComponent } from './components/cidade/cidade-form/cidade-form
 import { FabricanteFormComponent } from './components/fabricante/fabricante-form/fabricante-form.component';
 import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
 import { cidadeResolver } from './components/cidade/cidade.resolver';
+import { fornecedorResolver } from './components/fornecedor/fornecedor.resolver';
 
 export const routes: Routes = [
   {
@@ -55,5 +56,11 @@ export const routes: Routes = [
     path: 'fornecedores/create',
     component: FornecedorFormComponent,
     title: 'Novo Fornecedor'
+  },
+  {
+    path: 'fornecedores/edit/:id',
+    component: FornecedorFormComponent,
+    title: 'Editar Fornecedor',
+    resolve: {fornecedor: fornecedorResolver}
   }
 ];

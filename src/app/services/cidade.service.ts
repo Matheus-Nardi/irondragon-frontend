@@ -31,7 +31,12 @@ export class CidadeService {
   }
 
   update(cidade: Cidade): Observable<any> {
-    return this.httpClient.put<Cidade>(`${this.configService.getApiBaseUrl()}/cidades/${cidade.id}`, cidade);
+    const cidadeAlterada = {
+      nome: cidade.nome,
+      estado: cidade.estado.id
+    }
+
+    return this.httpClient.put<Cidade>(`${this.configService.getApiBaseUrl()}/cidades/${cidade.id}`, cidadeAlterada);
   }
 
   delete(cidade: Cidade): Observable<any> {
