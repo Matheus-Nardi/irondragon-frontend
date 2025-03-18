@@ -1,9 +1,9 @@
 <h1>Cadastro de Estado</h1>
 
-<div class="container">
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <div class="input-container">
-      <mat-form-field appearance="outline">
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="formGroup">
+      <mat-form-field appearance="outline" class="full-width-input">
         <mat-label>Nome</mat-label>
         <input
           matInput
@@ -33,7 +33,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width-input">
         <mat-label>Sigla</mat-label>
         <input
           matInput
@@ -61,24 +61,43 @@
           A sigla é obrigatória
         </mat-error>
         <mat-error
-        *ngIf="
-          formGroup.get('sigla')?.touched &&
-          formGroup.get('sigla')?.hasError('minlength')
-        "
-      >
-        A sigla deve ter no mínimo 2 caracteres
-      </mat-error>
-      <mat-error
-        *ngIf="
-          formGroup.get('sigla')?.touched &&
-          formGroup.get('sigla')?.hasError('maxlength')
-        "
-      >
-        A sigla deve ter no máximo 2 caracteres
-      </mat-error>
+          *ngIf="
+            formGroup.get('sigla')?.touched &&
+            formGroup.get('sigla')?.hasError('minlength')
+          "
+        >
+          A sigla deve ter no mínimo 2 caracteres
+        </mat-error>
+        <mat-error
+          *ngIf="
+            formGroup.get('sigla')?.touched &&
+            formGroup.get('sigla')?.hasError('maxlength')
+          "
+        >
+          A sigla deve ter no máximo 2 caracteres
+        </mat-error>
       </mat-form-field>
-    </div>
+    </form>
+  </mat-card-content>
 
-    <button class="submitEstado" type="submit">Adicionar estado</button>
-  </form>
-</div>
+  <mat-card-actions>
+    <button mat-raised-button routerLink="/estados">CANCELAR</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="salvar()"
+      [disabled]="formGroup.invalid"
+    >
+      SALVAR
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      [disabled]="formGroup.invalid"
+      (click)="excluir()"
+    >
+      EXCLUIR
+    </button>
+  </mat-card-actions>
+</mat-card>

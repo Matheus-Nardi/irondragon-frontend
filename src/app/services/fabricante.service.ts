@@ -30,4 +30,21 @@ export class FabricanteService {
   delete(fabricante: Fabricante): Observable<void> {
     return this.httpClient.delete<void>(`${this.configService.getApiBaseUrl()}/fabricantes/${fabricante.id}`);
   }
+
+  findById(id: string): Observable<Fabricante> {
+    return this.httpClient.get<Fabricante>(`${this.configService.getApiBaseUrl()}/fabricantes/${id}`);
+  }
+
+  update(fabricante: Fabricante): Observable<any> {
+    const telefone = {
+      codigoArea: fabricante.telefone.codigoArea,
+      numero: fabricante.telefone.numero,
+    }
+    const data = {
+      nome: fabricante.nome,
+      email: fabricante.email,
+      telefone: telefone,
+    }
+    return this.httpClient.put<Fabricante>(`${this.configService.getApiBaseUrl()}/fabricantes/${fabricante.id}`, data);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -13,43 +13,57 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-fornecedor-list',
-  imports: [MatTableModule, MatPaginatorModule, MatPaginator, MatIconModule, MatButtonModule, RouterLink, MatDialogModule],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    MatPaginator,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+    MatDialogModule,
+  ],
   templateUrl: './fornecedor-list.component.html',
-  styleUrl: './fornecedor-list.component.css'
+  styleUrl: './fornecedor-list.component.css',
 })
-export class FornecedorListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ["id", "nome", "email", "telefone", "acoes"];
+export class FornecedorListComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'nome', 'email', 'telefone', 'acoes'];
   fornecedores: Fornecedor[] = [];
 
   dataSource = new MatTableDataSource<Fornecedor>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private fornecedorService: FornecedorService, private dialogService: DialogService, private snackbarService: SnackbarService) {}
+  constructor(
+    private fornecedorService: FornecedorService,
+    private dialogService: DialogService,
+    private snackbarService: SnackbarService,
+    private changeDetectorRef: ChangeDetectorRef
+    
+  ) {}
 
   ngOnInit(): void {
-    this.fornecedorService.findAll().subscribe(data => {
+    this.fornecedorService.findAll().subscribe((data) => {
       this.fornecedores = data;
       this.dataSource.data = this.fornecedores;
+
+      this.changeDetectorRef.detectChanges();
+      this.dataSource.paginator = this.paginator;
     });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
   onDeleteFornecedor(fornecedor: Fornecedor) {
-    this.dialogService.openConfirmDialog(
-      `Deletar ${fornecedor.nome}?`,
-      `Ao clicar em confirmar, você estará deletando para sempre dos registros. Essa ação é irreversivel`,
-      'warning'
-    ).subscribe(result => {
-      if(result) {
-        this.deleteFornecedor(fornecedor);
-      }
-    })
+    this.dialogService
+      .openConfirmDialog(
+        `Deletar ${fornecedor.nome}?`,
+        `Ao clicar em confirmar, você estará deletando para sempre dos registros. Essa ação é irreversivel`,
+        'warning'
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.deleteFornecedor(fornecedor);
+        }
+      });
   }
-
 
   deleteFornecedor(fornecedor: Fornecedor) {
     this.fornecedorService.delete(fornecedor).subscribe({
@@ -62,7 +76,7 @@ export class FornecedorListComponent implements OnInit, AfterViewInit {
       },
       error: (err) => {
         console.error('Erro ao deletar o fornecedor', err);
-      }
-    })
+      },
+    });
   }
 }

@@ -21,5 +21,13 @@ export class EstadoService {
   create(estado: Estado): Observable<Estado> {
     return this.httpClient.post<Estado>(`${this.configService.getApiBaseUrl()}/estados` , estado);
   }
+
+  findById(id: string): Observable<Estado> {
+    return this.httpClient.get<Estado>(`${this.configService.getApiBaseUrl()}/estados/${id}`);
+  }
+
+  update(estado: Estado): Observable<any> {
+    return this.httpClient.put<Estado>(`${this.configService.getApiBaseUrl()}/estados/${estado.id}`, estado);
+  }
   
 }

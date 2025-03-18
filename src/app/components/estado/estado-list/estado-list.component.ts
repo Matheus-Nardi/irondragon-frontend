@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ import { SnackbarService } from '../../../services/snackbar.service';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    
   ],
   templateUrl: './estado-list.component.html',
   styleUrl: './estado-list.component.css',
@@ -33,15 +34,13 @@ export class EstadoListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
 
   //Para injeção de dependencia e declarar variaveis
   constructor(
     private estadoService: EstadoService,
     private dialogService: DialogService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   // Entender o subscribe
@@ -50,8 +49,13 @@ export class EstadoListComponent implements OnInit {
     this.estadoService.findAll().subscribe((data) => {
       this.estados = data;
       this.dataSource.data = this.estados;
+
+      this.changeDetectorRef.detectChanges();
+      this.dataSource.paginator = this.paginator;
     });
   }
+
+ 
 
   onDeleteEstado(estado: Estado) {
     this.dialogService.openConfirmDialog(
