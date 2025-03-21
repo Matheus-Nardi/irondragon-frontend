@@ -9,8 +9,11 @@ import { FabricanteFormComponent } from './components/fabricante/fabricante-form
 import { FabricanteListComponent } from './components/fabricante/fabricante-list/fabricante-list.component';
 import { fabricanteResolver } from './components/fabricante/fabricante.resolver';
 import { FornecedorFormComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
-import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
 import { fornecedorResolver } from './components/fornecedor/fornecedor.resolver';
+import { LoteListComponent } from './components/lote/lote-list/lote-list.component';
+import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
+import { loteResolver } from './components/lote/lote.resolver';
+import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
 
 export const routes: Routes = [
   {
@@ -76,5 +79,21 @@ export const routes: Routes = [
     component: FornecedorFormComponent,
     title: 'Editar Fornecedor',
     resolve: {fornecedor: fornecedorResolver}
+  },
+  {
+    path: 'lotes',
+    component: LoteListComponent,
+    title: 'Lista de Lotes',
+  },
+  {
+    path: 'lotes/create',
+    component: LoteFormComponent,
+    title: 'Novo Lote',
+  },
+  {
+    path: 'lotes/edit/:id',
+    component: LoteFormComponent,
+    title: 'Editar Lote',
+    resolve: {lote: loteResolver}
   }
 ];
