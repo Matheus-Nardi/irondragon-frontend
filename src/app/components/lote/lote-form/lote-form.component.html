@@ -1,0 +1,151 @@
+<h1>Cadastro de Lote</h1>
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="formGroup">
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Código</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="codigo"
+          placeholder="Código do lote"
+        />
+        @if (formGroup.get('codigo')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="formGroup.get('codigo')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('codigo') &&
+            formGroup.get('codigo')?.invalid &&
+            formGroup.get('codigo')?.touched
+          "
+        >
+          O codigo é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Estoque</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="estoque"
+          placeholder="Estoque do lote"
+        />
+        @if (formGroup.get('estoque')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="formGroup.get('estoque')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('estoque')?.touched &&
+            formGroup.get('estoque')?.hasError('required')
+          "
+        >
+          A quantidade do estoque é obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input" appearance="outline">
+        <mat-label>Data do lote</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="data" />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error
+        *ngIf="
+          formGroup.get('data') &&
+          formGroup.get('data')?.invalid &&
+          formGroup.get('data')?.touched
+        "
+      >
+        A data é obrigatória
+      </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input" appearance="outline">
+        <mat-select
+          formControlName="processador"
+          placeholder="Processador"
+          id="processador_id"
+        >
+          @for (processador of processadores; track processador.id) {
+          <mat-option [value]="processador">
+            {{ processador.nome }}
+          </mat-option>
+          }
+        </mat-select>
+        <mat-error
+        *ngIf="
+          formGroup.get('processador') &&
+          formGroup.get('processador')?.invalid &&
+          formGroup.get('processador')?.touched
+        "
+      >
+        O processador é obrigatório
+      </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input" appearance="outline">
+        <mat-select
+          formControlName="fornecedor"
+          placeholder="Fornecedor"
+          id="fornecedor_id"
+        >
+          @for (fornecedor of fornecedores; track fornecedor.id) {
+          <mat-option [value]="fornecedor">
+            {{ fornecedor.nome }}
+          </mat-option>
+          }
+        </mat-select>
+        <mat-error
+        *ngIf="
+          formGroup.get('fornecedor') &&
+          formGroup.get('fornecedor')?.invalid &&
+          formGroup.get('fornecedor')?.touched
+        "
+      >
+        O fornecedor é obrigatório
+      </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button routerLink="/lotes">CANCELAR</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="salvar()"
+      [disabled]="formGroup.invalid"
+    >
+      SALVAR
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      [disabled]="formGroup.invalid"
+      (click)="excluir()"
+    >
+      EXCLUIR
+    </button>
+  </mat-card-actions>
+</mat-card>
