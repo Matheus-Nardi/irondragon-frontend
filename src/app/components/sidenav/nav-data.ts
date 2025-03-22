@@ -18,6 +18,9 @@ export const navbarData = [
     {
       routeLink: 'fornecedores',
       label: 'Fornecedores',
+    },
+    {
+      routeLink: 'placasintegradas',
+      label: 'Placas Integradas'
     }
   ];
-  

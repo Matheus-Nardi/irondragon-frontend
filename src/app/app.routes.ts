@@ -14,6 +14,13 @@ import { LoteListComponent } from './components/lote/lote-list/lote-list.compone
 import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
 import { loteResolver } from './components/lote/lote.resolver';
 import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
+import {
+  PlacaintegradaListComponent
+} from './components/placaintegrada/placaintegrada-list/placaintegrada-list.component';
+import {
+  PlacaintegradaFormComponent
+} from './components/placaintegrada/placaintegrada-form/placaintegrada-form.component';
+import {placaintegradaResolver} from './components/placaintegrada/placaintegrada.resolver';
 
 export const routes: Routes = [
   {
@@ -95,5 +102,21 @@ export const routes: Routes = [
     component: LoteFormComponent,
     title: 'Editar Lote',
     resolve: {lote: loteResolver}
+  },
+  {
+    path: 'placasintegradas',
+    component: PlacaintegradaListComponent,
+    title: 'Lista de Placas Integradas'
+  },
+  {
+    path: 'placasintegradas/create',
+    component: PlacaintegradaFormComponent,
+    title: 'Nova Placa Integrada'
+  },
+  {
+    path: 'placasintegradas/edit/:id',
+    component: PlacaintegradaFormComponent,
+    title: 'Editar Placa Integrada',
+    resolve: { placaintegrada: placaintegradaResolver }
   }
 ];
