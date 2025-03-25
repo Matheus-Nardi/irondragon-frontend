@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { Estado } from '../../../models/estado.model';
@@ -28,34 +28,34 @@ import { SnackbarService } from '../../../services/snackbar.service';
 export class EstadoListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'sigla', 'acoes'];
   estados: Estado[] = [];
-
-  //
-  dataSource = new MatTableDataSource<Estado>();
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  totalRecords = 0;
+  pageSize = 5;
+  page = 0;
 
   //Para injeção de dependencia e declarar variaveis
   constructor(
     private estadoService: EstadoService,
     private dialogService: DialogService,
     private snackbarService: SnackbarService,
-    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  // Entender o subscribe
-  // Para a inicialização do componente - Lógica de Inicialização
   ngOnInit(): void {
-    this.estadoService.findAll().subscribe((data) => {
-      this.estados = data;
-      this.dataSource.data = this.estados;
-
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
+    this.loadEstados();
+  }
+  
+  loadEstados(): void {
+    this.estadoService.findAll(this.page, this.pageSize).subscribe(data => {
+      console.log(data);
+      this.estados = data.results;
+      this.totalRecords = data.count;
     });
   }
-
- 
+  
+  paginar(event: PageEvent): void {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadEstados();
+  }
 
   onDeleteEstado(estado: Estado) {
     this.dialogService.openConfirmDialog(
