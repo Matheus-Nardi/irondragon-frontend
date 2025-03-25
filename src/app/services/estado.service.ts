@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Estado } from '../models/estado.model';
 import { ConfigService } from './config.service';
+import { PageResponse } from '../interfaces/pageresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,17 @@ import { ConfigService } from './config.service';
 export class EstadoService {
   constructor(private httpClient: HttpClient, private configService: ConfigService) { }
 
-  findAll(): Observable<Estado[]> {
-    return this.httpClient.get<Estado[]>(`${this.configService.getApiBaseUrl()}/estados`);
+  findAll(page?:number, pageSize?:number): Observable<PageResponse<Estado>> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined) {
+      params = {
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+
+    return this.httpClient.get<PageResponse<Estado>>(`${this.configService.getApiBaseUrl()}/estados`, {params});
   }
 
   delete(estado: Estado): Observable<any> {

@@ -40,7 +40,7 @@ export class CidadeFormComponent implements OnInit {
 
   ngOnInit() {
     this.estadoService.findAll().subscribe((data) => {
-      this.estados = data;
+      this.estados = data.results;
       this.initializeForm();
     });
   }

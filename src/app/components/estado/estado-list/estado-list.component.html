@@ -8,7 +8,7 @@
 <div class="container">
   <div class="content">
     <div class="mat-elevation-z8 full-screen ">
-      <table mat-table [dataSource]="dataSource" class="full-table table-background">
+      <table mat-table [dataSource]="estados" class="full-table table-background">
 
 
         <ng-container matColumnDef="id">
@@ -52,9 +52,12 @@
     </ng-container>
       </table>
 
-      <mat-paginator class="table-background" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-        aria-label="Selecione uma página de estados">
-      </mat-paginator>
+      <mat-paginator
+    [pageSizeOptions]="[2, 4, 8, 16]"
+    [pageSize]="pageSize"
+    [length]="totalRecords"
+    (page)="paginar($event)">
+</mat-paginator>
     </div>
   </div>
 </div>
