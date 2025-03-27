@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FornecedorService } from '../../../services/fornecedor.service';
 import { Fornecedor } from '../../../models/fornecedor.model';
@@ -28,27 +28,34 @@ import { MatDialogModule } from '@angular/material/dialog';
 export class FornecedorListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'email', 'telefone', 'acoes'];
   fornecedores: Fornecedor[] = [];
+  totalRecords = 0;
+  pageSize = 5;
+  page = 0;
 
   dataSource = new MatTableDataSource<Fornecedor>();
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private fornecedorService: FornecedorService,
     private dialogService: DialogService,
-    private snackbarService: SnackbarService,
-    private changeDetectorRef: ChangeDetectorRef
-    
+    private snackbarService: SnackbarService,    
   ) {}
 
   ngOnInit(): void {
-    this.fornecedorService.findAll().subscribe((data) => {
-      this.fornecedores = data;
-      this.dataSource.data = this.fornecedores;
+    this.loadFornecedores();
+  }
 
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
+  loadFornecedores() {
+    this.fornecedorService.findAll(this.page, this.pageSize).subscribe((data) => {
+      this.fornecedores = data.results;
+      this.totalRecords = data.count;
+      this.dataSource.data = this.fornecedores;
     });
+  }
+
+  pagination(event: PageEvent) {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadFornecedores();
   }
 
   onDeleteFornecedor(fornecedor: Fornecedor) {
@@ -70,9 +77,7 @@ export class FornecedorListComponent implements OnInit {
       next: () => {
         console.log('Fornecedor deletado com sucesso');
         this.snackbarService.showSuccess('Fornecedor deletado com sucesso');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        this.loadFornecedores();
       },
       error: (err) => {
         console.error('Erro ao deletar o fornecedor', err);
