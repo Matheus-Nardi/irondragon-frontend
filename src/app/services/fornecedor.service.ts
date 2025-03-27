@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
 import { Fornecedor, IFornecedor } from '../models/fornecedor.model';
+import { PageResponse } from '../interfaces/pageresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,17 @@ export class FornecedorService {
 
   constructor(private httpClient: HttpClient, private configService: ConfigService) { }
 
-  findAll(): Observable<Fornecedor[]> {
-    return this.httpClient.get<Fornecedor[]>(`${this.configService.getApiBaseUrl()}/fornecedores`);
+  findAll(page?: number, pageSize?: number): Observable<PageResponse<Fornecedor>> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined) {
+      params = {
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+
+    return this.httpClient.get<PageResponse<Fornecedor>>(`${this.configService.getApiBaseUrl()}/fornecedores`, {params});
   }
 
   findById(id: string): Observable<Fornecedor> {

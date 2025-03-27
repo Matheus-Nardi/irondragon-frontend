@@ -64,7 +64,7 @@ export class LoteFormComponent implements OnInit {
 }
   ngOnInit(): void {
     this.fornecedorService.findAll().subscribe((data) => {
-      this.fornecedores = data;
+      this.fornecedores = data.results;
       this.initilizeForm();
     });
     this.processadorService.findAll().subscribe((data) => {
