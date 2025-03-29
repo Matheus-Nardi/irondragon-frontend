@@ -10,6 +10,9 @@ import { EstadoService } from '../../../services/estado.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogService } from '../../../services/dialog.service';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-estado-list',
@@ -20,14 +23,18 @@ import { SnackbarService } from '../../../services/snackbar.service';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
-    
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule
   ],
   templateUrl: './estado-list.component.html',
   styleUrl: './estado-list.component.css',
 })
 export class EstadoListComponent implements OnInit {
+  search: string = '';
   displayedColumns: string[] = ['id', 'nome', 'sigla', 'acoes'];
   estados: Estado[] = [];
+  estadosFiltrados: Estado[] = [];
   totalRecords = 0;
   pageSize = 5;
   page = 0;
@@ -37,7 +44,8 @@ export class EstadoListComponent implements OnInit {
     private estadoService: EstadoService,
     private dialogService: DialogService,
     private snackbarService: SnackbarService,
-  ) {}
+    
+  ) { }
 
   ngOnInit(): void {
     this.loadEstados();
@@ -48,6 +56,7 @@ export class EstadoListComponent implements OnInit {
       console.log(data);
       this.estados = data.results;
       this.totalRecords = data.count;
+      this.estadosFiltrados = [...this.estados];
     });
   }
   
@@ -68,6 +77,21 @@ export class EstadoListComponent implements OnInit {
       }
     });
   }
+
+  onSearch(value: string): void {
+    this.page = 0;
+    if (value.trim() === '') {
+      this.estadosFiltrados = [...this.estados]; 
+      this.totalRecords = this.estados.length;
+      return;
+    }
+  
+    this.estadoService.findByNome(value, this.page, this.pageSize).subscribe(data => {
+      this.estadosFiltrados = data.results;
+      this.totalRecords = data.count;
+    });
+  }
+
 
   deleteEstado(estado: Estado): void {
     this.estadoService.delete(estado).subscribe({

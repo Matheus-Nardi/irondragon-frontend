@@ -24,6 +24,18 @@ export class EstadoService {
     return this.httpClient.get<PageResponse<Estado>>(`${this.configService.getApiBaseUrl()}/estados`, {params});
   }
 
+  findByNome(nome:string, page?:number, pageSize?:number): Observable<PageResponse<Estado>> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined && nome !== undefined) {
+      params = {  
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+    return this.httpClient.get<PageResponse<Estado>>(`${this.configService.getApiBaseUrl()}/estados/search/${nome}`, {params});
+  }
+
   delete(estado: Estado): Observable<any> {
     return this.httpClient.delete(`${this.configService.getApiBaseUrl()}/estados/${estado.id}`);
   }
