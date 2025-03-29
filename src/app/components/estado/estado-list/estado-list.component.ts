@@ -12,6 +12,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-estado-list',
@@ -23,7 +24,8 @@ import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule } fro
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatInputModule
   ],
   templateUrl: './estado-list.component.html',
   styleUrl: './estado-list.component.css',
@@ -42,6 +44,7 @@ export class EstadoListComponent implements OnInit {
     private estadoService: EstadoService,
     private dialogService: DialogService,
     private snackbarService: SnackbarService,
+    
   ) { }
 
   ngOnInit(): void {
@@ -80,14 +83,12 @@ export class EstadoListComponent implements OnInit {
     if (value.trim() === '') {
       this.estadosFiltrados = [...this.estados]; 
       this.totalRecords = this.estados.length;
-      console.log(this.totalRecords)
       return;
     }
   
     this.estadoService.findByNome(value, this.page, this.pageSize).subscribe(data => {
       this.estadosFiltrados = data.results;
       this.totalRecords = data.count;
-      console.log(this.totalRecords)
     });
   }
 
