@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { Observable, ObservedValueOf } from 'rxjs';
 import { Cidade } from '../models/cidade.model';
+import { PageResponse } from '../interfaces/pageresponse';
 
 type Id = string | number;
 
@@ -17,8 +18,17 @@ export class CidadeService {
     return this.httpClient.get<Cidade>(`${this.configService.getApiBaseUrl()}/cidades/${id}`);
   }
 
-  findAll(): Observable<Cidade[]> {
-    return this.httpClient.get<Cidade[]>(`${this.configService.getApiBaseUrl()}/cidades`);
+  findAll(page?:number, pageSize?:number): Observable<PageResponse<Cidade>> {
+    let params = {};
+
+    if (page !== undefined && pageSize !== undefined) {
+      params = {
+        page: page.toString(),
+        page_size: pageSize.toString()
+      }
+    }
+
+    return this.httpClient.get<PageResponse<Cidade>>(`${this.configService.getApiBaseUrl()}/cidades`, {params});
   }
 
   create(cidade: Cidade): Observable<Cidade> {

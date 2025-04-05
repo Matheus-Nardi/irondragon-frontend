@@ -29,7 +29,11 @@
             formGroup.get('nome')?.touched
           "
         >
-          O nome é obrigatório
+        {{getErrorMessage('nome', formGroup.get('nome')?.errors)}}
+
+        @if (formGroup.get('nome')?.hasError('apiError')) {
+          <span>{{ formGroup.get('nome')?.getError('apiError') }}</span>
+        }
         </mat-error>
       </mat-form-field>
 
@@ -56,18 +60,15 @@
           *ngIf="
             formGroup.get('directX') &&
             formGroup.get('directX')?.touched &&
-            formGroup.get('directX')?.hasError('required')
+            formGroup.get('directX')?.hasError('required') ||
+            formGroup.get('directX')?.hasError('pattern')
           "
         >
-          A versão do DirectX é obrigatória
-        </mat-error>
-        <mat-error
-        *ngIf="
-        formGroup.get('directX') &&
-        formGroup.get('directX')?.touched &&
-        formGroup.get('directX')?.hasError('pattern')
-        ">
-          Somente numeros nesse campo
+        {{getErrorMessage('directX', formGroup.get('directX')?.errors)}}
+
+        @if (formGroup.get('directX')?.hasError('apiError')) {
+          <span>{{ formGroup.get('directX')?.getError('apiError') }}</span>
+        }
         </mat-error>
       </mat-form-field>
 
@@ -94,18 +95,15 @@
           *ngIf="
             formGroup.get('openGl') &&
             formGroup.get('openGl')?.touched &&
-            formGroup.get('openGl')?.hasError('required')
+            formGroup.get('openGl')?.hasError('required') ||
+            formGroup.get('openGl')?.hasError('pattern')
           "
         >
-          A versão do OpenGL é obrigatória
-        </mat-error>
-        <mat-error
-          *ngIf="
-        formGroup.get('openGl') &&
-        formGroup.get('openGl')?.touched &&
-        formGroup.get('openGl')?.hasError('pattern')
-        ">
-          Somente numeros nesse campo
+        {{getErrorMessage('openGl', formGroup.get('openGl')?.errors)}}
+
+        @if (formGroup.get('openGl')?.hasError('apiError')) {
+          <span>{{ formGroup.get('openGl')?.getError('apiError') }}</span>
+        }
         </mat-error>
       </mat-form-field>
 
@@ -132,18 +130,15 @@
           *ngIf="
             formGroup.get('vulkan') &&
             formGroup.get('vulkan')?.touched &&
-            formGroup.get('vulkan')?.hasError('required')
+            formGroup.get('vulkan')?.hasError('required') ||
+            formGroup.get('vulkan')?.hasError('pattern')
           "
         >
-          A versão do Vulkan é obrigatória
-        </mat-error>
-        <mat-error
-          *ngIf="
-        formGroup.get('vulkan') &&
-        formGroup.get('vulkan')?.touched &&
-        formGroup.get('vulkan')?.hasError('pattern')
-        ">
-          Somente numeros nesse campo
+        {{getErrorMessage('vulkan', formGroup.get('vulkan')?.errors)}}
+
+        @if (formGroup.get('vulkan')?.hasError('apiError')) {
+          <span>{{ formGroup.get('vulkan')?.getError('apiError') }}</span>
+        }
         </mat-error>
       </mat-form-field>
     </form>

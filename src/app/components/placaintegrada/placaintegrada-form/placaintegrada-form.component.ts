@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import {PlacaintegradaService} from '../../../services/placaintegrada.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
@@ -11,6 +11,7 @@ import {NgIf, TitleCasePipe} from '@angular/common';
 import {IPlacaIntegrada, PlacaIntegrada} from '../../../models/processador/placaintegrada.model';
 import {SnackbarService} from '../../../services/snackbar.service';
 import {Fornecedor} from '../../../models/fornecedor.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-placaintegrada-form',
@@ -110,5 +111,58 @@ export class PlacaintegradaFormComponent {
         }
       });
     }
+  }
+
+  getErrorMessage(controlName: string, errors: ValidationErrors | null | undefined): string {
+    if (!errors || !this.errorMessages[controlName]) {
+      return 'invalid field';
+    }
+    
+    for (const errorName in errors) {
+      if (this.errorMessages[controlName][errorName]) {
+        return this.errorMessages[controlName][errorName];
+      }
+    }
+    return 'invalid field';
+  }
+
+  errorHandling(httpError: HttpErrorResponse): void {
+    if (httpError.status === 400) {
+      if (httpError.error?.errors) {
+        httpError.error.errors.forEach((validationError: any) => {
+          const formControl = this.formGroup.get(validationError.fieldName);
+          // console.log(validationError);
+          if (formControl) {
+            formControl.setErrors({ apiError: validationError.message });
+          }
+        });
+      };
+    } else if (httpError.status < 500) {
+      alert(httpError.error?.message || 'Erro genérico no envio do formulário');    
+    } else {
+      alert(httpError.error?.message || 'Erro não mapeado do servidor');    
+    }
+  }
+
+  errorMessages: {[controlName: string] : {[errorName: string] : string}} = {
+    nome: {
+      required: 'O nome deve ser informado.',
+      apiError: ' '
+    },
+    directX: {
+      required: 'O DirectX deve ser informado',
+      pattern: 'Informe apenas números',
+      apiError: ' '
+    },
+    vulkan: {
+      required: 'O Vulkan deve ser informado',
+      pattern: 'Informe apenas números',
+      apiError: ' '
+    },
+    openGl: {
+      required: 'O OpenGL deve bosta informado',
+      pattern: 'Informe apenas números',
+      apiError: ' '
+    },
   }
 }
