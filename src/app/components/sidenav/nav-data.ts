@@ -1,3 +1,5 @@
+import { RouterLink } from "@angular/router";
+
 export const navbarData = [
     {
       routeLink: '',
@@ -22,5 +24,9 @@ export const navbarData = [
     {
       routeLink: 'placasintegradas',
       label: 'Placas Integradas'
+    },
+    {
+      RouterLink: 'lotes',
+      label: 'Lotes'
     }
   ];

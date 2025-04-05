@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Lote } from '../models/lote.model';
 import { ConfigService } from './config.service';
+import { PageResponse } from '../interfaces/pageresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,23 @@ export class LoteService {
     findById(id: string): Observable<Lote> {
       return this.httpClient.get<Lote>(`${this.configService.getApiBaseUrl()}/lotes/${id}`);
     }
-  
-    findAll(): Observable<Lote[]> {
-      return this.httpClient.get<Lote[]>(`${this.configService.getApiBaseUrl()}/lotes`);
+
+    findByCodigo(codigo: string): Observable<Lote> {
+      return this.httpClient.get<Lote>(`${this.configService.getApiBaseUrl()}/lotes/search/${codigo}`);
     }
+  
+    findAll(page?:number, pageSize?:number): Observable<PageResponse<Lote>> {
+       let params = {};
+   
+       if (page !== undefined && pageSize !== undefined) {
+         params = {
+           page: page.toString(),
+           page_size: pageSize.toString()
+         }
+       }
+   
+       return this.httpClient.get<PageResponse<Lote>>(`${this.configService.getApiBaseUrl()}/lotes`, {params});
+     }
   
     create(lote: Lote): Observable<Lote> {
 

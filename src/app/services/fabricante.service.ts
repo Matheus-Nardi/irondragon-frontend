@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
 import { Fabricante } from '../models/fabricante.model';
+import { PageResponse } from '../interfaces/pageresponse';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,31 @@ import { Fabricante } from '../models/fabricante.model';
 export class FabricanteService {
   constructor(private httpClient: HttpClient, private configService: ConfigService) {}
 
-  findAll(): Observable<Fabricante[]> {
-    return this.httpClient.get<Fabricante[]>(`${this.configService.getApiBaseUrl()}/fabricantes`);
-  }
+   findAll(page?:number, pageSize?:number): Observable<PageResponse<Fabricante>> {
+      let params = {};
+  
+      if (page !== undefined && pageSize !== undefined) {
+        params = {
+          page: page.toString(),
+          page_size: pageSize.toString()
+        }
+      }
+  
+      return this.httpClient.get<PageResponse<Fabricante>>(`${this.configService.getApiBaseUrl()}/fabricantes`, {params});
+    }
 
+     findByNome(nome:string, page?:number, pageSize?:number): Observable<PageResponse<Fabricante>> {
+        let params = {};
+    
+        if (page !== undefined && pageSize !== undefined && nome !== undefined) {
+          params = {  
+            page: page.toString(),
+            page_size: pageSize.toString()
+          }
+        }
+        return this.httpClient.get<PageResponse<Fabricante>>(`${this.configService.getApiBaseUrl()}/fabricantes/search/${nome}`, {params});
+      }
+    
   create(fabricante: Fabricante): Observable<Fabricante> {
     const telefone ={
       codigoArea: fabricante.telefone.codigoArea,

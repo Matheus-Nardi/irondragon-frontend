@@ -8,7 +8,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { Fabricante } from '../../../models/fabricante.model';
@@ -16,6 +16,8 @@ import { FabricanteService } from '../../../services/fabricante.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogService } from '../../../services/dialog.service';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-fabricante-list',
@@ -27,13 +29,20 @@ import { SnackbarService } from '../../../services/snackbar.service';
     MatButtonModule,
     RouterLink,
     MatDialogModule,
+    FormsModule,
+    MatInputModule
   ],
   templateUrl: './fabricante-list.component.html',
   styleUrl: './fabricante-list.component.css',
 })
 export class FabricanteListComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'nome', 'email', 'telefone', 'acoes'];
   fabricantes: Fabricante[] = [];
-  dataSource = new MatTableDataSource<Fabricante>();
+  fabricantesFiltrados: Fabricante[] = [];
+  totalRecords = 0;
+  pageSize = 5;
+  page = 0;
+  search: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -44,18 +53,37 @@ export class FabricanteListComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this.fabricanteService.findAll().subscribe((data) => {
-      this.fabricantes = data;
-      this.dataSource.data = this.fabricantes;
+ ngOnInit(): void {
+     this.loadFabricantes();
+   }
+   
+   loadFabricantes(): void {
+     this.fabricanteService.findAll(this.page, this.pageSize).subscribe(data => {
+       this.fabricantes = data.results;
+       this.totalRecords = data.count;
+       this.fabricantesFiltrados = [...this.fabricantes];
+     });
+   }
+   
+   paginar(event: PageEvent): void {
+     this.page = event.pageIndex;
+     this.pageSize = event.pageSize;
+     this.loadFabricantes();
+   }
 
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
+   onSearch(value: string): void {
+    this.page = 0;
+    if (value.trim() === '') {
+      this.fabricantesFiltrados = [...this.fabricantes]; 
+      this.totalRecords = this.fabricantes.length;
+      return;
+    }
+  
+    this.fabricanteService.findByNome(value, this.page, this.pageSize).subscribe(data => {
+      this.fabricantesFiltrados = data.results;
+      this.totalRecords = data.count;
     });
   }
-
-  
-  displayedColumns: string[] = ['id', 'nome', 'email', 'telefone', 'acoes'];
 
   onDeleteFabricante(fabricante: Fabricante): void {
     this.dialogService
