@@ -1,6 +1,6 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { EstadoService } from '../../../services/estado.service';
 import { Estado } from '../../../models/estado.model';
 import { MatCardModule } from '@angular/material/card';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cidade-form',
@@ -95,6 +96,48 @@ export class CidadeFormComponent implements OnInit {
           console.error('Erro ao excluir ' + JSON.stringify(err));
         }
       })
+    }
+  }
+
+  getErrorMessage(controlName: string, errors: ValidationErrors | null | undefined): string {
+    if (!errors || !this.errorMessages[controlName]) {
+      return 'invalid field';
+    }
+    
+    for (const errorName in errors) {
+      if (this.errorMessages[controlName][errorName]) {
+        return this.errorMessages[controlName][errorName];
+      }
+    }
+    return 'invalid field';
+  }
+
+  errorHandling(httpError: HttpErrorResponse): void {
+    if (httpError.status === 400) {
+      if (httpError.error?.errors) {
+        httpError.error.errors.forEach((validationError: any) => {
+          const formControl = this.formGroup.get(validationError.fieldName);
+          // console.log(validationError);
+          if (formControl) {
+            formControl.setErrors({ apiError: validationError.message });
+          }
+        });
+      };
+    } else if (httpError.status < 500) {
+      alert(httpError.error?.message || 'Erro genérico no envio do formulário');    
+    } else {
+      alert(httpError.error?.message || 'Erro não mapeado do servidor');    
+    }
+  }
+
+  errorMessages: {[controlName: string] : {[errorName: string] : string}} = {
+    nome: {
+      required: 'O nome deve ser informado',
+      apiError: ' '
+    },
+    estado: {
+      required: 'O estado deve ser referenciado',
+      apiError: ' '
     }
   }
 }

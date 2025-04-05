@@ -19,7 +19,11 @@
                 formGroup.get('nome')?.invalid &&
                 formGroup.get('nome')?.touched
               ">
-              O nome é obrigatório
+              {{getErrorMessage('nome', formGroup.get('nome')?.errors)}}
+
+              @if (formGroup.get('nome')?.hasError('apiError')) {
+                <span>{{ formGroup.get('nome')?.getError('apiError') }}</span>
+              }
             </mat-error>
           </mat-form-field>
   

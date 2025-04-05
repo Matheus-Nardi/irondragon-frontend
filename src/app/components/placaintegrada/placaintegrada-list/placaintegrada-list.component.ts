@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule, MatIconButton} from '@angular/material/button';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {Router, RouterLink, RouterModule} from '@angular/router';
 import {PlacaIntegrada} from '../../../models/processador/placaintegrada.model';
 import {PlacaintegradaService} from '../../../services/placaintegrada.service';
@@ -26,24 +26,33 @@ export class PlacaintegradaListComponent implements OnInit{
   placasIntegradas: PlacaIntegrada[] = [];
   dataSource = new MatTableDataSource<PlacaIntegrada>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalRecords: number = 0;
+  page: number = 0;
+  pageSize: number = 5;
 
   constructor(
     private placaIntegradaService: PlacaintegradaService,
     private dialogService: DialogService,
-    private snackBarService: SnackbarService,
-    private changeDetectorRef: ChangeDetectorRef,
+    private snackBarService: SnackbarService
   ) {
   }
 
   ngOnInit(): void {
-    this.placaIntegradaService.findAll().subscribe((data) => {
-      this.placasIntegradas = data;
-      this.dataSource.data = this.placasIntegradas;
+    this.loadPlacaIntegrada();
+  }
 
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
+  loadPlacaIntegrada(): void {
+    this.placaIntegradaService.findAll(this.page, this.pageSize).subscribe((data) => {
+      this.placasIntegradas = data.results;
+      this.totalRecords = data.count;
+      this.dataSource.data = this.placasIntegradas;
     });
+  }
+
+  pagination(event: PageEvent) {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadPlacaIntegrada();
   }
 
   onDeletePlacaIntegrada(placaIntegrada: PlacaIntegrada) {

@@ -19,7 +19,11 @@
                 formGroup.get('nome')?.invalid &&
                 formGroup.get('nome')?.touched
               ">
-              O nome é obrigatório
+              {{getErrorMessage('nome', formGroup.get('nome')?.errors)}}
+
+              @if (formGroup.get('nome')?.hasError('apiError')) {
+                <span>{{ formGroup.get('nome')?.getError('apiError') }}</span>
+              }
             </mat-error>
           </mat-form-field>
   
@@ -33,15 +37,14 @@
             }
             <mat-error *ngIf="
                 formGroup.get('email')?.touched &&
-                formGroup.get('email')?.hasError('required')
-              ">
-              O email é obrigatório
-            </mat-error>
-            <mat-error *ngIf="
-                formGroup.get('email')?.touched &&
+                formGroup.get('email')?.hasError('required') ||
                 formGroup.get('email')?.hasError('email')
               ">
-              O email deve ser válido
+              {{getErrorMessage('email', formGroup.get('email')?.errors)}}
+
+              @if (formGroup.get('email')?.hasError('apiError')) {
+                <span>{{ formGroup.get('email')?.getError('apiError') }}</span>
+              }
             </mat-error>
           </mat-form-field>
   
@@ -56,15 +59,14 @@
               }
               <mat-error *ngIf="
                   formGroup.get('codigoArea')?.touched &&
-                  formGroup.get('codigoArea')?.hasError('required')
-                ">
-                O código de área é obrigatório
-              </mat-error>
-              <mat-error *ngIf="
-                  formGroup.get('codigoArea')?.touched &&
+                  formGroup.get('codigoArea')?.hasError('required') ||
                   formGroup.get('codigoArea')?.hasError('minlength')
                 ">
-                O código de área deve ter no mínimo 2 dígitos
+                {{getErrorMessage('codigoArea', formGroup.get('codigoArea')?.errors)}}
+
+                @if (formGroup.get('codigoArea')?.hasError('apiError')) {
+                  <span>{{ formGroup.get('codigoArea')?.getError('apiError') }}</span>
+                }
               </mat-error>
               <mat-error *ngIf="
                 formGroup.get('codigoArea')?.touched &&

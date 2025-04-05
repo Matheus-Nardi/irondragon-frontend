@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Cidade } from '../../../models/cidade.model';
 import { CidadeService } from '../../../services/cidade.service';
@@ -22,23 +22,33 @@ export class CidadeListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'estado', 'acoes'];
   cidades: Cidade[] = [];
 
+  totalRecords: number = 0;
+  page: number = 0;
+  pageSize: number = 5;
+
   constructor(
     private cidadeService: CidadeService,
     private dialogService: DialogService,
-    private snackbarService: SnackbarService,
-    private changeDetectorRef: ChangeDetectorRef
+    private snackbarService: SnackbarService
   ) {}
   dataSource = new MatTableDataSource<Cidade>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngOnInit(): void {
-    this.cidadeService.findAll().subscribe((data) => {
-      this.cidades = data;
-      this.dataSource.data = this.cidades;
+    this.loadCidades();
+  }
 
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
+  loadCidades(): void {
+    this.cidadeService.findAll(this.page, this.pageSize).subscribe((data) => {
+      this.cidades = data.results;
+      this.totalRecords = data.count;
+      this.dataSource.data = this.cidades;
     });
+  }
+
+  pagination(event: PageEvent) {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadCidades();
   }
 
   onDeleteCidade(cidade: Cidade) {
