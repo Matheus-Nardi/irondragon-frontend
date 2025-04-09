@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { Observable, ObservedValueOf } from 'rxjs';
 import { Cidade } from '../models/cidade.model';
-import { PageResponse } from '../interfaces/pageresponse';
+import { PageResponse } from '../interfaces/pageresponse.interface';
 
 type Id = string | number;
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
 import { Fornecedor, IFornecedor } from '../models/fornecedor.model';
-import { PageResponse } from '../interfaces/pageresponse';
+import { PageResponse } from '../interfaces/pageresponse.interface';
 
 @Injectable({
   providedIn: 'root'

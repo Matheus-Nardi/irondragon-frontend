@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Estado } from '../models/estado.model';
 import { ConfigService } from './config.service';
-import { PageResponse } from '../interfaces/pageresponse';
+import { PageResponse } from '../interfaces/pageresponse.interface';
 
 @Injectable({
   providedIn: 'root'

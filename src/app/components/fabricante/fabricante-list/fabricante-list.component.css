@@ -64,10 +64,16 @@
     width: 100%;
   }
   
-  .mat-column-sigla {
+  .mat-column-email {
     width: 5em;
     text-align: center;
   }
+
+  .mat-column-telefone {
+    width: 10em; 
+    white-space: nowrap;
+    text-align: center;
+}
   
   .mat-column-acoes {
     width: 10em;
