@@ -66,7 +66,7 @@ export class CidadeFormComponent implements OnInit {
         this.cidadeService.create(cidadeForm).subscribe({
           next: (cidade) => {
             console.log('Cidade cadastrada com sucesso');
-            this.router.navigateByUrl('/cidades');
+            this.router.navigateByUrl('/admin/cidades');
           },
           error: (err) => {
             console.log(`Erro ao cadastrar a cidade ${JSON.stringify(err)}`)
@@ -75,7 +75,7 @@ export class CidadeFormComponent implements OnInit {
       } else {
         this.cidadeService.update(cidadeForm).subscribe({
           next: () => {
-            this.router.navigateByUrl('/cidades');
+            this.router.navigateByUrl('/admin/cidades');
           },
           error: (err) => {
             console.log(`Erro ao atualizar a cidade ${JSON.stringify(err)}`);
@@ -90,7 +90,7 @@ export class CidadeFormComponent implements OnInit {
     if(cidadeForm.id != null) {
       this.cidadeService.delete(cidadeForm).subscribe({
         next: () => {
-          this.router.navigateByUrl('/cidades');
+          this.router.navigateByUrl('/admin/cidades');
         },
         error: (err) => {
           console.error('Erro ao excluir ' + JSON.stringify(err));

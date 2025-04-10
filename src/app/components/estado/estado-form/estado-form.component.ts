@@ -76,7 +76,7 @@ export class EstadoFormComponent {
       operacao.subscribe({
         next: () => {
           console.log('Estado salvo com sucesso');
-          this.router.navigateByUrl('/estados');
+          this.router.navigateByUrl('/admin/estados');
           this.snackbarService.showSuccess('Estado salvo com sucesso');
         },
         error: (err) => {
@@ -95,7 +95,7 @@ export class EstadoFormComponent {
         this.estadoService.delete(estado).subscribe({
           next: () => {
             console.log('Estado excluido com sucesso');
-            this.router.navigateByUrl('/estados');
+            this.router.navigateByUrl('/admin/estados');
             this.snackbarService.showSuccess('Estado deletado com sucesso');
           },
           error: (err) => {

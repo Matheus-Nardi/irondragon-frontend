@@ -1,13 +1,14 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { navbarData } from './nav-data';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -25,7 +26,16 @@ import {MatInputModule} from '@angular/material/input';
   styleUrl: './sidenav.component.css',
 })
 export class SidenavComponent {
-  opened = false;
   navData = navbarData;
+
+  @ViewChild('drawer') public drawer!: MatDrawer;
+
+  constructor(private sidebarService: SidebarService) {}
+
+  ngOnInit(): void {
+    this.sidebarService.sideNavToggleSubject.subscribe(() => {
+      this.drawer?.toggle();
+    });
+  }
 
 }

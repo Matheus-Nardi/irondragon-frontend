@@ -59,7 +59,7 @@ export class FornecedorFormComponent {
         this.fornecedorService.create(fornecedor).subscribe({
           next: (fornecedor) => {
             console.log('Fornecedor cadastrado com sucesso!');
-            this.router.navigateByUrl('/fornecedores');
+            this.router.navigateByUrl('/admin/fornecedores');
           },
           error: (err) => {
             console.log(`Erro ao cadastrar o fornecedor ${JSON.stringify(err)}`);
@@ -68,7 +68,7 @@ export class FornecedorFormComponent {
       } else {
         this.fornecedorService.update(fornecedor).subscribe({
           next: () => {
-            this.router.navigateByUrl('/fornecedores');
+            this.router.navigateByUrl('/admin/fornecedores');
           },
           error: (err) => {
             console.error(`Erro ao atualizar o fornecedor, ${err}`);
@@ -83,7 +83,7 @@ export class FornecedorFormComponent {
     if(fornecedorForm.id != null) {
       this.fornecedorService.delete(fornecedorForm).subscribe({
         next: () => {
-          this.router.navigateByUrl('/fornecedor');
+          this.router.navigateByUrl('/admin/fornecedor');
         },
         error: (err) => {
           console.error('Erro ao excluir ' + JSON.stringify(err));
