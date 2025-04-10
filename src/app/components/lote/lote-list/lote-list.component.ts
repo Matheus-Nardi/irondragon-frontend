@@ -41,7 +41,7 @@ export class LoteListComponent implements OnInit {
   lotes: Lote[] = [];
   lotesFiltrados: Lote[] = [];
   totalRecords = 0;
-  pageSize = 3;
+  pageSize = 100;
   page = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -103,20 +103,17 @@ export class LoteListComponent implements OnInit {
     this.page = 0;
   
     if (value.trim() === '') {
-      this.lotesFiltrados = [...this.lotes]; 
-      this.totalRecords = this.lotes.length;
+      this.lotesFiltrados = [...this.lotes];
+      this.totalRecords = this.lotesFiltrados.length;
       return;
     }
   
-    this.loteService.findByCodigo(value).subscribe(data => {
-      if (data) {
-        this.lotesFiltrados = [data];
-        this.totalRecords = 1;
-      } else {
-        this.lotesFiltrados = [];
-        this.totalRecords = 0;
-      }
-    });
+    const searchValue = value.toLowerCase();
+    this.lotesFiltrados = this.lotes.filter(lote =>
+      lote.codigo.toLowerCase().includes(searchValue) 
+    );
+  
+    this.totalRecords = this.lotesFiltrados.length;
   }
   
 }
