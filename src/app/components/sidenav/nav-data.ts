@@ -26,7 +26,7 @@ export const navbarData = [
       label: 'Placas Integradas'
     },
     {
-      RouterLink: 'lotes',
+      routeLink: 'lotes',
       label: 'Lotes'
     }
   ];

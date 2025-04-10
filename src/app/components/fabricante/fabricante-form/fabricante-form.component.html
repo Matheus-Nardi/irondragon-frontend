@@ -24,12 +24,15 @@
           }
           <mat-error
             *ngIf="
-              formGroup.get('nome') &&
-              formGroup.get('nome')?.invalid &&
+              formGroup.get('nome')?.errors &&
               formGroup.get('nome')?.touched
             "
           >
-            O nome é obrigatório
+          {{ getErrorMessage("nome", formGroup.get("nome")?.errors) }}
+
+          @if(formGroup.get('nome')?.hasError('apiError')) {
+          <span>{{ formGroup.get("nome")?.getError("apiError") }}</span>
+          }
           </mat-error>
         </mat-form-field>
   
@@ -53,23 +56,20 @@
           }
           <mat-error
             *ngIf="
-              formGroup.get('email')?.touched &&
-              formGroup.get('email')?.hasError('required')
+              formGroup.get('email')?.errors &&
+              formGroup.get('email')?.touched
             "
           >
-            O email é obrigatório
-          </mat-error>
-          <mat-error
-            *ngIf="
-              formGroup.get('email')?.touched &&
-              formGroup.get('email')?.hasError('email')
-            "
-          >
-            O email deve ser válido
+          {{ getErrorMessage("email", formGroup.get("email")?.errors) }}
+
+          @if(formGroup.get('email')?.hasError('apiError')) {
+          <span>{{ formGroup.get("email")?.getError("apiError") }}</span>
+          }
+          
           </mat-error>
         </mat-form-field>
-        <div class="telefone-container">
-      <mat-form-field appearance="outline" class="codigoArea">
+        <div formGroupName="telefone" class="telefone-container">
+          <mat-form-field appearance="outline" class="codigoArea">
             <mat-label>DDD</mat-label>
             <input
               matInput
@@ -77,45 +77,30 @@
               formControlName="codigoArea"
               placeholder="63"
             />
-            @if (formGroup.get('codigoArea')?.value) {
-            <button
-              matSuffix
-              mat-icon-button
-              aria-label="Clear"
-              (click)="formGroup.get('telefone')?.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
+            @if (formGroup.get('telefone.codigoArea')?.value) {
+              <button
+                matSuffix
+                mat-icon-button
+                aria-label="Clear"
+                (click)="formGroup.get('telefone.codigoArea')?.setValue('')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
             }
             <mat-error
               *ngIf="
-                formGroup.get('codigoArea')?.touched &&
-                formGroup.get('codigoArea')?.hasError('required')
+                formGroup.get('telefone.codigoArea')?.errors &&
+                formGroup.get('telefone.codigoArea')?.touched
               "
             >
-              O código de área é obrigatório
+              {{ getErrorMessage("codigoArea", formGroup.get("telefone.codigoArea")?.errors) }}
+        
+              @if(formGroup.get('telefone.codigoArea')?.hasError('apiError')) {
+                <span>{{ formGroup.get("telefone.codigoArea")?.getError("apiError") }}</span>
+              }
             </mat-error>
-            <mat-error
-              *ngIf="
-                formGroup.get('codigoArea')?.touched &&
-                formGroup.get('codigoArea')?.hasError('minlength')
-              "
-            >
-              O código de área deve ter no mínimo 2 dígitos
-            </mat-error>
-            <mat-error
-            *ngIf="
-              formGroup.get('codigoArea')?.touched &&
-              formGroup.get('codigoArea')?.hasError('maxlength')
-            "
-          >
-            O código de área deve ter no máximo 2 dígitos
-          </mat-error>
           </mat-form-field>
-  
-          
-
-         
+        
           <mat-form-field appearance="outline" class="numero">
             <mat-label>Número</mat-label>
             <input
@@ -124,32 +109,28 @@
               formControlName="numero"
               placeholder="999999999"
             />
-            @if (formGroup.get('numero')?.value) {
-            <button
-              matSuffix
-              mat-icon-button
-              aria-label="Clear"
-              (click)="formGroup.get('numero')?.setValue('')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
+            @if (formGroup.get('telefone.numero')?.value) {
+              <button
+                matSuffix
+                mat-icon-button
+                aria-label="Clear"
+                (click)="formGroup.get('telefone.numero')?.setValue('')"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
             }
             <mat-error
               *ngIf="
-                formGroup.get('numero')?.touched &&
-                formGroup.get('numero')?.hasError('required')
+                formGroup.get('telefone.numero')?.errors &&
+                formGroup.get('telefone.numero')?.touched
               "
             >
-              O número é obrigatório
+              {{ getErrorMessage("numero", formGroup.get("telefone.numero")?.errors) }}
+        
+              @if(formGroup.get('telefone.numero')?.hasError('apiError')) {
+                <span>{{ formGroup.get("telefone.numero")?.getError("apiError") }}</span>
+              }
             </mat-error>
-            <mat-error
-            *ngIf="
-              formGroup.get('numero')?.touched &&
-              formGroup.get('numero')?.hasError('pattern')
-            "
-          >
-            O número deve conter 8 ou 9 dígitos
-          </mat-error>
           </mat-form-field>
         </div>
     </form>
@@ -161,14 +142,13 @@
       color="primary"
       type="submit"
       (click)="salvar()"
-      [disabled]="formGroup.invalid"
     >
       SALVAR
     </button>
     <button
       mat-raised-button
       color="warn"
-      [disabled]="formGroup.invalid"
+      [disabled]="formGroup.get('id')?.value === null"
       (click)="excluir()"
     >
       EXCLUIR
