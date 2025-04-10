@@ -1,14 +1,33 @@
 @if (lotes.length > 0) {
     <div class="header">
-      <h1 class="title">Lotes</h1>
-      <button class="btn" routerLink="/lotes/create">
-        <mat-icon>add</mat-icon>
-      </button>
+      <div class="add-container">
+        <h1 class="title">Lotes</h1>
+        <button class="btn" routerLink="/lotes/create">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    
+      <div class="search-container">
+        <span class="example-spacer"></span>
+        <mat-form-field class="example-form-field" appearance="outline">
+          <input
+          matInput
+          (keyup)="onSearch(search)"
+          placeholder="Pesquise por um lote"
+          [(ngModel)]="search"
+        />
+          <button matSuffix mat-icon-button aria-label="Clear">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        <span class="example-spacer"></span>
+      </div>
     </div>
+    
   <div class="container">
     <div class="content">
       <div class="mat-elevation-z8 full-screen ">
-        <table mat-table [dataSource]="lotes" class="full-table table-background">
+        <table mat-table [dataSource]="lotesFiltrados.slice(page * pageSize, (page + 1) * pageSize)" class="full-table table-background">
   
   
           <ng-container matColumnDef="id">
