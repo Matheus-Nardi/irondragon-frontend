@@ -1,24 +1,23 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { FabricanteService } from '../../../services/fabricante.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { timeout } from 'rxjs';
-import { SnackbarComponent } from '../../snackbar/snackbar.component';
-import { SnackbarService } from '../../../services/snackbar.service';
 import { Fabricante } from '../../../models/fabricante.model';
-import { MatCardModule } from '@angular/material/card';
+import { FabricanteService } from '../../../services/fabricante.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-fabricante-form',
@@ -53,50 +52,46 @@ export class FabricanteFormComponent {
       id: [fabricante && fabricante.id ? fabricante.id : null],
       nome: [
         fabricante && fabricante.nome ? fabricante.nome : '',
-        Validators.required,
+        [Validators.required, Validators.minLength(2), Validators.maxLength(60)],
       ],
       email: [
         fabricante && fabricante.email ? fabricante.email : '',
         [Validators.required, Validators.email],
       ],
-      codigoArea: [
-        fabricante && fabricante.telefone.codigoArea
-          ? fabricante.telefone.codigoArea
-          : '',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
-      ],
-      numero: [
-        fabricante && fabricante.telefone.numero
-          ? fabricante.telefone.numero
-          : '',
-        [Validators.required, Validators.pattern(/^\d{8,9}$/)],
-      ],
+      telefone: this.formBuilder.group({
+        codigoArea: [fabricante?.telefone?.codigoArea || '', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
+        numero: [fabricante?.telefone?.numero || '', [Validators.required, Validators.pattern(/^\d{8,9}$/)]],
+      })
     });
   }
 
   salvar() {
+    this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
-      const telefone = {
-        codigoArea: formValue.codigoArea,
-        numero: formValue.numero,
-      };
 
-      const novoFabricante = {
-        id: formValue.id,
-        nome: formValue.nome,
-        email: formValue.email,
-        telefone: telefone,
-      };
-      if (formValue.id == null) {
-        this.createFabricante(novoFabricante);
-      } else {
-        this.editFabricante(novoFabricante);
-      }
+      const fabricante = this.formGroup.value;
+      const operacao =
+        fabricante.id == null
+          ? this.fabricanteService.create(fabricante)
+          : this.fabricanteService.update(fabricante);
+
+      operacao.subscribe({
+        next: () => {
+          console.log('Fabricante salvo com sucesso');
+          this.router.navigateByUrl('/fabricantes');
+          this.snackbarService.showSuccess('Fabricante salvo com sucesso');
+        },
+        error: (err) => {
+          console.log('Erro ao salvar o fabricante' + JSON.stringify(err));
+          this.tratarErros(err);
+          this.snackbarService.showError('Erro ao salvar fabricante');
+        },
+      });
     }
   }
 
-  excluir(){
+
+  excluir() {
     if (this.formGroup.valid) {
       const fabricante = this.formGroup.value;
       if (fabricante.id != null) {
@@ -104,7 +99,7 @@ export class FabricanteFormComponent {
           next: () => {
             console.log('Fabricante excluido com sucesso');
             this.router.navigateByUrl('/fabricantes');
-            this.snackbarService.showSuccess('fabricante deletado com sucesso');
+            this.snackbarService.showSuccess('Fabricante deletado com sucesso');
           },
           error: (err) => {
             console.log('Erro ao excluir o fabricante' + JSON.stringify(err));
@@ -115,31 +110,66 @@ export class FabricanteFormComponent {
     }
   }
 
-  private createFabricante(novoFabricante: Fabricante) {
-    this.fabricanteService.create(novoFabricante).subscribe({
-      next: (fabricante) => {
-        console.log('Fabricante cadastrado com sucesso');
-        this.snackbarService.showSuccess('Fabricante cadastrado com sucesso');
-        this.router.navigateByUrl('/fabricantes');
+  tratarErros(httpError: HttpErrorResponse): void {
+      if (httpError.status === 400) {
+        if (httpError.error?.errors) {
+          httpError.error.errors.forEach((validationError: any) => {
+            const formControl = this.formGroup.get(validationError.fieldName);
+            if (formControl) {
+              formControl.setErrors({ apiError: validationError.message });
+            }
+          });
+        }
+      } else if (httpError.status < 500) {
+        this.snackbarService.showError(
+          httpError.error?.message || 'Erro genérico no envio do formulário'
+        );
+      } else {
+        this.snackbarService.showError(
+          httpError.error?.message || 'Erro não mapeado do servidor'
+        );
+      }
+    }
+  
+    getErrorMessage(
+      controlName: string,
+      errors: ValidationErrors | null | undefined
+    ): string {
+      if (!errors || !this.errorMessages[controlName]) {
+        return 'invalid field';
+      }
+  
+      for (const errorName in errors) {
+        if (this.errorMessages[controlName][errorName]) {
+          return this.errorMessages[controlName][errorName];
+        }
+      }
+      return 'invalid field';
+    }
+  
+    errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
+      nome: {
+        required: 'O nome deve ser informado.',
+        minlength: 'O nome deve ter no mínimo 2 caracteres.',
+        maxlength: 'O nome deve ter no máximo 60 caracteres.',
+        apiError: ' ',
       },
-      error: (err) => {
-        console.error('Erro ao cadastrar o fabricante' + JSON.stringify(err));
-        this.snackbarService.showError('Erro ao cadastrar o fabricante');
+      email: {
+        required: 'O e-mail deve ser informado.',
+        email: 'Informe um e-mail válido.',
+        apiError: ' ',
       },
-    });
-  }
-
-  private editFabricante(novoFabricante: Fabricante) {
-    this.fabricanteService.update(novoFabricante).subscribe({
-      next: () => {
-        console.log('Fabricante atualizado com sucesso');
-        this.router.navigateByUrl('/fabricantes');
-        this.snackbarService.showSuccess('fabricante atualizado com sucesso');
+      codigoArea: {
+        required: 'O código de área deve ser informado.',
+        minlength: 'O código de área deve ter 2 dígitos.',
+        maxlength: 'O código de área deve ter 2 dígitos.',
+        apiError: ' ',
       },
-      error: (err) => {
-        console.log('Erro ao atualizar o fabricante' + JSON.stringify(err));
-        this.snackbarService.showError('Erro ao atualizar fabricante');
-      },
-    });
-  }
+      numero: {
+        required: 'O número deve ser informado.',
+        pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
+        apiError: ' ',
+      }
+    };
+    
 }

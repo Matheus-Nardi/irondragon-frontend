@@ -23,12 +23,16 @@
         }
         <mat-error
           *ngIf="
-            formGroup.get('codigo') &&
-            formGroup.get('codigo')?.invalid &&
-            formGroup.get('codigo')?.touched
+            formGroup.get('codigo')?.touched &&
+            formGroup.get('codigo')?.errors
           "
         >
-          O codigo é obrigatório
+        {{ getErrorMessage("codigo", formGroup.get("codigo")?.errors) }}
+
+        @if(formGroup.get('codigo')?.hasError('apiError')) {
+        <span>{{ formGroup.get("codigo")?.getError("apiError") }}</span>
+        }
+
         </mat-error>
       </mat-form-field>
 
@@ -53,10 +57,15 @@
         <mat-error
           *ngIf="
             formGroup.get('estoque')?.touched &&
-            formGroup.get('estoque')?.hasError('required')
+            formGroup.get('estoque')?.errors
           "
         >
-          A quantidade do estoque é obrigatória
+        {{ getErrorMessage("estoque", formGroup.get("estoque")?.errors) }}
+
+        @if(formGroup.get('estoque')?.hasError('apiError')) {
+        <span>{{ formGroup.get("estoque")?.getError("apiError") }}</span>
+        }
+
         </mat-error>
       </mat-form-field>
 
@@ -71,12 +80,15 @@
         <mat-datepicker #picker></mat-datepicker>
         <mat-error
         *ngIf="
-          formGroup.get('data') &&
-          formGroup.get('data')?.invalid &&
+          formGroup.get('data')?.errors &&
           formGroup.get('data')?.touched
         "
       >
-        A data é obrigatória
+      {{ getErrorMessage("data", formGroup.get("data")?.errors) }}
+
+      @if(formGroup.get('data')?.hasError('apiError')) {
+      <span>{{ formGroup.get("data")?.getError("apiError") }}</span>
+      }
       </mat-error>
       </mat-form-field>
 
@@ -94,12 +106,15 @@
         </mat-select>
         <mat-error
         *ngIf="
-          formGroup.get('processador') &&
-          formGroup.get('processador')?.invalid &&
+          formGroup.get('processador')?.errors &&
           formGroup.get('processador')?.touched
         "
       >
-        O processador é obrigatório
+      {{ getErrorMessage("processador", formGroup.get("processador")?.errors) }}
+
+      @if(formGroup.get('processador')?.hasError('apiError')) {
+      <span>{{ formGroup.get("processador")?.getError("apiError") }}</span>
+      }
       </mat-error>
       </mat-form-field>
 
@@ -117,12 +132,15 @@
         </mat-select>
         <mat-error
         *ngIf="
-          formGroup.get('fornecedor') &&
-          formGroup.get('fornecedor')?.invalid &&
+          formGroup.get('fornecedor')?.errors &&
           formGroup.get('fornecedor')?.touched
         "
       >
-        O fornecedor é obrigatório
+      {{ getErrorMessage("fornecedor", formGroup.get("fornecedor")?.errors) }}
+
+      @if(formGroup.get('fornecedor')?.hasError('apiError')) {
+      <span>{{ formGroup.get("fornecedor")?.getError("apiError") }}</span>
+      }
       </mat-error>
       </mat-form-field>
     </form>
@@ -135,14 +153,13 @@
       color="primary"
       type="submit"
       (click)="salvar()"
-      [disabled]="formGroup.invalid"
     >
       SALVAR
     </button>
     <button
       mat-raised-button
       color="warn"
-      [disabled]="formGroup.invalid"
+      [disabled]="formGroup.get('id')?.value === null"
       (click)="excluir()"
     >
       EXCLUIR

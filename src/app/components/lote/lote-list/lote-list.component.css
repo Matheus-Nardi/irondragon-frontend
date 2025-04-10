@@ -1,77 +1,90 @@
-.header{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
-.btn{
-    background: #0077C0;
-    border-radius: 5px;
-    text-transform: uppercase;
-    color: white;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
+.btn {
+  background: #0077c0;
+  border-radius: 5px;
+  text-transform: uppercase;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
 }
-.title{
-    text-align: center;
-    font-weight: 500;
+.title {
+  text-align: center;
+  font-weight: 500;
 }
-
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .content {
-    width: 80%;
-    max-width: 1200px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-bottom: 20px;
+  width: 80%;
+  max-width: 1200px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .table-background {
-    background-color: #FFFF;
+  background-color: #ffff;
 }
 
-.mat-column-id{
-    width: 5em;
-    border-right: 1px solid currentColor;
-    padding-right: 24px;
-    text-align: center;
+.mat-column-id {
+  width: 5em;
+  border-right: 1px solid currentColor;
+  padding-right: 24px;
+  text-align: center;
 }
 
-.mat-column-nome{
-    width: 100%;
+.mat-column-codigo {
+  width: 80%;
 }
 
-.mat-column-sigla{
-    width: 5em;
-    text-align: center;
+.mat-column-processador {
+  text-align: center;
 }
 
-.mat-column-acoes{
-    width: 10em;
-    text-align: center;
+.mat-column-fornecedor {
+  text-align: center;
+}
+
+.mat-column-estoque {
+  text-align: center;
+}
+
+.mat-column-data {
+  text-align: center;
+  white-space: nowrap;
+  width: 200px;
+}
+
+
+
+.mat-column-acoes {
+  width: 10em;
+  text-align: center;
 }
 .action-buttons {
-    display: flex;
-    gap: 8px; 
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
 }
 
-.edit{
-    color: #0077C0;
+.edit {
+  color: #0077c0;
 }
 
-.delete{
-    color: red;
+.delete {
+  color: red;
 }
