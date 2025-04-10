@@ -1,7 +1,7 @@
 @if (placasIntegradas.length > 0) {
   <div class="header">
     <h1 class="title">Placas Integradas</h1>
-    <button class="btn" routerLink="/placasintegradas/create">
+    <button class="btn" routerLink="create">
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -43,7 +43,7 @@
                 <button
                   mat-icon-button
                   color="primary edit"
-                  routerLink="/placasintegradas/edit/{{ placaIntegrada.id }}"
+                  routerLink="edit/{{ placaIntegrada.id }}"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>

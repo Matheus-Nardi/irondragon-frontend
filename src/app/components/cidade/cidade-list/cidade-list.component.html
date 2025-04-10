@@ -1,7 +1,7 @@
 @if (cidades.length > 0) {
 <div class="header">
   <h1 class="title">Cidades</h1>
-  <button class="btn" routerLink="/cidades/create">
+  <button class="btn" routerLink="create">
     <mat-icon>add</mat-icon>
   </button>
 </div>
@@ -30,7 +30,7 @@
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let cidade">
             <div class="action-buttons">
-              <button mat-icon-button color="primary edit" routerLink="/cidades/edit/{{ cidade.id }}">
+              <button mat-icon-button color="primary edit" routerLink="edit/{{ cidade.id }}">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button color="warn delete">

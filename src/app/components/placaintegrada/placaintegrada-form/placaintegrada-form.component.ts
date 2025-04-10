@@ -75,7 +75,7 @@ export class PlacaintegradaFormComponent {
       next: (placaIntegrada) => {
         this.snackbarService.showSuccess('Placa Integrada criada com sucesso!');
         console.log('Placa Integrada criada com sucesso', JSON.stringify(placaIntegrada));
-        this.router.navigateByUrl('/placasintegradas');
+        this.router.navigateByUrl('/admin/placasintegradas');
       },
       error: (err) => {
         console.error('Erro ao cadastrar a placa', err);
@@ -88,7 +88,7 @@ export class PlacaintegradaFormComponent {
       next: () => {
         this.snackbarService.showSuccess('Placa Integrada alterada com sucesso!');
         console.log('Placa Integrada alterada com sucesso');
-        this.router.navigateByUrl('/placasintegradas');
+        this.router.navigateByUrl('/admin/placasintegradas');
       },
       error: (err) => {
         console.error('Erro ao alterar o cadastro da placa', err);
@@ -104,7 +104,7 @@ export class PlacaintegradaFormComponent {
         next: () => {
           this.snackbarService.showSuccess('Placa Integrada deletada com sucesso!');
           console.log('Placa Integrada deletada com sucesso!');
-          this.router.navigateByUrl('/placasintegradas');
+          this.router.navigateByUrl('/admin/placasintegradas');
         },
         error: (err) => {
           console.error('Erro ao deletar a placa', err);

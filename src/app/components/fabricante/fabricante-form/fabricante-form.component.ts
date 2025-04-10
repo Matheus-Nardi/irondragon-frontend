@@ -78,7 +78,7 @@ export class FabricanteFormComponent {
       operacao.subscribe({
         next: () => {
           console.log('Fabricante salvo com sucesso');
-          this.router.navigateByUrl('/fabricantes');
+          this.router.navigateByUrl('/admin/fabricantes');
           this.snackbarService.showSuccess('Fabricante salvo com sucesso');
         },
         error: (err) => {
@@ -98,7 +98,7 @@ export class FabricanteFormComponent {
         this.fabricanteService.delete(fabricante).subscribe({
           next: () => {
             console.log('Fabricante excluido com sucesso');
-            this.router.navigateByUrl('/fabricantes');
+            this.router.navigateByUrl('/admin/fabricantes');
             this.snackbarService.showSuccess('Fabricante deletado com sucesso');
           },
           error: (err) => {

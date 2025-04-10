@@ -119,7 +119,7 @@ export class LoteFormComponent implements OnInit {
       operacao.subscribe({
         next: () => {
           console.log('Lote salvo com sucesso');
-          this.router.navigateByUrl('/lotes');
+          this.router.navigateByUrl('/admin/lotes');
           this.snackbarService.showSuccess('Lote salvo com sucesso');
         },
         error: (err) => {
@@ -198,7 +198,7 @@ export class LoteFormComponent implements OnInit {
         this.loteService.delete(lote).subscribe({
           next: () => {
             console.log('Lote excluido com sucesso');
-            this.router.navigateByUrl('/lotes');
+            this.router.navigateByUrl('/admin/lotes');
             this.snackbarService.showSuccess('Lote deletado com sucesso');
           },
           error: (err) => {
