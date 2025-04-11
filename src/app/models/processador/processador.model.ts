@@ -10,6 +10,7 @@ export class Processador {
     nome!: string;
     socket!: string;
     threads!: number;
+    nucleos!: number;
     desbloqueado!: boolean;
     preco!: number;
     placaIntegrada?: PlacaIntegrada;

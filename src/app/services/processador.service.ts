@@ -46,10 +46,49 @@ export class ProcessadorService {
   }
 
   create(processador: Processador): Observable<Processador> {
-    return this.httpClient.post<Processador>(`${this.configService.getApiBaseUrl()}/processadores`, processador);
+    const data = {
+      nome: processador.nome,
+      socket: processador.socket,
+      threads: processador.threads,
+      nucleos: processador.nucleos,
+      desbloqueado: processador.desbloqueado,
+      preco: Number(processador.preco),
+      placaIntegrada: processador.placaIntegrada?.id || null,
+      fabricante: processador.fabricante.id,
+      memoriaCache: {
+        cacheL2: Number(processador.memoriaCache.cacheL2),
+        cacheL3: Number(processador.memoriaCache.cacheL3)
+      },
+      frequencia: processador.frequencia,
+      consumoEnergetico: processador.consumoEnergetico,
+      conectividade: processador.conectividade
+    }
+
+    console.log(JSON.stringify(data));
+
+
+    return this.httpClient.post<Processador>(`${this.configService.getApiBaseUrl()}/processadores`, data);
   }
 
   update(processador: Processador): Observable<any> {
-    return this.httpClient.put<Processador>(`${this.configService.getApiBaseUrl()}/processadores/${processador.id}`, processador);
+    const data = {
+      nome: processador.nome,
+      socket: processador.socket,
+      threads: processador.threads,
+      nucleos: processador.nucleos,
+      desbloqueado: processador.desbloqueado,
+      preco: Number(processador.preco),
+      placaIntegrada: processador.placaIntegrada?.id || null,
+      fabricante: processador.fabricante.id,
+      memoriaCache: {
+        cacheL2: Number(processador.memoriaCache.cacheL2),
+        cacheL3: Number(processador.memoriaCache.cacheL3)
+      },
+      frequencia: processador.frequencia,
+      consumoEnergetico: processador.consumoEnergetico,
+      conectividade: processador.conectividade
+    }
+
+    return this.httpClient.put<Processador>(`${this.configService.getApiBaseUrl()}/processadores/${processador.id}`, data);
   }
 }
