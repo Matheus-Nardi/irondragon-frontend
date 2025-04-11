@@ -18,6 +18,7 @@ import { PlacaintegradaListComponent } from './components/placaintegrada/placain
 import { PlacaintegradaFormComponent } from './components/placaintegrada/placaintegrada-form/placaintegrada-form.component';
 import { placaintegradaResolver } from './components/placaintegrada/placaintegrada.resolver';
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
+import { AdminHomeComponent } from './components/template/admin-home/admin-home.component';
 
 export const routes: Routes = [
   {
@@ -25,7 +26,7 @@ export const routes: Routes = [
     component: AdminTemplateComponent,
     title: 'Administração',
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'estados' },
+      { path: 'home', component: AdminHomeComponent, title: 'Home',},
 
       { path: 'estados', component: EstadoListComponent, title: 'Lista de Estados' },
       { path: 'estados/create', component: EstadoFormComponent, title: 'Novo Estado' },
