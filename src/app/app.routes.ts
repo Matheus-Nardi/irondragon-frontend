@@ -55,8 +55,8 @@ export const routes: Routes = [
       { path: 'placasintegradas/edit/:id', component: PlacaintegradaFormComponent, title: 'Editar Placa Integrada', resolve: { placaintegrada: placaintegradaResolver } },
 
       { path: 'processadores', component: ProcessadorListComponent, title: 'Lista de Processadores' },
-      { path: 'testes', component: ProcessadorFormComponent, title: 'Novo Processador' },
-      { path: '**', component: PageNotFoundComponent },
+      { path: 'processadores/create', component: ProcessadorFormComponent, title: 'Novo Processador' },
+      { path: '**', component: PageNotFoundComponent }
     ]
   },
 ];
