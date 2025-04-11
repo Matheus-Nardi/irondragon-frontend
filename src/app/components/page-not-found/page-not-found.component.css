@@ -1,0 +1,66 @@
+.not-found-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* Ocupa toda a altura da tela */
+    background-color: #f4f4f4;
+    /* Um fundo leve */
+}
+
+mat-card {
+    max-width: 500px;
+    /* Largura máxima do cartão */
+    width: 90%;
+    /* Ocupa 90% da largura em telas menores */
+    text-align: center;
+}
+
+.not-found-title {
+    font-size: 6em;
+    font-weight: 700;
+    color: black;
+    /* Cor primária do Material Design */
+    margin-bottom: 0.5em;
+}
+
+.not-found-subtitle {
+    font-size: 1.5em;
+    color: #757575;
+    /* Cor secundária */
+    margin-bottom: 1em;
+}
+
+.not-found-message {
+    color: #545454;
+    margin-bottom: 1.5em;
+}
+
+mat-card-actions {
+    justify-content: center;
+    /* Centraliza o botão */
+}
+
+.btn {
+    font-size: 20px;
+    background: #0077c0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    font-size: 23px;
+    background: #0077c0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}

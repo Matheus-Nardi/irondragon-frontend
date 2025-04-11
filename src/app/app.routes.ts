@@ -20,6 +20,7 @@ import { placaintegradaResolver } from './components/placaintegrada/placaintegra
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
 import { ProcessadorListComponent } from './components/processador/processador-list/processador-list.component';
 import { ProcessadorFormComponent } from './components/processador/processador-form/processador-form.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
@@ -54,7 +55,8 @@ export const routes: Routes = [
       { path: 'placasintegradas/edit/:id', component: PlacaintegradaFormComponent, title: 'Editar Placa Integrada', resolve: { placaintegrada: placaintegradaResolver } },
 
       { path: 'processadores', component: ProcessadorListComponent, title: 'Lista de Processadores' },
-      { path: 'processadores/create', component: ProcessadorFormComponent, title: 'Novo Processador' }
+      { path: 'testes', component: ProcessadorFormComponent, title: 'Novo Processador' },
+      { path: '**', component: PageNotFoundComponent },
     ]
-  }
+  },
 ];

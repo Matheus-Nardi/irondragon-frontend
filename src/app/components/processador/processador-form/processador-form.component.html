@@ -1,1 +1,160 @@
-<h1>massa</h1>
+<h1>Cadastro de Processador</h1>
+
+<mat-card>
+    <mat-card-content>
+      <form [formGroup]="formGroup">
+          <mat-form-field appearance="outline" class="full-width-input">
+            <mat-label>Nome</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="nome"
+              placeholder="Nome do fabricante"
+              [value]="formGroup.get('nome')?.value | titlecase"
+            />
+            @if (formGroup.get('nome')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="formGroup.get('nome')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('nome')?.errors &&
+                formGroup.get('nome')?.touched
+              "
+            >
+            <!-- {{ getErrorMessage("nome", formGroup.get("nome")?.errors) }} -->
+  
+            @if(formGroup.get('nome')?.hasError('apiError')) {
+            <span>{{ formGroup.get("nome")?.getError("apiError") }}</span>
+            }
+            </mat-error>
+          </mat-form-field>
+    
+          <mat-form-field appearance="outline" class="full-width-input">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="email"
+              placeholder="email@email.com"
+            />
+            @if (formGroup.get('email')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="formGroup.get('email')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('email')?.errors &&
+                formGroup.get('email')?.touched
+              "
+            >
+            <!-- {{ getErrorMessage("email", formGroup.get("email")?.errors) }} -->
+  
+            @if(formGroup.get('email')?.hasError('apiError')) {
+            <span>{{ formGroup.get("email")?.getError("apiError") }}</span>
+            }
+            
+            </mat-error>
+          </mat-form-field>
+          <div formGroupName="telefone" class="telefone-container">
+            <mat-form-field appearance="outline" class="codigoArea">
+              <mat-label>DDD</mat-label>
+              <input
+                matInput
+                type="tel"
+                formControlName="codigoArea"
+                placeholder="63"
+              />
+              @if (formGroup.get('telefone.codigoArea')?.value) {
+                <button
+                  matSuffix
+                  mat-icon-button
+                  aria-label="Clear"
+                  (click)="formGroup.get('telefone.codigoArea')?.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-error
+                *ngIf="
+                  formGroup.get('telefone.codigoArea')?.errors &&
+                  formGroup.get('telefone.codigoArea')?.touched
+                "
+              >
+                <!-- {{ getErrorMessage("codigoArea", formGroup.get("telefone.codigoArea")?.errors) }} -->
+          
+                @if(formGroup.get('telefone.codigoArea')?.hasError('apiError')) {
+                  <span>{{ formGroup.get("telefone.codigoArea")?.getError("apiError") }}</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          
+            <mat-form-field appearance="outline" class="numero">
+              <mat-label>Número</mat-label>
+              <input
+                matInput
+                type="tel"
+                formControlName="numero"
+                placeholder="999999999"
+              />
+              @if (formGroup.get('telefone.numero')?.value) {
+                <button
+                  matSuffix
+                  mat-icon-button
+                  aria-label="Clear"
+                  (click)="formGroup.get('telefone.numero')?.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <mat-error
+                *ngIf="
+                  formGroup.get('telefone.numero')?.errors &&
+                  formGroup.get('telefone.numero')?.touched
+                "
+              >
+                <!-- {{ getErrorMessage("numero", formGroup.get("telefone.numero")?.errors) }} -->
+          
+                @if(formGroup.get('telefone.numero')?.hasError('apiError')) {
+                  <span>{{ formGroup.get("telefone.numero")?.getError("apiError") }}</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button routerLink="/admin/fabricantes">CANCELAR</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+      >
+        SALVAR
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="formGroup.get('id')?.value === null"
+        (click)="onDelete()"
+      >
+        EXCLUIR
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  
+  
+  
