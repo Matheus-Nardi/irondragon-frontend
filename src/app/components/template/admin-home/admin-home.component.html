@@ -1,0 +1,10 @@
+
+  @for (item of homeDataContent; track $index) {
+    
+      <mat-card class="dashboard-card" appearance="outlined" routerLink="{{item.routeLink}}">
+        <mat-card-header>
+          <mat-icon class="card-icon">{{item.icon}}</mat-icon>
+          <mat-card-title>{{item.label}}</mat-card-title>
+        </mat-card-header>
+      </mat-card>    
+  }

@@ -1,8 +1,7 @@
-import { RouterLink } from "@angular/router";
 
 export const navbarData = [
     {
-      routeLink: 'admin',
+      routeLink: '/admin/home',
       label: 'Home',
     },
     {

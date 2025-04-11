@@ -9,6 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import {MatInputModule} from '@angular/material/input';
 import { SidebarService } from '../../services/sidebar.service';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-sidenav',
@@ -20,7 +21,8 @@ import { SidebarService } from '../../services/sidebar.service';
     MatListModule,
     MatToolbarModule,
     RouterOutlet,
-    MatInputModule
+    MatInputModule,
+    MatGridListModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css',
