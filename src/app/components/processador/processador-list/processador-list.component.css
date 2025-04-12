@@ -1,0 +1,116 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  background: #0077c0;
+  border-radius: 5px;
+  text-transform: uppercase;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}
+.title {
+  text-align: center;
+  font-weight: 500;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 80%;
+  max-width: 1200px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.table-background {
+  background-color: #ffff;
+}
+
+.mat-column-id {
+  width: 5em;
+  border-right: 1px solid currentColor;
+  padding-right: 24px;
+  text-align: center;
+}
+
+.mat-column-codigo {
+  width: 80%;
+}
+
+.mat-column-processador {
+  text-align: center;
+}
+
+.mat-column-fornecedor {
+  text-align: center;
+}
+
+.mat-column-estoque {
+  text-align: center;
+}
+
+.mat-column-data {
+  text-align: center;
+  white-space: nowrap;
+  width: 200px;
+}
+
+
+
+.mat-column-acoes {
+  width: 10em;
+  text-align: center;
+}
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit {
+  color: #0077c0;
+}
+
+.delete {
+  color: red;
+}
+
+.search-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.example-form-field {
+  width: 70%;
+  background-color: w;
+
+  mat-icon {
+    color: black;
+  }
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+

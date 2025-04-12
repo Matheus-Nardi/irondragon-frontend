@@ -25,6 +25,19 @@ export class FornecedorService {
     return this.httpClient.get<PageResponse<Fornecedor>>(`${this.configService.getApiBaseUrl()}/fornecedores`, {params});
   }
 
+    findByNome(nome:string, page?:number, pageSize?:number): Observable<PageResponse<Fornecedor>> {
+      let params = {};
+  
+      if (page !== undefined && pageSize !== undefined && nome !== undefined) {
+        params = {  
+          page: page.toString(),
+          page_size: pageSize.toString()
+        }
+      }
+      return this.httpClient.get<PageResponse<Fornecedor>>(`${this.configService.getApiBaseUrl()}/fornecedores/search/${nome}`, {params});
+    }
+  
+
   findById(id: string): Observable<Fornecedor> {
     return this.httpClient.get<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores/${id}`);
   }

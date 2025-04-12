@@ -1,0 +1,69 @@
+h1 {
+    text-align: center;
+    font-weight: 400;
+}
+
+
+.full-width-input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* para centralizar horizontalmente */
+mat-card {
+    max-width: 800px;
+    margin: 2rem auto;
+
+}
+
+mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-container {
+    padding: 2rem;
+}
+
+button[mat-raised-button] {
+    width: 120px;
+}
+
+/* adiciona margem a direita em todos exceto o ultimo */
+button[mat-raised-button]:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.telefone-container {
+    display: flex;
+    gap: 20px;
+}
+
+.numero {
+    width: 100%;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .full-width-input {
+    width: 100%;
+  }
+  
+  .desbloqueado-container {
+    display: flex;
+    align-items: center;
+    align-self: end;
+    gap: 16px;
+    margin-top: 16px;
+  }

@@ -11,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Fornecedor, IFornecedor } from '../../../models/fornecedor.model';
 import { MatCardModule } from '@angular/material/card';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-fornecedor-form',
@@ -25,7 +26,8 @@ export class FornecedorFormComponent {
     private formBuilder: FormBuilder, 
     private fornecedorService: FornecedorService, 
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private snackbarService: SnackbarService
   ) {
 
     const fornecedor = this.activatedRoute.snapshot.data['fornecedor'];
@@ -40,41 +42,27 @@ export class FornecedorFormComponent {
   }
 
   onSubmit() {
-    if(this.formGroup.valid) {
-      const fornecedorForm = this.formGroup.value;
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.valid) {
 
-      const data: IFornecedor = {
-        id: fornecedorForm.id,
-        nome: fornecedorForm.nome,
-        email: fornecedorForm.email,
-        telefone: {
-          codigoArea: fornecedorForm.codigoArea,
-          numero: fornecedorForm.numero
-        }
-      }
+      const fornecedor = this.formGroup.value;
+      const operacao =
+        fornecedor.id == null
+          ? this.fornecedorService.create(fornecedor)
+          : this.fornecedorService.update(fornecedor);
 
-      const fornecedor = Fornecedor.valueOf(data);
-
-      if(fornecedorForm.id == null) {
-        this.fornecedorService.create(fornecedor).subscribe({
-          next: (fornecedor) => {
-            console.log('Fornecedor cadastrado com sucesso!');
-            this.router.navigateByUrl('/admin/fornecedores');
-          },
-          error: (err) => {
-            console.log(`Erro ao cadastrar o fornecedor ${JSON.stringify(err)}`);
-          }
-        });
-      } else {
-        this.fornecedorService.update(fornecedor).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/admin/fornecedores');
-          },
-          error: (err) => {
-            console.error(`Erro ao atualizar o fornecedor, ${err}`);
-          }
-        });
-      }
+      operacao.subscribe({
+        next: () => {
+          console.log('Fornecedor salvo com sucesso');
+          this.router.navigateByUrl('/admin/fornecedors');
+          this.snackbarService.showSuccess('Fornecedor salvo com sucesso');
+        },
+        error: (err) => {
+          console.log('Erro ao salvar o fornecedor' + JSON.stringify(err));
+          this.errorHandling(err);
+          this.snackbarService.showError('Erro ao salvar fornecedor');
+        },
+      });
     }
   }
 

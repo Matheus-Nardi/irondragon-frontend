@@ -27,5 +27,9 @@ export const navbarData = [
     {
       routeLink: 'lotes',
       label: 'Lotes'
+    },
+    {
+      routeLink: 'processadores',
+      label: 'Processadores'
     }
   ];

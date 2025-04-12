@@ -82,7 +82,7 @@ export class LoteFormComponent implements OnInit {
       this.initilizeForm();
     });
     this.processadorService.findAll().subscribe((data) => {
-      this.processadores = data;
+      this.processadores = data.results;
       this.initilizeForm();
     });
   }

@@ -1,6 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FornecedorService } from '../../../services/fornecedor.service';
 import { Fornecedor } from '../../../models/fornecedor.model';
@@ -10,6 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-fornecedor-list',
@@ -21,6 +28,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     RouterLink,
     MatDialogModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
   ],
   templateUrl: './fornecedor-list.component.html',
   styleUrl: './fornecedor-list.component.css',
@@ -28,6 +38,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 export class FornecedorListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'email', 'telefone', 'acoes'];
   fornecedores: Fornecedor[] = [];
+  fornecedorsFiltrados: Fornecedor[] = [];
+  search: string = '';
   totalRecords = 0;
   pageSize = 5;
   page = 0;
@@ -37,7 +49,7 @@ export class FornecedorListComponent implements OnInit {
   constructor(
     private fornecedorService: FornecedorService,
     private dialogService: DialogService,
-    private snackbarService: SnackbarService,    
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -45,17 +57,35 @@ export class FornecedorListComponent implements OnInit {
   }
 
   loadFornecedores() {
-    this.fornecedorService.findAll(this.page, this.pageSize).subscribe((data) => {
-      this.fornecedores = data.results;
-      this.totalRecords = data.count;
-      this.dataSource.data = this.fornecedores;
-    });
+    this.fornecedorService
+      .findAll(this.page, this.pageSize)
+      .subscribe((data) => {
+        this.fornecedores = data.results;
+        this.totalRecords = data.count;
+        this.fornecedorsFiltrados = [...this.fornecedores];
+      });
   }
 
   pagination(event: PageEvent) {
     this.page = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadFornecedores();
+  }
+
+  onSearch(value: string): void {
+    this.page = 0;
+    if (value.trim() === '') {
+      this.fornecedorsFiltrados = [...this.fornecedores];
+      this.totalRecords = this.fornecedores.length;
+      return;
+    }
+
+    this.fornecedorService
+      .findByNome(value, this.page, this.pageSize)
+      .subscribe((data) => {
+        this.fornecedorsFiltrados = data.results;
+        this.totalRecords = data.count;
+      });
   }
 
   onDeleteFornecedor(fornecedor: Fornecedor) {

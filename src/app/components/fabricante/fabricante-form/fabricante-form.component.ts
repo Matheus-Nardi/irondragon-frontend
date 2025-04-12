@@ -111,65 +111,65 @@ export class FabricanteFormComponent {
   }
 
   tratarErros(httpError: HttpErrorResponse): void {
-      if (httpError.status === 400) {
-        if (httpError.error?.errors) {
-          httpError.error.errors.forEach((validationError: any) => {
-            const formControl = this.formGroup.get(validationError.fieldName);
-            if (formControl) {
-              formControl.setErrors({ apiError: validationError.message });
-            }
-          });
-        }
-      } else if (httpError.status < 500) {
-        this.snackbarService.showError(
-          httpError.error?.message || 'Erro genérico no envio do formulário'
-        );
-      } else {
-        this.snackbarService.showError(
-          httpError.error?.message || 'Erro não mapeado do servidor'
-        );
+    if (httpError.status === 400) {
+      if (httpError.error?.errors) {
+        httpError.error.errors.forEach((validationError: any) => {
+          const formControl = this.formGroup.get(validationError.fieldName);
+          if (formControl) {
+            formControl.setErrors({ apiError: validationError.message });
+          }
+        });
       }
+    } else if (httpError.status < 500) {
+      this.snackbarService.showError(
+        httpError.error?.message || 'Erro genérico no envio do formulário'
+      );
+    } else {
+      this.snackbarService.showError(
+        httpError.error?.message || 'Erro não mapeado do servidor'
+      );
     }
-  
-    getErrorMessage(
-      controlName: string,
-      errors: ValidationErrors | null | undefined
-    ): string {
-      if (!errors || !this.errorMessages[controlName]) {
-        return 'invalid field';
-      }
-  
-      for (const errorName in errors) {
-        if (this.errorMessages[controlName][errorName]) {
-          return this.errorMessages[controlName][errorName];
-        }
-      }
+  }
+
+  getErrorMessage(
+    controlName: string,
+    errors: ValidationErrors | null | undefined
+  ): string {
+    if (!errors || !this.errorMessages[controlName]) {
       return 'invalid field';
     }
-  
-    errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
-      nome: {
-        required: 'O nome deve ser informado.',
-        minlength: 'O nome deve ter no mínimo 2 caracteres.',
-        maxlength: 'O nome deve ter no máximo 60 caracteres.',
-        apiError: ' ',
-      },
-      email: {
-        required: 'O e-mail deve ser informado.',
-        email: 'Informe um e-mail válido.',
-        apiError: ' ',
-      },
-      codigoArea: {
-        required: 'O código de área deve ser informado.',
-        minlength: 'O código de área deve ter 2 dígitos.',
-        maxlength: 'O código de área deve ter 2 dígitos.',
-        apiError: ' ',
-      },
-      numero: {
-        required: 'O número deve ser informado.',
-        pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
-        apiError: ' ',
+
+    for (const errorName in errors) {
+      if (this.errorMessages[controlName][errorName]) {
+        return this.errorMessages[controlName][errorName];
       }
-    };
-    
+    }
+    return 'invalid field';
+  }
+
+  errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
+    nome: {
+      required: 'O nome deve ser informado.',
+      minlength: 'O nome deve ter no mínimo 2 caracteres.',
+      maxlength: 'O nome deve ter no máximo 60 caracteres.',
+      apiError: ' ',
+    },
+    email: {
+      required: 'O e-mail deve ser informado.',
+      email: 'Informe um e-mail válido.',
+      apiError: ' ',
+    },
+    codigoArea: {
+      required: 'O código de área deve ser informado.',
+      minlength: 'O código de área deve ter 2 dígitos.',
+      maxlength: 'O código de área deve ter 2 dígitos.',
+      apiError: ' ',
+    },
+    numero: {
+      required: 'O número deve ser informado.',
+      pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
+      apiError: ' ',
+    }
+  };
+
 }

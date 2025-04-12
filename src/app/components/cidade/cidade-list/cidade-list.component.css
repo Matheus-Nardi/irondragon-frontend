@@ -1,10 +1,24 @@
-.header{
+.header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .add-container {
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 16px;
-}
+  }
+  
+  .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
 .btn{
     background: #0077C0;
@@ -81,3 +95,25 @@
 .delete{
     color: red;
 }
+
+
+.search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .example-form-field {
+    width: 70%;
+    background-color: w;
+  
+    mat-icon {
+      color: black;
+    }
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+  

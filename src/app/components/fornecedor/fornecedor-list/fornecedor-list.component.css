@@ -1,10 +1,35 @@
-.header{
+.header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .add-container {
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 16px;
-}
+  }
+  
+  .search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .example-form-field {
+    width: 70%;
+    background-color: w;
+  
+    mat-icon {
+      color: black;
+    }
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
 
 .btn{
     background: #0077C0;

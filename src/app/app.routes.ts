@@ -19,6 +19,10 @@ import { PlacaintegradaFormComponent } from './components/placaintegrada/placain
 import { placaintegradaResolver } from './components/placaintegrada/placaintegrada.resolver';
 import { AdminTemplateComponent } from './components/template/admin-template/admin-template.component';
 import { AdminHomeComponent } from './components/template/admin-home/admin-home.component';
+import { ProcessadorListComponent } from './components/processador/processador-list/processador-list.component';
+import { ProcessadorFormComponent } from './components/processador/processador-form/processador-form.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { processadorResolver } from './components/processador/processador.resolver';
 
 export const routes: Routes = [
   {
@@ -51,6 +55,11 @@ export const routes: Routes = [
       { path: 'placasintegradas', component: PlacaintegradaListComponent, title: 'Lista de Placas Integradas' },
       { path: 'placasintegradas/create', component: PlacaintegradaFormComponent, title: 'Nova Placa Integrada' },
       { path: 'placasintegradas/edit/:id', component: PlacaintegradaFormComponent, title: 'Editar Placa Integrada', resolve: { placaintegrada: placaintegradaResolver } },
+
+      { path: 'processadores', component: ProcessadorListComponent, title: 'Lista de Processadores' },
+      { path: 'processadores/create', component: ProcessadorFormComponent, title: 'Novo Processador' },
+      { path: 'processadores/edit/:id', component: ProcessadorFormComponent, title: 'Editar Processador', resolve: { processador: processadorResolver } },
+      { path: '**', component: PageNotFoundComponent }
     ]
-  }
+  },
 ];
