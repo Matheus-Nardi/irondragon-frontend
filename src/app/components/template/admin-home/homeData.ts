@@ -1,42 +1,50 @@
 export const homeData = [
-    {
-      routeLink: '/admin/home',
-      label: 'Home',
-      icon: 'home'
-    },
-    {
-      routeLink: '/admin/estados',
-      label: 'Estados',
-        icon: 'map'
-    },
-    {
-      routeLink: '/admin/cidades',
-      label: 'Cidades',
-        icon: 'place'
-    },
-    {
-      routeLink: '/admin/fabricantes',
-      label: 'Fabricantes',
-        icon: 'business'
-    },
-    {
-      routeLink: '/admin/fornecedores',
-      label: 'Fornecedores',
-        icon: 'people'
-    },
-    {
-      routeLink: '/admin/placasintegradas',
-      label: 'Placas Integradas',
-      icon: 'dashboard'
-    },
-    {
-      routeLink: '/admin/lotes',
-      label: 'Lotes',
-      icon: 'inventory'
-    },
-    {
-      routeLink: '/admin/processadores',
-      label: 'Processadores',
-      icon: 'memory'
-    }
-  ];
+  {
+    routeLink: '/admin/home',
+    label: 'Home',
+    icon: 'home',
+    description: 'Página inicial do sistema'
+  },
+  {
+    routeLink: '/admin/estados',
+    label: 'Estados',
+    icon: 'map',
+    description: 'Gerencie os estados disponíveis no sistema'
+  },
+  {
+    routeLink: '/admin/cidades',
+    label: 'Cidades',
+    icon: 'place',
+    description: 'CRUD completo para cidades vinculadas aos estados'
+  },
+  {
+    routeLink: '/admin/fabricantes',
+    label: 'Fabricantes',
+    icon: 'business',
+    description: 'Cadastro e gerenciamento de fabricantes'
+  },
+  {
+    routeLink: '/admin/fornecedores',
+    label: 'Fornecedores',
+    icon: 'people',
+    description: 'Gerencie os fornecedores cadastrados'
+  },
+  {
+    routeLink: '/admin/placasintegradas',
+    label: 'Placas Integradas',
+    icon: 'dashboard',
+    description: 'CRUD de placas integradas utilizadas nos produtos'
+  },
+  {
+    routeLink: '/admin/lotes',
+    label: 'Lotes',
+    icon: 'inventory',
+    description: 'Controle e organização de lotes de produtos'
+  },
+  {
+    routeLink: '/admin/processadores',
+    label: 'Processadores',
+    icon: 'memory',
+    description: 'Gerenciamento dos modelos de processadores'
+  }
+];
