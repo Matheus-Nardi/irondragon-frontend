@@ -31,6 +31,18 @@ export class CidadeService {
     return this.httpClient.get<PageResponse<Cidade>>(`${this.configService.getApiBaseUrl()}/cidades`, {params});
   }
 
+  findByNome(nome:string, page?:number, pageSize?:number): Observable<PageResponse<Cidade>> {
+      let params = {};
+  
+      if (page !== undefined && pageSize !== undefined && nome !== undefined) {
+        params = {  
+          page: page.toString(),
+          page_size: pageSize.toString()
+        }
+      }
+      return this.httpClient.get<PageResponse<Cidade>>(`${this.configService.getApiBaseUrl()}/cidades/search/${nome}`, {params});
+    }
+
   create(cidade: Cidade): Observable<Cidade> {
     const novaCidade = {
       nome: cidade.nome,

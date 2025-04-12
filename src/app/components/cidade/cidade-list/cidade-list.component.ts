@@ -1,6 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Cidade } from '../../../models/cidade.model';
 import { CidadeService } from '../../../services/cidade.service';
@@ -11,16 +15,33 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-cidade-list',
-  imports: [MatTableModule, MatPaginatorModule, MatPaginator, MatIconModule, MatButtonModule, RouterLink, MatDialogModule, MatCardModule],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    MatPaginator,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+    MatDialogModule,
+    MatCardModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+  ],
   templateUrl: './cidade-list.component.html',
   styleUrl: './cidade-list.component.css',
 })
 export class CidadeListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nome', 'estado', 'acoes'];
   cidades: Cidade[] = [];
+  cidadesFiltradas: Cidade[] = [];
+  search: string = '';
 
   totalRecords: number = 0;
   page: number = 0;
@@ -31,7 +52,6 @@ export class CidadeListComponent implements OnInit {
     private dialogService: DialogService,
     private snackbarService: SnackbarService
   ) {}
-  dataSource = new MatTableDataSource<Cidade>();
 
   ngOnInit(): void {
     this.loadCidades();
@@ -41,7 +61,7 @@ export class CidadeListComponent implements OnInit {
     this.cidadeService.findAll(this.page, this.pageSize).subscribe((data) => {
       this.cidades = data.results;
       this.totalRecords = data.count;
-      this.dataSource.data = this.cidades;
+      this.cidadesFiltradas = [...this.cidades];
     });
   }
 
@@ -62,6 +82,22 @@ export class CidadeListComponent implements OnInit {
         if (result) {
           this.deleteCidade(cidade);
         }
+      });
+  }
+
+  onSearch(value: string): void {
+    this.page = 0;
+    if (value.trim() === '') {
+      this.cidadesFiltradas = [...this.cidades];
+      this.totalRecords = this.cidades.length;
+      return;
+    }
+
+    this.cidadeService
+      .findByNome(value, this.page, this.pageSize)
+      .subscribe((data) => {
+        this.cidadesFiltradas = data.results;
+        this.totalRecords = data.count;
       });
   }
 

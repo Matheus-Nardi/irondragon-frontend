@@ -40,10 +40,19 @@
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="formGroup.invalid">Adicionar</button>
-      <button mat-raised-button color="primary" (click)="onDelete()" [disabled]="formGroup.invalid">Excluir</button>
-
-      <button mat-raised-button [disabled]="formGroup.invalid">Cancelar</button>
+      <button mat-raised-button routerLink="/admin/cidades/">CANCELAR</button>
+      <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+        SALVAR
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="formGroup.get('id')?.value === null"
+        (click)="onDelete()"
+        e
+      >
+        EXCLUIR
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

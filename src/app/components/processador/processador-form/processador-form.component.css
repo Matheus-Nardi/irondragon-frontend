@@ -42,3 +42,28 @@ button[mat-raised-button]:not(:last-child) {
 .numero {
     width: 100%;
 }
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .full-width-input {
+    width: 100%;
+  }
+  
+  .desbloqueado-container {
+    display: flex;
+    align-items: center;
+    align-self: end;
+    gap: 16px;
+    margin-top: 16px;
+  }

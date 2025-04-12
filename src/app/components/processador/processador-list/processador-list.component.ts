@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { DialogService } from '../../../services/dialog.service';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-processador-list',
@@ -22,7 +23,9 @@ import { DialogService } from '../../../services/dialog.service';
     RouterLink,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    CommonModule,
+    CurrencyPipe
   ],
   templateUrl: './processador-list.component.html',
   styleUrl: './processador-list.component.css'
@@ -101,6 +104,10 @@ export class ProcessadorListComponent {
         console.log('Processador deletado com sucesso!');
         this.snackbarService.showSuccess('Processador deletado com sucesso!');
         this.loadProcessadores();
+      } ,
+      error: (err) => {
+        console.error('Erro ao deletar processador' + JSON.stringify(err));
+        this.snackbarService.showError('Erro ao deletar processador');
       }
     })
   }

@@ -102,8 +102,19 @@
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="formGroup.invalid">Adicionar Fornecedor</button>
-      <button mat-raised-button color="primary" (click)="onDelete()" [disabled]="formGroup.invalid">Excluir fornecedor</button>
+      <button mat-raised-button routerLink="/admin/fornecedores">CANCELAR</button>
+      <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+        SALVAR
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="formGroup.get('id')?.value === null"
+        (click)="onDelete()"
+        e
+      >
+        EXCLUIR
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>
