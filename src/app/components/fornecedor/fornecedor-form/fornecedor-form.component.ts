@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FornecedorService } from '../../../services/fornecedor.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -15,38 +21,63 @@ import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-fornecedor-form',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, NgIf, MatToolbarModule, MatButtonModule, CommonModule, MatCardModule],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    NgIf,
+    MatToolbarModule,
+    MatButtonModule,
+    CommonModule,
+    MatCardModule,
+    RouterLink
+  ],
   templateUrl: './fornecedor-form.component.html',
-  styleUrl: './fornecedor-form.component.css'
+  styleUrl: './fornecedor-form.component.css',
 })
 export class FornecedorFormComponent {
   formGroup: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private fornecedorService: FornecedorService, 
+    private formBuilder: FormBuilder,
+    private fornecedorService: FornecedorService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackbarService
   ) {
-
     const fornecedor = this.activatedRoute.snapshot.data['fornecedor'];
 
     this.formGroup = this.formBuilder.group({
-      id: [(fornecedor && fornecedor.id) ? fornecedor.id : null],
-      nome: [(fornecedor && fornecedor.nome) ? fornecedor.nome : '', Validators.required],
-      email: [(fornecedor && fornecedor.email) ? fornecedor.email : '', [Validators.required, Validators.email]],
+      id: [fornecedor && fornecedor.id ? fornecedor.id : null],
+      nome: [
+        fornecedor && fornecedor.nome ? fornecedor.nome : '',
+        Validators.required,
+      ],
+      email: [
+        fornecedor && fornecedor.email ? fornecedor.email : '',
+        [Validators.required, Validators.email],
+      ],
       telefone: this.formBuilder.group({
-        codigoArea: [fornecedor?.telefone?.codigoArea || '', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
-        numero: [fornecedor?.telefone?.numero || '', [Validators.required, Validators.pattern(/^\d{8,9}$/)]],
-      })
-  });
+        codigoArea: [
+          fornecedor?.telefone?.codigoArea || '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(2),
+          ],
+        ],
+        numero: [
+          fornecedor?.telefone?.numero || '',
+          [Validators.required, Validators.pattern(/^\d{8,9}$/)],
+        ],
+      }),
+    });
   }
 
   onSubmit() {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
-
       const fornecedor = this.formGroup.value;
       const operacao =
         fornecedor.id == null
@@ -70,23 +101,26 @@ export class FornecedorFormComponent {
 
   onDelete() {
     const fornecedorForm = this.formGroup.value;
-    if(fornecedorForm.id != null) {
+    if (fornecedorForm.id != null) {
       this.fornecedorService.delete(fornecedorForm).subscribe({
         next: () => {
           this.router.navigateByUrl('/admin/fornecedores');
         },
         error: (err) => {
           console.error('Erro ao excluir ' + JSON.stringify(err));
-        }
-      })
+        },
+      });
     }
   }
 
-  getErrorMessage(controlName: string, errors: ValidationErrors | null | undefined): string {
+  getErrorMessage(
+    controlName: string,
+    errors: ValidationErrors | null | undefined
+  ): string {
     if (!errors || !this.errorMessages[controlName]) {
       return 'invalid field';
     }
-    
+
     for (const errorName in errors) {
       if (this.errorMessages[controlName][errorName]) {
         return this.errorMessages[controlName][errorName];
@@ -105,28 +139,28 @@ export class FornecedorFormComponent {
             formControl.setErrors({ apiError: validationError.message });
           }
         });
-      };
+      }
     } else if (httpError.status < 500) {
-      alert(httpError.error?.message || 'Erro genérico no envio do formulário');    
+      alert(httpError.error?.message || 'Erro genérico no envio do formulário');
     } else {
-      alert(httpError.error?.message || 'Erro não mapeado do servidor');    
+      alert(httpError.error?.message || 'Erro não mapeado do servidor');
     }
   }
 
-  errorMessages: {[controlName: string] : {[errorName: string] : string}} = {
+  errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
     nome: {
       required: 'O nome deve ser informado.',
-      apiError: ' '
+      apiError: ' ',
     },
     email: {
       required: 'O email deve ser informado',
       email: 'Informe um email válido',
-      apiError: ' '
+      apiError: ' ',
     },
     telefone: {
       required: 'O telefone deve ser informado',
       pattern: 'Informe um número valido',
-      apiError: ' '
+      apiError: ' ',
     },
     codigoArea: {
       required: 'O código de área deve ser informado.',
@@ -138,6 +172,6 @@ export class FornecedorFormComponent {
       required: 'O número deve ser informado.',
       pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
       apiError: ' ',
-    }
-  }
+    },
+  };
 }
