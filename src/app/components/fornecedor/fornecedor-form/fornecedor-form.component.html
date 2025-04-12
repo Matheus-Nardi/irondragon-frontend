@@ -48,53 +48,68 @@
             </mat-error>
           </mat-form-field>
   
-          <div class="telefone-container">
+          <div formGroupName="telefone" class="telefone-container">
             <mat-form-field appearance="outline" class="codigoArea">
               <mat-label>DDD</mat-label>
-              <input matInput type="tel" formControlName="codigoArea" placeholder="63" />
-              @if (formGroup.get('codigoArea')?.value) {
-              <button matSuffix mat-icon-button aria-label="Clear" (click)="formGroup.get('telefone')?.setValue('')">
-                <mat-icon>close</mat-icon>
-              </button>
+              <input
+                matInput
+                type="tel"
+                formControlName="codigoArea"
+                placeholder="63"
+              />
+              @if (formGroup.get('telefone.codigoArea')?.value) {
+                <button
+                  matSuffix
+                  mat-icon-button
+                  aria-label="Clear"
+                  (click)="formGroup.get('telefone.codigoArea')?.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
               }
-              <mat-error *ngIf="
-                  formGroup.get('codigoArea')?.touched &&
-                  formGroup.get('codigoArea')?.hasError('required') ||
-                  formGroup.get('codigoArea')?.hasError('minlength')
-                ">
-                {{getErrorMessage('codigoArea', formGroup.get('codigoArea')?.errors)}}
-
-                @if (formGroup.get('codigoArea')?.hasError('apiError')) {
-                  <span>{{ formGroup.get('codigoArea')?.getError('apiError') }}</span>
+              <mat-error
+                *ngIf="
+                  formGroup.get('telefone.codigoArea')?.errors &&
+                  formGroup.get('telefone.codigoArea')?.touched
+                "
+              >
+                {{ getErrorMessage("codigoArea", formGroup.get("telefone.codigoArea")?.errors) }}
+          
+                @if(formGroup.get('telefone.codigoArea')?.hasError('apiError')) {
+                  <span>{{ formGroup.get("telefone.codigoArea")?.getError("apiError") }}</span>
                 }
               </mat-error>
-              <mat-error *ngIf="
-                formGroup.get('codigoArea')?.touched &&
-                formGroup.get('codigoArea')?.hasError('maxlength')
-              ">
-                O código de área deve ter no máximo 2 dígitos
-              </mat-error>
             </mat-form-field>
-  
+          
             <mat-form-field appearance="outline" class="numero">
               <mat-label>Número</mat-label>
-              <input matInput type="tel" formControlName="numero" placeholder="999999999" />
-              @if (formGroup.get('numero')?.value) {
-              <button matSuffix mat-icon-button aria-label="Clear" (click)="formGroup.get('numero')?.setValue('')">
-                <mat-icon>close</mat-icon>
-              </button>
+              <input
+                matInput
+                type="tel"
+                formControlName="numero"
+                placeholder="999999999"
+              />
+              @if (formGroup.get('telefone.numero')?.value) {
+                <button
+                  matSuffix
+                  mat-icon-button
+                  aria-label="Clear"
+                  (click)="formGroup.get('telefone.numero')?.setValue('')"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
               }
-              <mat-error *ngIf="
-                  formGroup.get('numero')?.touched &&
-                  formGroup.get('numero')?.hasError('required')
-                ">
-                O número é obrigatório
-              </mat-error>
-              <mat-error *ngIf="
-                formGroup.get('numero')?.touched &&
-                formGroup.get('numero')?.hasError('pattern')
-              ">
-                O número deve conter 8 ou 9 dígitos
+              <mat-error
+                *ngIf="
+                  formGroup.get('telefone.numero')?.errors &&
+                  formGroup.get('telefone.numero')?.touched
+                "
+              >
+                {{ getErrorMessage("numero", formGroup.get("telefone.numero")?.errors) }}
+          
+                @if(formGroup.get('telefone.numero')?.hasError('apiError')) {
+                  <span>{{ formGroup.get("telefone.numero")?.getError("apiError") }}</span>
+                }
               </mat-error>
             </mat-form-field>
           </div>

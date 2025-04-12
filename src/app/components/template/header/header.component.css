@@ -2,8 +2,13 @@
     flex: 1 1 auto;
 }
 
-*{
+mat-toolbar{
     background-color: #0077C0;
+    color: white;
+}
+
+
+mat-icon{
     color: white;
 }
 

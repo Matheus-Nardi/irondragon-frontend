@@ -43,11 +43,28 @@ export class FornecedorService {
   }
 
   create(fornecedor: Fornecedor): Observable<Fornecedor> {
-    return this.httpClient.post<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores`, fornecedor);
+    const telefone ={
+      codigoArea: fornecedor.telefone.codigoArea,
+      numero: fornecedor.telefone.numero,
+    }
+    const data = {
+      nome: fornecedor.nome,
+      email: fornecedor.email,
+      telefone: telefone,
+    }
+    return this.httpClient.post<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores`, data);
   }
 
   update(fornecedor: Fornecedor): Observable<any> {
-    return this.httpClient.put<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores/${fornecedor.id}`, fornecedor);
+    const data = {
+      nome: fornecedor.nome,
+      email: fornecedor.email,
+      telefone: {
+        codigoArea: fornecedor.telefone.codigoArea,
+        numero: fornecedor.telefone.numero,
+      },
+    }
+    return this.httpClient.put<Fornecedor>(`${this.configService.getApiBaseUrl()}/fornecedores/${fornecedor.id}`, data);
   }
 
   delete(fornecedor: Fornecedor): Observable<any> {

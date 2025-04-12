@@ -36,9 +36,11 @@ export class FornecedorFormComponent {
       id: [(fornecedor && fornecedor.id) ? fornecedor.id : null],
       nome: [(fornecedor && fornecedor.nome) ? fornecedor.nome : '', Validators.required],
       email: [(fornecedor && fornecedor.email) ? fornecedor.email : '', [Validators.required, Validators.email]],
-      codigoArea: [(fornecedor && fornecedor.telefone.codigoArea) ? fornecedor.telefone.codigoArea : '', [Validators.required, Validators.minLength(2)]],
-      numero: [(fornecedor && fornecedor.telefone.numero) ? fornecedor.telefone.numero : '', Validators.required]
-    });
+      telefone: this.formBuilder.group({
+        codigoArea: [fornecedor?.telefone?.codigoArea || '', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
+        numero: [fornecedor?.telefone?.numero || '', [Validators.required, Validators.pattern(/^\d{8,9}$/)]],
+      })
+  });
   }
 
   onSubmit() {
@@ -54,7 +56,7 @@ export class FornecedorFormComponent {
       operacao.subscribe({
         next: () => {
           console.log('Fornecedor salvo com sucesso');
-          this.router.navigateByUrl('/admin/fornecedors');
+          this.router.navigateByUrl('/admin/fornecedores');
           this.snackbarService.showSuccess('Fornecedor salvo com sucesso');
         },
         error: (err) => {
@@ -71,7 +73,7 @@ export class FornecedorFormComponent {
     if(fornecedorForm.id != null) {
       this.fornecedorService.delete(fornecedorForm).subscribe({
         next: () => {
-          this.router.navigateByUrl('/admin/fornecedor');
+          this.router.navigateByUrl('/admin/fornecedores');
         },
         error: (err) => {
           console.error('Erro ao excluir ' + JSON.stringify(err));
@@ -127,13 +129,15 @@ export class FornecedorFormComponent {
       apiError: ' '
     },
     codigoArea: {
-      required: 'O código área deve bosta informado',
-      minlength: 'Deve conter no minimo 2 caracteres',
-      apiError: ' '
+      required: 'O código de área deve ser informado.',
+      minlength: 'O código de área deve ter 2 dígitos.',
+      maxlength: 'O código de área deve ter 2 dígitos.',
+      apiError: ' ',
     },
     numero: {
-      required: 'O numero deve bosta informado',
-      apiError: ' '
+      required: 'O número deve ser informado.',
+      pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
+      apiError: ' ',
     }
   }
 }

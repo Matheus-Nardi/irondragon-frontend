@@ -33,5 +33,10 @@ export const homeData = [
       routeLink: '/admin/lotes',
       label: 'Lotes',
       icon: 'inventory'
+    },
+    {
+      routeLink: '/admin/processadores',
+      label: 'Processadores',
+      icon: 'memory'
     }
   ];
