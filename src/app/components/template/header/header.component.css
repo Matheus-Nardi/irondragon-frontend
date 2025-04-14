@@ -1,15 +1,54 @@
-.spacer{
+.spacer {
     flex: 1 1 auto;
 }
 
-mat-toolbar{
-    background-color: #0077C0;
-    color: white;
+/* Animação ao carregar o toolbar */
+@keyframes slideInTop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-
-mat-icon{
+/* Toolbar estilizada */
+.custom-toolbar {
+    background: linear-gradient(90deg, #0077C0 0%, #005FA3 100%);
     color: white;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+    animation: slideInTop 0.5s ease-out;
+    z-index: 1000;
+    position: relative;
 }
 
+/* Logo com destaque */
+.logo {
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin-left: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease;
+}
 
+/* Ícones com animações sutis */
+mat-icon {
+    color: white;
+    transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+}
+
+mat-icon:hover {
+    transform: scale(1.2);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+}

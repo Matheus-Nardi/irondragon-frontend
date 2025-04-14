@@ -1,11 +1,5 @@
 export const homeData = [
   {
-    routeLink: '/admin/home',
-    label: 'Home',
-    icon: 'home',
-    description: 'Página inicial do sistema'
-  },
-  {
     routeLink: '/admin/estados',
     label: 'Estados',
     icon: 'map',
@@ -26,7 +20,7 @@ export const homeData = [
   {
     routeLink: '/admin/fornecedores',
     label: 'Fornecedores',
-    icon: 'people',
+    icon: 'local_shipping',
     description: 'Gerencie os fornecedores cadastrados'
   },
   {

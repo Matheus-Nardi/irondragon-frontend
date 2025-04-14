@@ -1,9 +1,23 @@
+/* Animação */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container principal */
 .page-container {
   padding: 24px;
   width: 100%;
   box-sizing: border-box;
 }
 
+/* Cabeçalho da página */
 .page-header {
   margin-bottom: 24px;
 }
@@ -28,6 +42,7 @@
   color: var(--mat-sys-primary);
 }
 
+/* Cartão do formulário com animação */
 .form-card {
   background-color: var(--mat-sys-surface-container-lowest);
   border-radius: 8px;
@@ -36,6 +51,7 @@
   max-width: 800px;
   margin: 0 auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: slideInUp 0.4s ease-out;
 }
 
 .form-header {
@@ -55,7 +71,7 @@
   border-radius: 50%;
   background-color: var(--mat-sys-primary-container);
   margin-right: 16px;
-  
+
   mat-icon {
     color: var(--mat-sys-on-primary-container);
     font-size: 24px;
@@ -64,13 +80,11 @@
   }
 }
 
-.form-title {
-  h2 {
-    margin: 0 0 4px 0;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--mat-sys-on-surface);
-  }
+.form-title h2 {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
 }
 
 .form-subtitle {
@@ -101,10 +115,10 @@
   display: flex;
   justify-content: flex-end;
   gap: 16px;
-  
+
   button {
     min-width: 120px;
-    
+
     mat-icon {
       margin-right: 8px;
     }
@@ -125,26 +139,27 @@
   color: var(--mat-sys-on-primary);
 }
 
+/* Responsivo */
 @media (max-width: 768px) {
   .page-container {
     padding: 16px;
   }
-  
+
   .form-header {
     padding: 16px;
   }
-  
+
   .form-content {
     padding: 16px;
   }
-  
+
   .form-actions {
     padding: 16px;
   }
-  
+
   .action-buttons {
     flex-wrap: wrap;
-    
+
     button {
       flex: 1 0 auto;
       min-width: 0;
@@ -155,7 +170,7 @@
 @media (max-width: 480px) {
   .action-buttons {
     flex-direction: column-reverse;
-    
+
     button {
       width: 100%;
     }
