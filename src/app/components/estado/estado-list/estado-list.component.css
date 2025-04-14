@@ -1,109 +1,189 @@
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.page-container {
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.add-container {
+.page-header {
+  margin-bottom: 24px;
+}
+
+.title-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
   gap: 16px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  margin: 0;
+  color: var(--mat-sys-primary);
+}
+
+.add-button {
+  background-color: var(--mat-sys-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: var(--mat-sys-primary-container);
+  }
+
+  span {
+    margin-left: 8px;
+  }
 }
 
 .search-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 500px;
+    
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
 }
 
-.btn {
-  background: #0077c0;
-  border-radius: 5px;
-  text-transform: uppercase;
-  color: white;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
+.table-container {
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface-container-lowest);
+  width: 100%;
+  overflow: auto;
+  max-height: calc(100vh - 200px);
 }
-.title {
+
+.estados-table {
+  width: 100%;
+  table-layout: fixed;
+  
+  .mat-mdc-header-row {
+    background-color: var(--mat-sys-surface-container);
+  }
+  
+  .mat-mdc-row:nth-child(even) {
+    background-color: var(--mat-sys-surface-container-lowest);
+  }
+  
+  .mat-mdc-row:nth-child(odd) {
+    background-color: var(--mat-sys-surface-container);
+  }
+  
+  .mat-mdc-row:hover {
+    background-color: var(--mat-sys-surface-container-high);
+  }
+}
+
+.mat-column-id {
+  width: 80px;
   text-align: center;
   font-weight: 500;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.content {
-  width: 80%;
-  max-width: 1200px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.table-background {
-  background-color: #ffff;
-}
-
-.mat-column-id {
-  width: 5em;
-  border-right: 1px solid currentColor;
-  padding-right: 24px;
-  text-align: center;
-}
-
 .mat-column-nome {
-  width: 100%;
+  width: auto;
 }
 
 .mat-column-sigla {
-  width: 5em;
+  width: 100px;
   text-align: center;
 }
 
-.mat-column-acoes {
-  width: 10em;
+.actions-column {
+  width: 120px;
   text-align: center;
 }
+
 .action-buttons {
   display: flex;
+  justify-content: center;
   gap: 8px;
-  justify-content: center;
-  align-items: center;
 }
 
-.edit {
-  color: #0077c0;
+.edit-button {
+  color: var(--mat-sys-primary);
 }
 
-.delete {
-  color: red;
+.delete-button {
+  color: var(--mat-sys-error);
 }
 
-.search-container {
-  margin-top: 20px;
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--mat-sys-outline);
+}
+
+.empty-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-}
-
-.example-form-field {
-  width: 70%;
-  background-color: w;
-
-  mat-icon {
-    color: black;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+    color: var(--mat-sys-outline);
+  }
+  
+  .empty-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+    margin-bottom: 24px;
+  }
+  
+  .add-button {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 36px;
+    border-radius: 18px;
   }
 }
 
-.example-spacer {
-  flex: 1 1 auto;
+.mat-icon{
+  overflow: inherit;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+  
+  .mat-column-id {
+    width: 60px;
+  }
+  
+  .actions-column {
+    width: 100px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .page-container {
+    padding: 24px 32px;
+  }
 }

@@ -10,10 +10,10 @@
 }
 
 .success {
-  background-color: #4caf50;
+  background-color: var(--mat-sys-primary);
 }
 
 .error {
-  background-color: #f44336;
+  background-color: var(--mat-sys-error);
 }
 
