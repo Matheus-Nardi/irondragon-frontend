@@ -23,6 +23,8 @@ import { ProcessadorListComponent } from './components/processador/processador-l
 import { ProcessadorFormComponent } from './components/processador/processador-form/processador-form.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { processadorResolver } from './components/processador/processador.resolver';
+import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
+import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
 
 export const routes: Routes = [
   {
@@ -59,6 +61,10 @@ export const routes: Routes = [
       { path: 'processadores', component: ProcessadorListComponent, title: 'Lista de Processadores' },
       { path: 'processadores/create', component: ProcessadorFormComponent, title: 'Novo Processador' },
       { path: 'processadores/edit/:id', component: ProcessadorFormComponent, title: 'Editar Processador', resolve: { processador: processadorResolver } },
+
+
+      {path: 'funcionarios', component: FuncionarioListComponent, title: 'Lista de Funcionários'},
+      {path: 'funcionarios/create', component: FuncionarioFormComponent, title: 'Novo Funcionário'},
       { path: '**', component: PageNotFoundComponent }
     ]
   },

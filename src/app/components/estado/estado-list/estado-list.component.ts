@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { Estado } from '../../../models/estado.model';
 import { EstadoService } from '../../../services/estado.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DialogService } from '../../../services/dialog.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +26,8 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogModule,
     MatFormFieldModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './estado-list.component.html',
   styleUrl: './estado-list.component.css',
@@ -36,7 +38,7 @@ export class EstadoListComponent implements OnInit {
   estados: Estado[] = [];
   estadosFiltrados: Estado[] = [];
   totalRecords = 0;
-  pageSize = 5;
+  pageSize = 10;
   page = 0;
 
   //Para injeção de dependencia e declarar variaveis

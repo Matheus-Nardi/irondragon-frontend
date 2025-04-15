@@ -12,13 +12,26 @@
 }
 
 .menu-item {
+  display: flex;
+  align-items: center; /* Alinhamento vertical */
+  gap:2em;    /* Espaço entre ícone e texto */
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  line-height: 1.4;
   border-radius: 4px;
+  padding: 10px 14px;
   transition: background-color 0.2s ease;
+  cursor: pointer;
+}
 
-  &:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
-  }
+.menu-icon {
+  font-size: 1.3rem;
+  /* Removi estilos adicionais para focar no básico */
+}
+
+mat-icon {
+  /* Tente ajustar o tamanho ou o alinhamento diretamente */
+  height: auto;
+  width: auto;
+  vertical-align: middle; /* Tente isso se `align-items: center` não for suficiente */
 }

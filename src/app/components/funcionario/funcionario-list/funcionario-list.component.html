@@ -1,0 +1,130 @@
+@if (funcionarios.length > 0) {
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <h1 class="page-title">Funcionários</h1>
+      <button class="add-button" routerLink="create">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="table-container mat-elevation-z2">
+      <table mat-table [dataSource]="funcionarios" class="funcionarios-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let funcionario">{{ funcionario.id }}</td>
+        </ng-container>
+        <!-- Nome Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Username</th>
+          <td mat-cell *matCellDef="let funcionario">
+            {{ funcionario.usuario.username }}
+          </td>
+        </ng-container>
+
+        <!-- Cargo Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let funcionario">
+            {{ funcionario.usuario.email }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cargo">
+          <th mat-header-cell *matHeaderCellDef>Cargo</th>
+          <td mat-cell *matCellDef="let funcionario">
+            {{ funcionario.cargo }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="salario">
+          <th mat-header-cell *matHeaderCellDef>Salario</th>
+          <td mat-cell *matCellDef="let funcionario">
+            {{ funcionario.salario | currency: 'BRL' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataContratacao">
+          <th mat-header-cell *matHeaderCellDef>Data de Contração</th>
+          <td mat-cell *matCellDef="let funcionario">
+            {{ funcionario.dataContratacao | date: 'dd/MM/yyyy'}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefone">
+          <th mat-header-cell *matHeaderCellDef>Telefone</th>
+          <td mat-cell *matCellDef="let funcionario">
+            ({{ funcionario.usuario.telefone.codigoArea }})
+            {{ funcionario.usuario.telefone.numero }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="actions-column">
+            Ações
+          </th>
+          <td mat-cell *matCellDef="let element" class="actions-column">
+            <div class="action-buttons">
+              <button
+                mat-icon-button
+                class="edit-button"
+                routerLink="edit/{{ element.id }}"
+                matTooltip="Editar"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="delete-button"
+                matTooltip="Excluir"
+                (click)="onDeleteFuncionario(element)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="view-button"
+                matTooltip="Visualizar"
+                (click)="viewDetails(element)"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Empty state row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state" colspan="4">
+            Nenhum dado encontrado
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      [pageSize]="pageSize"
+      [length]="totalRecords"
+      (page)="paginar($event)"
+      aria-label="Selecione a página"
+    >
+    </mat-paginator>
+  </div>
+</div>
+  } @else {
+  <div class="empty-container">
+    <mat-icon class="empty-icon">info</mat-icon>
+    <h1 class="empty-title">Nenhum funcionário encontrado</h1>
+    <button class="add-button" routerLink="create">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  }
+
