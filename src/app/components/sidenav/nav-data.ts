@@ -38,5 +38,10 @@ export const navbarData = [
     routeLink: 'processadores',
     label: 'Processadores',
     icon: 'memory' // Ícone do Angular Material
+  },
+  {
+    routeLink: 'funcionarios',
+    label: 'Funcionarios',
+    icon: 'people' // Ícone do Angular Material
   }
 ];
