@@ -40,5 +40,11 @@ export const homeData = [
     label: 'Processadores',
     icon: 'memory',
     description: 'Gerenciamento dos modelos de processadores'
+  },
+  {
+    routeLink: '/admin/funcionarios',
+    label: 'Funcionários',
+    icon: 'people',
+    description: 'Gerenciamento dos funcionários do sistema'
   }
 ];

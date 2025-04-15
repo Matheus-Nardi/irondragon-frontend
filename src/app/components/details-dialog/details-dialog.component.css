@@ -1,0 +1,142 @@
+.dialog-container {
+    min-width: 320px;
+    max-width: 600px;
+    overflow: hidden;
+  }
+  
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: var(--mat-sys-surface-container);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+  
+  .dialog-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--mat-sys-primary-container);
+    margin-right: 16px;
+  }
+  
+  .dialog-icon mat-icon {
+    color: var(--mat-sys-on-primary-container);
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .dialog-title {
+    flex: 1;
+  }
+  
+  .dialog-title h2 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+    text-align: center;
+  }
+  
+  .dialog-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+    text-align: center;
+  }
+  
+  .close-button {
+    color: var(--mat-sys-on-surface-variant);
+  }
+  
+  .dialog-content {
+    padding: 24px;
+    max-height: 60vh;
+  }
+  
+  .properties-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .property-item {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: var(--mat-sys-surface-container-lowest);
+    transition: background-color 0.2s;
+  }
+  
+  .property-item:hover {
+    background-color: var(--mat-sys-surface-container-low);
+  }
+  
+  .property-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface-variant);
+    margin-bottom: 4px;
+    text-transform: capitalize;
+  }
+  
+  .property-value {
+    font-size: 16px;
+    color: var(--mat-sys-on-surface);
+    word-break: break-word;
+  }
+  
+  .empty-properties {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0;
+    color: var(--mat-sys-outline);
+  }
+  
+  .empty-properties mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+  
+  .empty-properties p {
+    font-size: 16px;
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    background-color: var(--mat-sys-surface-container);
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+  
+  .dialog-actions button {
+    min-width: 100px;
+  }
+  
+  .dialog-actions button mat-icon {
+    margin-right: 8px;
+  }
+  
+  @media (max-width: 480px) {
+    .dialog-header {
+      padding: 16px;
+    }
+  
+    .dialog-content {
+      padding: 16px;
+    }
+  
+    .dialog-actions {
+      padding: 16px;
+    }
+  }
+  
