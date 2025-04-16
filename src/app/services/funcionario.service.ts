@@ -44,4 +44,13 @@ export class FuncionarioService {
       `${this.configService.getApiBaseUrl()}/funcionarios/${id}`
     );
   }
+
+  create(usuarioId: Number, funcionario: Funcionario): Observable<Funcionario> {
+      const data = {
+        cargo: funcionario.cargo,
+        salario: funcionario.salario,
+        dataContratacao: funcionario.dataContratacao,
+      }
+      return this.httpClient.post<Funcionario>(`${this.configService.getApiBaseUrl()}funcionarios/${usuarioId}`, data);
+    }
 }
