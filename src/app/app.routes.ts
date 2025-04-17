@@ -25,6 +25,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { processadorResolver } from './components/processador/processador.resolver';
 import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
 import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
+import { funcionarioResolver } from './components/funcionario/funcionario.resolver';
 
 export const routes: Routes = [
   {
@@ -65,6 +66,7 @@ export const routes: Routes = [
 
       {path: 'funcionarios', component: FuncionarioListComponent, title: 'Lista de Funcionários'},
       {path: 'funcionarios/create', component: FuncionarioFormComponent, title: 'Novo Funcionário'},
+      {path: 'funcionarios/edit/:id', component: FuncionarioFormComponent, title: 'Edicar Funcionario', resolve: {funcionario: funcionarioResolver}},
       { path: '**', component: PageNotFoundComponent }
     ]
   },

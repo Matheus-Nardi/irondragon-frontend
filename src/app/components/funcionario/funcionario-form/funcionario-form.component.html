@@ -1,93 +1,189 @@
-<mat-stepper #stepper>
-    <mat-step [stepControl]="formGroupFindByCpf" errorMessage="Antes é necessário buscar um usuário.">
-      <form [formGroup]="formGroupFindByCpf">
-        <ng-template matStepLabel>Busque um usuário pelo seu CPF</ng-template>
-        <mat-form-field>
-          <mat-label>CPF</mat-label>
-          <input matInput placeholder="cpf" formControlName="cpf" required>
-        </mat-form-field>
-       
-        <div>
-          <button (click)="findByCpf(formGroupFindByCpf.get('cpf')?.value)">
-            <mat-icon> search </mat-icon>
-           </button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Informações encontradas</ng-template>
-    
-      <mat-card>
-        @if(usuario){
-          <mat-card-header>
-            <mat-card-title>{{ usuario.username }}</mat-card-title>
-            <mat-card-subtitle>CPF: {{ usuario.cpf }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p><strong>Email:</strong> {{ usuario.email }}</p>
-            <p><strong>Telefone:</strong> {{ usuario.telefone.codigoArea }} {{usuario.telefone.numero}}</p>
-            <p><strong>Data Nascimento:</strong> {{ usuario.dataNascimento || 'Não informada' }} </p>
-            <p><strong>Usuario desde:</strong> {{ usuario.dataCriacao }}</p>
-            <p><strong>Perfil:</strong> {{ usuario.perfil.label }}</p>
-          </mat-card-content>
-        }
-      </mat-card>
-    
-      <div class="actions">
-        <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-button matStepperNext>Próximo</button>
-      </div>
-    </mat-step>
-    
-    <mat-step [stepControl]="formGroupFuncionario" errorMessage="Address is required.">
-      <form [formGroup]="formGroupFuncionario">
-        <ng-template matStepLabel>Cadastro de Funcionario</ng-template>
-        <mat-form-field>
-          <mat-label>Cargo</mat-label>
-          <input matInput placeholder="Vendedor" formControlName="cargo"
-                 required>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Salario</mat-label>
-            <input matInput placeholder="R$1200" formControlName="salario"
-                   required>
-          </mat-form-field>
+<div class="page-container">
+  <div class="stepper-container">
+    <div class="stepper-header">
+      <h1 class="page-title">Cadastro de Funcionário</h1>
+      <p class="page-subtitle">Busque um usuário pelo CPF e cadastre-o como funcionário</p>
+    </div>
 
-          <mat-form-field class="full-width-input" appearance="outline">
-            <mat-label>Data de contratacao</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="dataContratacao" />
-            <mat-hint>DD/MM/YYYY</mat-hint>
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error
-            *ngIf="
-              formGroupFuncionario.get('dataContratacao')?.errors &&
-              formGroupFuncionario.get('dataContratacao')?.touched
-            "
-          >
-          {{ getErrorMessage("dataContratacao", formGroupFuncionario.get("dataContratacao")?.errors) }}
-    
-          @if(formGroupFuncionario.get('dataContratacao')?.hasError('apiError')) {
-          <span>{{ formGroupFuncionario.get("dataContratacao")?.getError("apiError") }}</span>
-          }
-          </mat-error>
-          </mat-form-field>
-
-        <div>
-          <button mat-button matStepperPrevious  >Voltar</button>
-          <button mat-button matStepperNext (click)="salvar()" >Salvar</button>
+    <mat-stepper #stepper class="custom-stepper mat-elevation-z2">
+      <!-- Etapa 1: Busca por CPF -->
+      <mat-step [stepControl]="formGroupFindByCpf" errorMessage="Antes é necessário buscar um usuário." *ngIf="!editando">
+        <form [formGroup]="formGroupFindByCpf" class="step-form">
+          <ng-template matStepLabel>Buscar usuário</ng-template>
+          
+          <div class="step-content">
+            <h2 class="step-title">Busque um usuário pelo CPF</h2>
+            <p class="step-description">Digite o CPF do usuário que deseja cadastrar como funcionário</p>
+            
+            <div class="form-field-container">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>CPF</mat-label>
+                <input matInput placeholder="000.000.000-00" formControlName="cpf" required>
+                <mat-icon matSuffix>person_search</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div class="step-actions">
+            <button mat-raised-button color="primary" 
+                    [disabled]="formGroupFindByCpf.invalid"
+                    (click)="findByCpf(formGroupFindByCpf.get('cpf')?.value)">
+              <mat-icon>search</mat-icon>
+              Buscar
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      
+      <!-- Etapa 2: Informações do usuário -->
+      <mat-step>
+        <ng-template matStepLabel>Informações</ng-template>
+        
+        <div class="step-content">
+          <h2 class="step-title">Informações do usuário</h2>
+          <p class="step-description">Verifique se os dados do usuário estão corretos</p>
+          
+          <div class="user-card-container">
+            <mat-card class="user-card" *ngIf="usuario">
+              <div class="user-card-header">
+                <div class="user-avatar">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <div class="user-info">
+                  <h3 class="user-name">{{ usuario.username }}</h3>
+                  <p class="user-cpf">CPF: {{ usuario.cpf }}</p>
+                </div>
+              </div>
+              
+              <mat-divider></mat-divider>
+              
+              <div class="user-details">
+                <div class="detail-item">
+                  <span class="detail-label">Email:</span>
+                  <span class="detail-value">{{ usuario.email }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Telefone:</span>
+                  <span class="detail-value">{{ usuario.telefone.codigoArea }} {{ usuario.telefone.numero }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Data de Nascimento:</span>
+                  <span class="detail-value">{{ usuario.dataNascimento || 'Não informada' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Usuário desde:</span>
+                  <span class="detail-value">{{ usuario.dataCriacao }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Perfil:</span>
+                  <span class="detail-value">{{ usuario.perfil.label }}</span>
+                </div>
+              </div>
+            </mat-card>
+            
+            <div class="empty-user" *ngIf="!usuario">
+              <mat-icon>person_off</mat-icon>
+              <p>Nenhum usuário encontrado</p>
+            </div>
+          </div>
         </div>
-      </form>
-    </mat-step>
-    <!-- <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
-    </mat-step> -->
-  </mat-stepper>
+        
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+          <button mat-raised-button color="primary" matStepperNext [disabled]="!usuario">
+            <mat-icon>arrow_forward</mat-icon>
+            Próximo
+          </button>
+        </div>
+      </mat-step>
+      
+      <!-- Etapa 3: Cadastro de funcionário -->
+      <mat-step [stepControl]="formGroupFuncionario">
+        <form [formGroup]="formGroupFuncionario" class="step-form">
+          <ng-template matStepLabel>Dados funcionais</ng-template>
+          
+          <div class="step-content">
+            <h2 class="step-title">Dados do funcionário</h2>
+            <p class="step-description">Preencha as informações funcionais</p>
+            
+            <div class="form-fields-grid">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Cargo</mat-label>
+                <input matInput placeholder="Ex: Vendedor" formControlName="cargo" required>
+                <mat-icon matSuffix>work</mat-icon>
+                <mat-error
+                  *ngIf="
+                    formGroupFuncionario.get('cargo')?.errors &&
+                    formGroupFuncionario.get('cargo')?.touched
+                  "
+                >
+                  {{ getErrorMessage("cargo", formGroupFuncionario.get("cargo")?.errors) }}
+          
+                  @if(formGroupFuncionario.get('cargo')?.hasError('apiError')) {
+                  <span>{{ formGroupFuncionario.get("cargo")?.getError("apiError") }}</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Salário</mat-label>
+                <input matInput placeholder="Ex: 1200,00" formControlName="salario" required>
+                <mat-icon matSuffix>attach_money</mat-icon>
+                <mat-error
+                  *ngIf="
+                    formGroupFuncionario.get('salario')?.errors &&
+                    formGroupFuncionario.get('salario')?.touched
+                  "
+                >
+                  {{ getErrorMessage("salario", formGroupFuncionario.get("salario")?.errors) }}
+          
+                  @if(formGroupFuncionario.get('salario')?.hasError('apiError')) {
+                  <span>{{ formGroupFuncionario.get("salario")?.getError("apiError") }}</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Data de contratação</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataContratacao" required>
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error
+                  *ngIf="
+                    formGroupFuncionario.get('dataContratacao')?.errors &&
+                    formGroupFuncionario.get('dataContratacao')?.touched
+                  "
+                >
+                  {{ getErrorMessage("dataContratacao", formGroupFuncionario.get("dataContratacao")?.errors) }}
+          
+                  @if(formGroupFuncionario.get('dataContratacao')?.hasError('apiError')) {
+                  <span>{{ formGroupFuncionario.get("dataContratacao")?.getError("apiError") }}</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div class="step-actions">
+            <button mat-stroked-button matStepperPrevious>
+              <mat-icon>arrow_back</mat-icon>
+              Voltar
+            </button>
+            <button mat-raised-button color="primary" (click)="salvar()" [disabled]="formGroupFuncionario.invalid">
+              <mat-icon>save</mat-icon>
+              Salvar
+            </button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

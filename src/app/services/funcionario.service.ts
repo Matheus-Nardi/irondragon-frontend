@@ -53,4 +53,16 @@ export class FuncionarioService {
       }
       return this.httpClient.post<Funcionario>(`${this.configService.getApiBaseUrl()}funcionarios/${usuarioId}`, data);
     }
+
+    update(funcionario: Funcionario): Observable<any> {
+
+      const data = {
+        cargo: funcionario.cargo,
+        salario: funcionario.salario,
+        dataContratacao: funcionario.dataContratacao,
+      }
+      console.log(data);
+      
+      return this.httpClient.put<Funcionario>(`${this.configService.getApiBaseUrl()}funcionarios/${funcionario.id}`, data);
+    }
 }
