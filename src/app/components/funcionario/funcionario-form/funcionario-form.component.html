@@ -65,7 +65,7 @@
                 
                 <div class="detail-item">
                   <span class="detail-label">Telefone:</span>
-                  <span class="detail-value">{{ usuario.telefone.codigoArea }} {{ usuario.telefone.numero }}</span>
+                  <span class="detail-value">({{ usuario.telefone.codigoArea }}) {{ usuario.telefone.numero }}</span>
                 </div>
                 
                 <div class="detail-item">
@@ -75,7 +75,7 @@
                 
                 <div class="detail-item">
                   <span class="detail-label">Usuário desde:</span>
-                  <span class="detail-value">{{ usuario.dataCriacao }}</span>
+                  <span class="detail-value">{{ usuario.dataCriacao | date: 'dd/MM/yyyy'}}</span>
                 </div>
                 
                 <div class="detail-item">
@@ -107,11 +107,11 @@
       <!-- Etapa 3: Cadastro de funcionário -->
       <mat-step [stepControl]="formGroupFuncionario">
         <form [formGroup]="formGroupFuncionario" class="step-form">
-          <ng-template matStepLabel>Dados funcionais</ng-template>
+          <ng-template matStepLabel>Dados do funcionario</ng-template>
           
           <div class="step-content">
             <h2 class="step-title">Dados do funcionário</h2>
-            <p class="step-description">Preencha as informações funcionais</p>
+            <p class="step-description">Preencha as informações do funcionario</p>
             
             <div class="form-fields-grid">
               <mat-form-field appearance="outline" class="form-field">
@@ -134,7 +134,7 @@
               
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Salário</mat-label>
-                <input matInput placeholder="Ex: 1200,00" formControlName="salario" required>
+                <input matInput placeholder="Ex: 1200.00" formControlName="salario" required>
                 <mat-icon matSuffix>attach_money</mat-icon>
                 <mat-error
                   *ngIf="

@@ -90,7 +90,7 @@ export class FuncionarioFormComponent implements AfterViewInit {
     this.formGroupFuncionario = this.formBuilder.group({
       id: funcionario?.id || null,
       cargo: [funcionario?.cargo || '', Validators.required],
-      salario: [funcionario?.salario || '', Validators.required],
+      salario: [funcionario?.salario || '', [Validators.required, Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]],
       dataContratacao: [funcionario?.dataContratacao || '', Validators.required],
     });
 
@@ -200,6 +200,7 @@ export class FuncionarioFormComponent implements AfterViewInit {
     },
     salario: {
       required: 'O salário deve ser informado.',
+      pattern: 'Informe um valor decimal válido, ex: 199.99',
       apiError: ' ',
     },
     dataContratacao: {

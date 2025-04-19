@@ -122,6 +122,11 @@ export class FuncionarioListComponent implements OnInit {
       'Telefone': usuario.telefone
         ? `(${usuario.telefone.codigoArea}) ${usuario.telefone.numero}`
         : 'Não informado',
+        'Endereços': usuario.enderecos?.length > 0
+        ? usuario.enderecos.map(e =>
+            `${e.logradouro},  ${e.numero} - ${e.bairro}, ${e.cidade.nome} - ${e.cidade.estado.sigla}, CEP: ${e.cep}`
+          ).join('\n')
+        : 'Não informado'
     };
   
     this.dialogService.openDetailsDialog(

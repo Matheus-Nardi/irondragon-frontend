@@ -182,7 +182,6 @@
   .detail-label {
     font-weight: 500;
     color: var(--mat-sys-on-surface-variant);
-    min-width: 140px;
   }
   
   .detail-value {
