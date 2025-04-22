@@ -6,7 +6,6 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Cidade } from '../../../models/cidade.model';
 import { CidadeService } from '../../../services/cidade.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SnackbarService } from '../../../services/snackbar.service';
@@ -18,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Cidade } from '../../../models/cidade.model';
 
 @Component({
   selector: 'app-cidade-list',

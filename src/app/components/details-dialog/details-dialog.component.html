@@ -17,18 +17,20 @@
       @for (property of getKeys(data.properties); track $index) {
         <div class="property-item">
           <div class="property-label">{{ property }}</div>
+      
           <div class="property-value">
-            {{ data.properties[property] || 'Não informado' }}
+            @if (property === 'Endereços' && data.properties[property] !== 'Não informado') {
+              <ul class="enderecos-list">
+                @for (endereco of data.properties[property].split('\n'); track $index) {
+                  <li>{{ endereco }}</li>
+                }
+              </ul>
+            } @else {
+              {{ data.properties[property] || 'Não informado' }}
+            }
           </div>
         </div>
-      }
-      
-      @if (getKeys(data.properties).length === 0) {
-        <div class="empty-properties">
-          <mat-icon>info</mat-icon>
-          <p>Nenhuma informação disponível</p>
-        </div>
-      }
+      }      
     </div>
   </mat-dialog-content>
 
