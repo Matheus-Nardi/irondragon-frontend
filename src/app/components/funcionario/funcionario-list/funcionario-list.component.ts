@@ -124,7 +124,7 @@ export class FuncionarioListComponent implements OnInit {
         : 'Não informado',
         'Endereços': usuario.enderecos?.length > 0
         ? usuario.enderecos.map(e =>
-            `${e.logradouro},  ${e.numero} - ${e.bairro}, ${e.cidade.nome} - ${e.cidade.estado.sigla}, CEP: ${e.cep}`
+            `${e.logradouro},  Numero: ${e.numero} - Bairro: ${e.bairro}, Cidade: ${e.cidade.nome} - ${e.cidade.estado.sigla}, CEP: ${e.cep}`
           ).join('\n')
         : 'Não informado'
     };

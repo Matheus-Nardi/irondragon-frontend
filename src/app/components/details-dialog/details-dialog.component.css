@@ -125,7 +125,7 @@
   .dialog-actions button mat-icon {
     margin-right: 8px;
   }
-  
+
   @media (max-width: 480px) {
     .dialog-header {
       padding: 16px;
