@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Processador } from '../../../models/processador/processador.model';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-processador-form',
@@ -42,11 +43,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSelectModule,
     MatSlideToggleModule,
     MatButtonModule,
+    MatStepperModule
   ],
   styleUrls: ['./processador-form.component.css'],
 })
 export class ProcessadorFormComponent implements OnInit {
   formGroup!: FormGroup;
+  formGroupInfosBasicas!: FormGroup;
+  formGroupInfosEspecificas!: FormGroup;
   fabricantes: Fabricante[] = [];
   placasIntegradas: PlacaIntegrada[] = [];
 
@@ -59,7 +63,8 @@ export class ProcessadorFormComponent implements OnInit {
     private snackbarService: SnackbarService,
     private activatedRoute: ActivatedRoute
   ) {
-    this.formGroup = this.formBuilder.group({
+
+    this.formGroupInfosBasicas = this.formBuilder.group({
       id: [null],
       nome: ['', Validators.required],
       socket: ['', Validators.required],
@@ -72,45 +77,21 @@ export class ProcessadorFormComponent implements OnInit {
       ],
       fabricante: [null, Validators.required],
       placaIntegrada: [null],
-      memoriaCache: this.formBuilder.group({
-        cacheL2: [
-          '',
-          [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
-        ],
-        cacheL3: [
-          '',
-          [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
-        ],
-      }),
-      frequencia: this.formBuilder.group({
-        clockBasico: [
-          '',
-          [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
-        ],
-        clockBoost: [
-          '',
-          [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
-        ],
-      }),
-      consumoEnergetico: this.formBuilder.group({
-        energiaBasica: [
-          '',
-          [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
-        ],
-        energiaMaxima: ['', [Validators.pattern('^[1-9][0-9]*$')]],
-      }),
-      conectividade: this.formBuilder.group({
-        pci: [
-          '',
-          [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
-        ],
-        tipoMemoria: ['', Validators.required],
-        canaisMemoria: [
-          '',
-          [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
-        ],
-      }),
     });
+
+
+    this.formGroupInfosEspecificas = this.formBuilder.group({
+      cacheL2: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
+      cacheL3: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
+      clockBasico: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
+      clockBoost: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
+      energiaBasica: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+      energiaMaxima: ['', [Validators.pattern('^[1-9][0-9]*$')]],
+      pci: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
+      tipoMemoria: ['', Validators.required],
+      canaisMemoria: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+    });
+
   }
 
   ngOnInit(): void {
@@ -135,7 +116,7 @@ export class ProcessadorFormComponent implements OnInit {
       (p) => p.id === (processador?.placaIntegrada?.id ?? null)
     );
   
-    this.formGroup = this.formBuilder.group({
+    this.formGroupInfosBasicas = this.formBuilder.group({
       id: [processador && processador.id ? processador.id : null],
       nome: [processador && processador.nome ? processador.nome : ''],
       socket: [processador && processador.socket ? processador.socket : ''],
@@ -147,71 +128,60 @@ export class ProcessadorFormComponent implements OnInit {
       preco: [processador && processador.preco ? processador.preco : ''],
       fabricante: [fabricante && fabricante?.id ? fabricante : null],
       placaIntegrada: [placaIntegrada && placaIntegrada.id ? processador.placaIntegrada : null],
-      memoriaCache: this.formBuilder.group({
-        cacheL2: [
-          processador.memoriaCache && processador.memoriaCache.cacheL2
-            ? processador.memoriaCache.cacheL2 
-            : '',
-        ],
-        cacheL3: [
-          processador.memoriaCache && processador.memoriaCache.cacheL3
-            ? processador.memoriaCache.cacheL3
-            : '',
-        ],
-      }),
-      frequencia: this.formBuilder.group({
-        clockBasico: [
-          processador.frequencia && processador.frequencia.clockBasico
-            ? processador.frequencia.clockBasico
-            : '',
-        ],
-        clockBoost: [
-          processador.frequencia && processador.frequencia.clockBoost
-            ? processador.frequencia.clockBoost
-            : '',
-        ],
-      }),
-      consumoEnergetico: this.formBuilder.group({
-        energiaBasica: [
-          processador.consumoEnergetico &&
-          processador.consumoEnergetico.energiaBasica
-            ? processador.consumoEnergetico.energiaBasica
-            : '',
-        ],
-        energiaMaxima: [
-          processador.consumoEnergetico &&
-          processador.consumoEnergetico.energiaMaxima
-            ? processador.consumoEnergetico.energiaMaxima
-            : '',
-        ],
-      }),
-      conectividade: this.formBuilder.group({
-        pci: [
-          processador && processador.conectividade.pci
-            ? processador.conectividade.pci
-            : '',
-        ],
-        tipoMemoria: [
-          processador && processador.conectividade.tipoMemoria
-            ? processador.conectividade.tipoMemoria
-            : '',
-        ],
-        canaisMemoria: [
-          processador && processador.conectividade.canaisMemoria
-            ? processador.conectividade.canaisMemoria
-            : '',
-        ],
-      }),
+    });
+  
+    this.formGroupInfosEspecificas = this.formBuilder.group({
+      cacheL2: [processador?.memoriaCache?.cacheL2 ?? ''],
+      cacheL3: [processador?.memoriaCache?.cacheL3 ?? ''],
+      clockBasico: [processador?.frequencia?.clockBasico ?? ''],
+      clockBoost: [processador?.frequencia?.clockBoost ?? ''],
+      energiaBasica: [processador?.consumoEnergetico?.energiaBasica ?? ''],
+      energiaMaxima: [processador?.consumoEnergetico?.energiaMaxima ?? ''],
+      pci: [processador?.conectividade?.pci ?? ''],
+      tipoMemoria: [processador?.conectividade?.tipoMemoria ?? ''],
+      canaisMemoria: [processador?.conectividade?.canaisMemoria ?? ''],
     });
   }
-  
   onSubmit(): void {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.valid) {
+    this.formGroupInfosBasicas.markAllAsTouched();
+    this.formGroupInfosEspecificas.markAllAsTouched();
   
-      const processador = this.formGroup.value;
-      console.log('Payload enviado:', this.formGroup.value);
-
+    if (this.formGroupInfosBasicas.valid && this.formGroupInfosEspecificas.valid) {
+      const infosBasicas = this.formGroupInfosBasicas.value;
+      const infosEspecificas = this.formGroupInfosEspecificas.value;
+  
+      // Combine os valores dos dois formGroups em um único objeto 'processador'
+      const processador = {
+        id: infosBasicas.id,
+        nome: infosBasicas.nome,
+        socket: infosBasicas.socket,
+        threads: infosBasicas.threads,
+        nucleos: infosBasicas.nucleos,
+        desbloqueado: infosBasicas.desbloqueado,
+        preco: infosBasicas.preco,
+        fabricante: infosBasicas.fabricante,
+        placaIntegrada: infosBasicas.placaIntegrada,
+        memoriaCache: {
+          cacheL2: infosEspecificas.cacheL2,
+          cacheL3: infosEspecificas.cacheL3,
+        },
+        frequencia: {
+          clockBasico: infosEspecificas.clockBasico,
+          clockBoost: infosEspecificas.clockBoost,
+        },
+        consumoEnergetico: {
+          energiaBasica: infosEspecificas.energiaBasica,
+          energiaMaxima: infosEspecificas.energiaMaxima,
+        },
+        conectividade: {
+          pci: infosEspecificas.pci,
+          tipoMemoria: infosEspecificas.tipoMemoria,
+          canaisMemoria: infosEspecificas.canaisMemoria,
+        },
+      } as Processador;
+  
+      console.log('Payload enviado:', processador);
+  
       const operacao =
         processador.id == null
           ? this.processadorService.create(processador)
@@ -290,6 +260,7 @@ export class ProcessadorFormComponent implements OnInit {
     }
   }
 
+  //Arrumar as validações aqui e no HTML
   errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
     nome: {
       required: 'O nome deve ser informado.',
