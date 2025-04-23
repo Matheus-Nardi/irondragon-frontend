@@ -1,102 +1,107 @@
 @if (lotes.length > 0) {
-    <div class="header">
-      <div class="add-container">
-        <h1 class="title">Lotes</h1>
-        <button class="btn" routerLink="create">
+  <div class="page-container">
+    <div class="page-header">
+      <div class="title-container">
+        <h1 class="page-title">Lotes</h1>
+        <button class="add-button" routerLink="create">
           <mat-icon>add</mat-icon>
         </button>
       </div>
-    
+
       <div class="search-container">
-        <span class="example-spacer"></span>
-        <mat-form-field class="example-form-field" appearance="outline">
+        <mat-form-field appearance="outline">
           <input
-          matInput
-          (keyup)="onSearch(search)"
-          placeholder="Pesquise por um lote"
-          [(ngModel)]="search"
-        />
-          <button matSuffix mat-icon-button aria-label="Clear">
-            <mat-icon>search</mat-icon>
-          </button>
+            matInput
+            (keyup)="onSearch(search)"
+            placeholder="Pesquise por um lote"
+            [(ngModel)]="search"
+          />
+          <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-        <span class="example-spacer"></span>
       </div>
     </div>
-    
-  <div class="container">
-    <div class="content">
-      <div class="mat-elevation-z8 full-screen ">
-        <table mat-table [dataSource]="lotesFiltrados.slice(page * pageSize, (page + 1) * pageSize)" class="full-table table-background">
-  
-  
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> ID </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.id}} </td>
-          </ng-container>
-  
-  
-          <ng-container matColumnDef="codigo">
-            <th mat-header-cell *matHeaderCellDef> Codigo </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.codigo}} </td>
-          </ng-container>
 
-          <ng-container matColumnDef="processador">
-            <th mat-header-cell *matHeaderCellDef> Processador </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.processador.nome}} </td>
-          </ng-container>
-  
-          <ng-container matColumnDef="estoque">
-            <th mat-header-cell *matHeaderCellDef> Estoque </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.estoque}} </td>
-          </ng-container>
+    <div class="table-container mat-elevation-z2">
+      <table mat-table [dataSource]="lotesFiltrados" class="lotes-table">
 
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.id }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="fornecedor">
-            <th mat-header-cell *matHeaderCellDef> Fornecedor </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.fornecedor.nome}} </td>
-          </ng-container>
+        <ng-container matColumnDef="codigo">
+          <th mat-header-cell *matHeaderCellDef>Código</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.codigo }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="data">
-            <th mat-header-cell *matHeaderCellDef> Data </th>
-            <td mat-cell *matCellDef="let lote"> {{lote.data}} </td>
-          </ng-container>
+        <ng-container matColumnDef="processador">
+          <th mat-header-cell *matHeaderCellDef>Processador</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.processador.nome }}</td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  
-  
-      <ng-container matColumnDef="acoes">
-        <th mat-header-cell *matHeaderCellDef>Ações</th>
-        <td mat-cell *matCellDef="let element">
-          <div class="action-buttons">
-          <button
-            mat-icon-button
-            color="primary edit"
-            routerLink="edit/{{ element.id }}"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn delete">
-            <mat-icon (click)="onDeleteLote(element)" >delete</mat-icon>
-          </button>
-        
-          </div>
-        </td>
-      </ng-container>
-        </table>
-  
-       <mat-paginator
-        [pageSizeOptions]="[2, 4, 8, 16]"
-        [pageSize]="pageSize"
-        [length]="totalRecords"
-        (page)="paginar($event)"
-      >
-      </mat-paginator>
-      </div>
+        <ng-container matColumnDef="estoque">
+          <th mat-header-cell *matHeaderCellDef>Estoque</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.estoque }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fornecedor">
+          <th mat-header-cell *matHeaderCellDef>Fornecedor</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.fornecedor.nome }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="data">
+          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <td mat-cell *matCellDef="let lote">{{ lote.data }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="actions-column">Ações</th>
+          <td mat-cell *matCellDef="let element" class="actions-column">
+            <div class="action-buttons">
+              <button
+                mat-icon-button
+                class="edit-button"
+                routerLink="edit/{{ element.id }}"
+                matTooltip="Editar"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="delete-button"
+                matTooltip="Excluir"
+                (click)="onDeleteLote(element)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state" colspan="7">Nenhum dado encontrado</td>
+        </tr>
+      </table>
     </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      [pageSize]="pageSize"
+      [length]="totalRecords"
+      (page)="paginar($event)"
+      aria-label="Selecione a página"
+    >
+    </mat-paginator>
   </div>
-  
-  } @else {
-  <h1 class="title">Lotes não encontrado</h1>
-  }
+} @else {
+  <div class="empty-container">
+    <mat-icon class="empty-icon">info</mat-icon>
+    <h1 class="empty-title">Nenhum lote encontrado</h1>
+    <button class="add-button" routerLink="create">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+}

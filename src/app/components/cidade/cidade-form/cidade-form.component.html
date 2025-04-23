@@ -1,33 +1,65 @@
-<h1>Cadastro de Cidade</h1>
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <button mat-icon-button class="back-button" routerLink="/admin/cidades" matTooltip="Voltar para a lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="page-title">{{ formGroup.get('id')?.value ? 'Editar' : 'Nova' }} Cidade</h1>
+    </div>
+  </div>
 
-<div class="container">
-  <mat-card>
-    <mat-card-content>
-      <form [formGroup]="formGroup">
-        <div class="input-container">
-          <mat-form-field appearance="outline">
+  <div class="form-card mat-elevation-z2">
+    <div class="form-header">
+      <div class="form-icon">
+        <mat-icon>location_city</mat-icon>
+      </div>
+      <div class="form-title">
+        <h2>Informações da Cidade</h2>
+        <p class="form-subtitle">Preencha os dados da cidade</p>
+      </div>
+    </div>
+
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <div class="form-content">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Nome</mat-label>
-            <input matInput type="text" formControlName="nome" placeholder="Nome da cidade"
-              [value]="formGroup.get('nome')?.value | titlecase" />
+            <input
+              matInput
+              type="text"
+              formControlName="nome"
+              placeholder="Nome da cidade"
+              [value]="formGroup.get('nome')?.value | titlecase"
+              autocomplete="off"
+            />
             @if (formGroup.get('nome')?.value) {
-            <button matSuffix mat-icon-button aria-label="Clear" (click)="formGroup.get('nome')?.setValue('')">
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              matTooltip="Limpar campo"
+              (click)="formGroup.get('nome')?.setValue('')"
+            >
               <mat-icon>close</mat-icon>
             </button>
             }
-            <mat-error *ngIf="
-                formGroup.get('nome') &&
-                formGroup.get('nome')?.invalid &&
+            <mat-error
+              *ngIf="
+                formGroup.get('nome')?.errors &&
                 formGroup.get('nome')?.touched
-              ">
-              {{getErrorMessage('nome', formGroup.get('nome')?.errors)}}
+              "
+            >
+              {{ getErrorMessage("nome", formGroup.get("nome")?.errors) }}
 
-              @if (formGroup.get('nome')?.hasError('apiError')) {
-                <span>{{ formGroup.get('nome')?.getError('apiError') }}</span>
+              @if(formGroup.get('nome')?.hasError('apiError')) {
+              <span>{{ formGroup.get("nome")?.getError("apiError") }}</span>
               }
             </mat-error>
           </mat-form-field>
-  
-          <mat-form-field appearance="outline">
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Estado</mat-label>
             <mat-select formControlName="estado" placeholder="Selecione um estado"
               [value]="formGroup.get('estado')?.value">
@@ -35,23 +67,59 @@
                 {{ estado.nome }}
               </mat-option>
             </mat-select>
+            <mat-error
+              *ngIf="
+                formGroup.get('estado')?.errors &&
+                formGroup.get('estado')?.touched
+              "
+            >
+              {{ getErrorMessage("estado", formGroup.get("estado")?.errors) }}
+
+              @if(formGroup.get('estado')?.hasError('apiError')) {
+              <span>{{ formGroup.get("estado")?.getError("apiError") }}</span>
+              }
+            </mat-error>
           </mat-form-field>
         </div>
-      </form>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button  [routerLink]="['/admin/cidades']">CANCELAR</button>
-      <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
-        SALVAR
-      </button>
-      <button
-        mat-raised-button
-        color="warn"
-        [disabled]="formGroup.get('id')?.value === null"
-        (click)="onDelete()"
-      >
-        EXCLUIR
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      </div>
+
+      <div class="form-actions">
+        <div class="action-buttons">
+          <button
+            mat-stroked-button
+            type="button"
+            routerLink="/admin/cidades"
+            class="cancel-button"
+          >
+            <mat-icon>close</mat-icon>
+            <span>Cancelar</span>
+          </button>
+
+          <button
+            mat-raised-button
+            color="warn"
+            type="button"
+            [disabled]="!formGroup.get('id')?.value"
+            (click)="onDelete()"
+            class="delete-button"
+            *ngIf="formGroup.get('id')?.value"
+          >
+            <mat-icon>delete</mat-icon>
+            <span>Excluir</span>
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="save-button"
+          >
+            <mat-icon>save</mat-icon>
+            <span>Salvar</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
 </div>

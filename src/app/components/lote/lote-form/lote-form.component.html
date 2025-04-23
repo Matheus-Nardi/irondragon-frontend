@@ -1,168 +1,189 @@
-<h1>Cadastro de Lote</h1>
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <button mat-icon-button class="back-button" routerLink="/admin/lotes" matTooltip="Voltar para a lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="page-title">{{ formGroup.get('id')?.value ? 'Editar' : 'Novo' }} Lote</h1>
+    </div>
+  </div>
 
-<mat-card>
-  <mat-card-content>
-    <form [formGroup]="formGroup">
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Código</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="codigo"
-          placeholder="Código do lote"
-        />
-        @if (formGroup.get('codigo')?.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="formGroup.get('codigo')?.setValue('')"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-        <mat-error
-          *ngIf="
-            formGroup.get('codigo')?.touched &&
-            formGroup.get('codigo')?.errors
-          "
-        >
-        {{ getErrorMessage("codigo", formGroup.get("codigo")?.errors) }}
+  <div class="form-card mat-elevation-z2">
+    <div class="form-header">
+      <div class="form-icon">
+        <mat-icon>layers</mat-icon>
+      </div>
+      <div class="form-title">
+        <h2>Informações do Lote</h2>
+        <p class="form-subtitle">Preencha os dados do lote</p>
+      </div>
+    </div>
 
-        @if(formGroup.get('codigo')?.hasError('apiError')) {
-        <span>{{ formGroup.get("codigo")?.getError("apiError") }}</span>
-        }
+    <form [formGroup]="formGroup" (ngSubmit)="salvar()">
+      <div class="form-content">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="codigo"
+              placeholder="Código do lote"
+              [value]="formGroup.get('codigo')?.value"
+              autocomplete="off"
+            />
+            @if (formGroup.get('codigo')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              matTooltip="Limpar campo"
+              (click)="formGroup.get('codigo')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('codigo')?.touched && formGroup.get('codigo')?.errors
+              "
+            >
+              {{ getErrorMessage("codigo", formGroup.get("codigo")?.errors) }}
 
-        </mat-error>
-      </mat-form-field>
+              @if(formGroup.get('codigo')?.hasError('apiError')) {
+              <span>{{ formGroup.get("codigo")?.getError("apiError") }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-      <mat-form-field appearance="outline" class="full-width-input">
-        <mat-label>Estoque</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="estoque"
-          placeholder="Estoque do lote"
-        />
-        @if (formGroup.get('estoque')?.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="formGroup.get('estoque')?.setValue('')"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-        <mat-error
-          *ngIf="
-            formGroup.get('estoque')?.touched &&
-            formGroup.get('estoque')?.errors
-          "
-        >
-        {{ getErrorMessage("estoque", formGroup.get("estoque")?.errors) }}
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Estoque</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="estoque"
+              placeholder="Estoque do lote"
+              [value]="formGroup.get('estoque')?.value"
+              autocomplete="off"
+            />
+            @if (formGroup.get('estoque')?.value) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              matTooltip="Limpar campo"
+              (click)="formGroup.get('estoque')?.setValue('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            }
+            <mat-error
+              *ngIf="
+                formGroup.get('estoque')?.touched && formGroup.get('estoque')?.errors
+              "
+            >
+              {{ getErrorMessage("estoque", formGroup.get("estoque")?.errors) }}
 
-        @if(formGroup.get('estoque')?.hasError('apiError')) {
-        <span>{{ formGroup.get("estoque")?.getError("apiError") }}</span>
-        }
+              @if(formGroup.get('estoque')?.hasError('apiError')) {
+              <span>{{ formGroup.get("estoque")?.getError("apiError") }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-        </mat-error>
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Data do lote</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="data" autocomplete="off" />
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="
+                formGroup.get('data')?.errors && formGroup.get('data')?.touched
+              "
+            >
+              {{ getErrorMessage("data", formGroup.get("data")?.errors) }}
 
-      <mat-form-field class="full-width-input" appearance="outline">
-        <mat-label>Data do lote</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="data" />
-        <mat-hint>DD/MM/YYYY</mat-hint>
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error
-        *ngIf="
-          formGroup.get('data')?.errors &&
-          formGroup.get('data')?.touched
-        "
-      >
-      {{ getErrorMessage("data", formGroup.get("data")?.errors) }}
+              @if(formGroup.get('data')?.hasError('apiError')) {
+              <span>{{ formGroup.get("data")?.getError("apiError") }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-      @if(formGroup.get('data')?.hasError('apiError')) {
-      <span>{{ formGroup.get("data")?.getError("apiError") }}</span>
-      }
-      </mat-error>
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Processador</mat-label>
+            <mat-select formControlName="processador" placeholder="Processador" id="processador_id">
+              @for (processador of processadores; track processador.id) {
+              <mat-option [value]="processador">{{ processador.nome }}</mat-option>
+              }
+            </mat-select>
+            <mat-error
+              *ngIf="
+                formGroup.get('processador')?.errors && formGroup.get('processador')?.touched
+              "
+            >
+              {{ getErrorMessage("processador", formGroup.get("processador")?.errors) }}
 
-      <mat-form-field class="full-width-input" appearance="outline">
-        <mat-select
-          formControlName="processador"
-          placeholder="Processador"
-          id="processador_id"
-        >
-          @for (processador of processadores; track processador.id) {
-          <mat-option [value]="processador">
-            {{ processador.nome }}
-          </mat-option>
-          }
-        </mat-select>
-        <mat-error
-        *ngIf="
-          formGroup.get('processador')?.errors &&
-          formGroup.get('processador')?.touched
-        "
-      >
-      {{ getErrorMessage("processador", formGroup.get("processador")?.errors) }}
+              @if(formGroup.get('processador')?.hasError('apiError')) {
+              <span>{{ formGroup.get("processador")?.getError("apiError") }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-      @if(formGroup.get('processador')?.hasError('apiError')) {
-      <span>{{ formGroup.get("processador")?.getError("apiError") }}</span>
-      }
-      </mat-error>
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fornecedor</mat-label>
+            <mat-select formControlName="fornecedor" placeholder="Fornecedor" id="fornecedor_id">
+              @for (fornecedor of fornecedores; track fornecedor.id) {
+              <mat-option [value]="fornecedor">{{ fornecedor.nome }}</mat-option>
+              }
+            </mat-select>
+            <mat-error
+              *ngIf="
+                formGroup.get('fornecedor')?.errors && formGroup.get('fornecedor')?.touched
+              "
+            >
+              {{ getErrorMessage("fornecedor", formGroup.get("fornecedor")?.errors) }}
 
-      <mat-form-field class="full-width-input" appearance="outline">
-        <mat-select
-          formControlName="fornecedor"
-          placeholder="Fornecedor"
-          id="fornecedor_id"
-        >
-          @for (fornecedor of fornecedores; track fornecedor.id) {
-          <mat-option [value]="fornecedor">
-            {{ fornecedor.nome }}
-          </mat-option>
-          }
-        </mat-select>
-        <mat-error
-        *ngIf="
-          formGroup.get('fornecedor')?.errors &&
-          formGroup.get('fornecedor')?.touched
-        "
-      >
-      {{ getErrorMessage("fornecedor", formGroup.get("fornecedor")?.errors) }}
+              @if(formGroup.get('fornecedor')?.hasError('apiError')) {
+              <span>{{ formGroup.get("fornecedor")?.getError("apiError") }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-      @if(formGroup.get('fornecedor')?.hasError('apiError')) {
-      <span>{{ formGroup.get("fornecedor")?.getError("apiError") }}</span>
-      }
-      </mat-error>
-      </mat-form-field>
+      <div class="form-actions">
+        <div class="action-buttons">
+          <button mat-stroked-button type="button" routerLink="/admin/lotes" class="cancel-button">
+            <mat-icon>close</mat-icon>
+            <span>Cancelar</span>
+          </button>
+          <button
+            mat-raised-button
+            color="warn"
+            type="button"
+            [disabled]="!formGroup.get('id')?.value"
+            (click)="excluir()"
+            class="delete-button"
+            *ngIf="formGroup.get('id')?.value"
+          >
+            <mat-icon>delete</mat-icon>
+            <span>Excluir</span>
+          </button>
+          <button mat-raised-button color="primary" type="submit" class="save-button">
+            <mat-icon>save</mat-icon>
+            <span>Salvar</span>
+          </button>
+        </div>
+      </div>
     </form>
-  </mat-card-content>
 
-  <mat-card-actions>
-    <button mat-raised-button routerLink="/admin/lotes">CANCELAR</button>
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      (click)="salvar()"
-    >
-      SALVAR
-    </button>
-    <button
-      mat-raised-button
-      color="warn"
-      [disabled]="formGroup.get('id')?.value === null"
-      (click)="excluir()"
-    >
-      EXCLUIR
-    </button>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</div>

@@ -8,6 +8,9 @@ import {PlacaIntegrada} from '../../../models/processador/placaintegrada.model';
 import {PlacaintegradaService} from '../../../services/placaintegrada.service';
 import {DialogService} from '../../../services/dialog.service';
 import {SnackbarService} from '../../../services/snackbar.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-placaintegrada-list',
@@ -16,14 +19,19 @@ import {SnackbarService} from '../../../services/snackbar.service';
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
-    RouterLink
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
   templateUrl: './placaintegrada-list.component.html',
   styleUrl: './placaintegrada-list.component.css'
 })
 export class PlacaintegradaListComponent implements OnInit{
+  search: string = '';
   displayedColumns: string[] = ['id', 'nome', 'directX', 'openGl', 'vulkan', 'acoes'];
   placasIntegradas: PlacaIntegrada[] = [];
+  placasIntegradasFiltradas: PlacaIntegrada[] = [];
   dataSource = new MatTableDataSource<PlacaIntegrada>();
 
   totalRecords: number = 0;
@@ -45,7 +53,7 @@ export class PlacaintegradaListComponent implements OnInit{
     this.placaIntegradaService.findAll(this.page, this.pageSize).subscribe((data) => {
       this.placasIntegradas = data.results;
       this.totalRecords = data.count;
-      this.dataSource.data = this.placasIntegradas;
+      this.placasIntegradasFiltradas = this.placasIntegradas;
     });
   }
 
@@ -53,6 +61,18 @@ export class PlacaintegradaListComponent implements OnInit{
     this.page = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadPlacaIntegrada();
+  }
+
+  onSearch(value: string): void {
+    this.page = 0;
+    if(value.trim() == '') {
+      this.placasIntegradasFiltradas = [...this.placasIntegradas];
+    } else {
+      this.placaIntegradaService.findByNome(value.trim(), this.page, this.pageSize).subscribe((data) => {
+        this.placasIntegradasFiltradas = data.results;
+        this.totalRecords = data.count;
+      });
+    }
   }
 
   onDeletePlacaIntegrada(placaIntegrada: PlacaIntegrada) {
