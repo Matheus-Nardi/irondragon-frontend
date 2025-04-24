@@ -26,6 +26,9 @@ import { processadorResolver } from './components/processador/processador.resolv
 import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
 import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
 import { funcionarioResolver } from './components/funcionario/funcionario.resolver';
+import { ClienteTemplateComponent } from './components/template/cliente-template/cliente-template.component';
+import { Component } from '@angular/core';
+import { ClienteHomeComponent } from './components/template/cliente-home/cliente-home.component';
 
 export const routes: Routes = [
   {
@@ -33,7 +36,7 @@ export const routes: Routes = [
     component: AdminTemplateComponent,
     title: 'Administração',
     children: [
-      { path: 'home', component: AdminHomeComponent, title: 'Home',},
+      { path: '', component: AdminHomeComponent, title: 'Home',},
 
       { path: 'estados', component: EstadoListComponent, title: 'Lista de Estados' },
       { path: 'estados/create', component: EstadoFormComponent, title: 'Novo Estado' },
@@ -70,4 +73,15 @@ export const routes: Routes = [
       { path: '**', component: PageNotFoundComponent }
     ]
   },
+
+  {
+    path: '',
+    component: ClienteTemplateComponent,
+    title: 'IRONDRAGON',
+    children:[
+      {
+        path: '', component: ClienteHomeComponent , title: 'Home'
+      }
+    ]
+  }
 ];
