@@ -7,6 +7,7 @@
 
 section{
     margin-bottom: 48px;
+
 }
 
 .benefits-section {
@@ -72,111 +73,179 @@ section{
     line-height: 1.4;
   }
 
-
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3em; /* Espaçamento entre os cards */
+  .products-section {
+    padding: 24px 0;
   }
-
-  .card {
-  position: relative;
-  width: 300px; /* Aumentado */
-  height: 400px; /* Aumentado */
-  background-color: #f0f8ff;
+  
+  
+.container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 24px;
   justify-content: center;
-  align-items: center;
-  padding: 12px;
-  gap: 12px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.card {
+  position: relative;
+  width: 280px;
+  background-color: #f0f8ff; /* Mantido do design original */
   border-radius: 8px;
-  cursor: pointer;
-  color: #1e90ff; /* Cor inicial do texto */
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, color 0.3s ease; /* Adicionando transição para a cor do texto do card */
-}
-
-.card:hover {
-  transform: scale(1.05); /* Aumenta a escala do card no hover */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Adiciona uma sombra no hover */
-  color: white; /* Define a cor do texto do card para branco no hover (afeta elementos que herdam essa cor) */
-}
-
-.card img {
-  border-radius: 3px;
-  object-fit: cover;
-  width: 90%;
-  height: 90%;
-  transition: opacity 0.3s ease-in-out; /* Adicionando transição para a imagem */
-}
-
-.card:hover img {
-  opacity: 0.9; /* Levemente transparente no hover */
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  left: -5px;
-  margin: auto;
-  width: 310px; /* Ajustado proporcionalmente */
-  height: 410px; /* Ajustado proporcionalmente */
-  border-radius: 10px;
-  background: linear-gradient(-45deg, #b3e5fc 0%, #29b6f6 100%); /* Azul mais claro e brilhante */
-  z-index: -10;
-  pointer-events: none;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.card::after {
   content: "";
-  z-index: -1;
   position: absolute;
   inset: 0;
-  background: linear-gradient(-45deg, #81d4fa 0%, #03a9f4 100%); /* Azul mais claro e brilhante */
-  transform: translate3d(0, 0, 0) scale(0.95);
-  filter: blur(20px);
-  transition: filter 0.3s ease; /* Adicionando transição para o blur */
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  opacity: 0.5;
+  z-index: -1;
+  transition: opacity 0.3s ease;
 }
 
-.heading {
-  font-size: 20px;
-  text-transform: capitalize;
-  font-weight: 700;
-  color: #1e88e5; /* Azul mais forte para o título */
-  transition: color 0.3s ease; /* Adicionando transição para a cor do título */
-}
-
-.card:hover .heading {
-  color: white; /* Define a cor do título para branco no hover */
-}
-
-.card p:not(.heading) {
-  font-size: 14px;
-  color: #81d4fa; /* Azul mais claro para o texto */
-  transition: color 0.3s ease; /* Adicionando transição para a cor do texto */
-}
-
-.card:hover p:not(.heading) {
-  color: white; /* Define a cor dos parágrafos para branco no hover */
-}
-
-.card p:last-child {
-  color: #1565c0; /* Azul mais escuro para o último parágrafo */
-  font-weight: 600;
-  transition: color 0.3s ease; /* Adicionando transição para a cor do último parágrafo */
-}
-
-.card:hover p:last-child {
-  color: white; /* Define a cor do último parágrafo para branco no hover */
-}
-
-.card:hover::after {
-  filter: blur(40px); /* Aumentando o blur no hover para intensificar o brilho */
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .card:hover::before {
-  transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
-  background: linear-gradient(-45deg, #64b5f6 0%, #039be5 100%); /* Azul ainda mais brilhante no hover */
+  opacity: 0.8;
 }
+
+.card.featured {
+  border: 2px solid var(--mat-sys-primary, #1976d2);
+}
+
+.product-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--mat-sys-primary, #1976d2);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.product-image {
+  position: relative;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.card:hover .product-image {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.product-image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brand {
+  font-size: 12px;
+  color: var(--mat-sys-on-surface-variant, #757575);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.heading {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e88e5; /* Mantido do design original */
+  margin: 0;
+  height: 40px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  transition: color 0.3s ease;
+}
+
+.card:hover .heading {
+  color: #0d47a1; /* Cor mais escura no hover, mas não branco */
+}
+
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.specs span {
+  font-size: 12px;
+  background-color: rgba(33, 150, 243, 0.1); /* Azul claro com transparência */
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card:hover .specs span {
+  background-color: rgba(33, 150, 243, 0.2);
+  color: #0d47a1;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1565c0; /* Mantido do design original */
+  margin: 8px 0;
+  transition: color 0.3s ease;
+}
+
+.card:hover .price {
+  color: #0d47a1;
+}
+
+.buy-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 0;
+  background-color: var(--mat-sys-primary, #1976d2);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.buy-button:hover {
+  background-color: #0d47a1;
+  transform: translateY(-2px);
+}
+
+.buy-button mat-icon {
+  font-size: 18px;
+}
+

@@ -78,30 +78,44 @@
     </div>
   </section>
 
-  <section>
-   <div class="container">
-
-  
+  <section class="products-section">
+    <h2 class="section-title">Nossos Produtos</h2>
+    <div class="container">
       @for (produto of processadores; track $index) {
         <div class="card">
-          <img
-            src="https://m.media-amazon.com/images/I/51D3DrDmwkL._AC_SL1000_.jpg"
-            alt="Foto do produto"
-          />
-          <p class="heading">
-            {{ produto.fabricante.nome }} {{ produto.nome }}
-          </p>
-          <p>
-            {{ produto.fabricante.nome }}
-          </p>
-          <p>
-            R${{ produto.preco }}
-          </p>
-          <p class="buy-button">
-            <mat-icon>shopping_cart</mat-icon> COMPRAR
-          </p>
+          <div class="product-image">
+            <img
+              src="https://m.media-amazon.com/images/I/51A6E9HPocL.__AC_SX300_SY300_QL70_ML2_.jpg"
+              alt="Foto do produto"
+            />
+          </div>
+          <div class="product-info">
+            <p class="brand">{{ produto.fabricante.nome }}</p>
+            <p class="heading"> Processador {{ produto.nome }}</p>
+            <div class="specs">
+              <span>{{ produto.nucleos }} Núcleos</span>
+              <span>{{ produto.threads }} Threads</span>  
+            </div>
+            <p class="price">R$ {{ produto.preco }}</p>
+            <button class="buy-button">
+              <mat-icon>shopping_cart</mat-icon> COMPRAR
+            </button>
+          </div>
         </div>
       }
+
+    
     </div>
+    <mat-paginator
+    [pageSizeOptions]="[4, 10, 25, 50]"
+    [pageSize]="pageSize"
+    [length]="totalRecords"
+    (page)="paginar($event)"
+    aria-label="Selecione a página"
+  >
+  </mat-paginator>
   </section>
+
+
+  <app-intel-amd/>
 </div>
