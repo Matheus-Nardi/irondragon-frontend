@@ -1,0 +1,182 @@
+.ecommerce-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+section{
+    margin-bottom: 48px;
+}
+
+.benefits-section {
+    margin: 48px 0;
+}
+
+.benefits-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 24px;
+    padding: 0 16px;
+}
+
+.benefit-card{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 12px;
+    background-color: var(--mat-sys-surface-container-lowest);
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .benefit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--mat-sys-primary-container);
+    margin-right: 16px;
+  }
+  
+  .benefit-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--mat-sys-on-primary-container);
+  }
+  
+  .benefit-content {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .benefit-content mat-card-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+    margin: 0 0 8px 0;
+  }
+  
+  .benefit-content mat-card-subtitle {
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3em; /* Espaçamento entre os cards */
+  }
+
+  .card {
+  position: relative;
+  width: 300px; /* Aumentado */
+  height: 400px; /* Aumentado */
+  background-color: #f0f8ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #1e90ff; /* Cor inicial do texto */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, color 0.3s ease; /* Adicionando transição para a cor do texto do card */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Aumenta a escala do card no hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Adiciona uma sombra no hover */
+  color: white; /* Define a cor do texto do card para branco no hover (afeta elementos que herdam essa cor) */
+}
+
+.card img {
+  border-radius: 3px;
+  object-fit: cover;
+  width: 90%;
+  height: 90%;
+  transition: opacity 0.3s ease-in-out; /* Adicionando transição para a imagem */
+}
+
+.card:hover img {
+  opacity: 0.9; /* Levemente transparente no hover */
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -5px;
+  margin: auto;
+  width: 310px; /* Ajustado proporcionalmente */
+  height: 410px; /* Ajustado proporcionalmente */
+  border-radius: 10px;
+  background: linear-gradient(-45deg, #b3e5fc 0%, #29b6f6 100%); /* Azul mais claro e brilhante */
+  z-index: -10;
+  pointer-events: none;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-45deg, #81d4fa 0%, #03a9f4 100%); /* Azul mais claro e brilhante */
+  transform: translate3d(0, 0, 0) scale(0.95);
+  filter: blur(20px);
+  transition: filter 0.3s ease; /* Adicionando transição para o blur */
+}
+
+.heading {
+  font-size: 20px;
+  text-transform: capitalize;
+  font-weight: 700;
+  color: #1e88e5; /* Azul mais forte para o título */
+  transition: color 0.3s ease; /* Adicionando transição para a cor do título */
+}
+
+.card:hover .heading {
+  color: white; /* Define a cor do título para branco no hover */
+}
+
+.card p:not(.heading) {
+  font-size: 14px;
+  color: #81d4fa; /* Azul mais claro para o texto */
+  transition: color 0.3s ease; /* Adicionando transição para a cor do texto */
+}
+
+.card:hover p:not(.heading) {
+  color: white; /* Define a cor dos parágrafos para branco no hover */
+}
+
+.card p:last-child {
+  color: #1565c0; /* Azul mais escuro para o último parágrafo */
+  font-weight: 600;
+  transition: color 0.3s ease; /* Adicionando transição para a cor do último parágrafo */
+}
+
+.card:hover p:last-child {
+  color: white; /* Define a cor do último parágrafo para branco no hover */
+}
+
+.card:hover::after {
+  filter: blur(40px); /* Aumentando o blur no hover para intensificar o brilho */
+}
+
+.card:hover::before {
+  transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+  background: linear-gradient(-45deg, #64b5f6 0%, #039be5 100%); /* Azul ainda mais brilhante no hover */
+}

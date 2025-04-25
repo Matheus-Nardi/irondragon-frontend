@@ -26,9 +26,9 @@ import { processadorResolver } from './components/processador/processador.resolv
 import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
 import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
 import { funcionarioResolver } from './components/funcionario/funcionario.resolver';
-import { ClienteTemplateComponent } from './components/template/cliente-template/cliente-template.component';
+import { ClienteTemplateComponent } from './components/template/cliente/cliente-template/cliente-template.component';
 import { Component } from '@angular/core';
-import { ClienteHomeComponent } from './components/template/cliente-home/cliente-home.component';
+import { ClienteHomeComponent } from './components/template/cliente/cliente-home/cliente-home.component';
 
 export const routes: Routes = [
   {

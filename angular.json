@@ -28,6 +28,7 @@
             ],
             "styles": [
               "src/app/themes/apptheme.css",
+              "node_modules/swiper/swiper-bundle.min.css",
               "src/styles.css"
             ],
             "scripts": []

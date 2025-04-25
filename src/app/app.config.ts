@@ -8,8 +8,9 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginatorService } from './services/custompaginator.service';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { register as registerSwiperElements } from 'swiper/element/bundle';
 
-
+registerSwiperElements();
 registerLocaleData(localePt);
 export const appConfig: ApplicationConfig = {
   providers: [

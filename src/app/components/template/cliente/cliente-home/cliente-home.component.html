@@ -1,0 +1,107 @@
+<div class="ecommerce-container">
+
+  <swiper-container
+  slides-per-view="1"
+  space-between="10"
+  navigation="true"
+  pagination="true"
+  autoplay='{"delay": 5000}'
+  loop="true"
+  style="width: 100%; height: 300px; margin-top: 2em;"
+>
+  <swiper-slide>
+    <img 
+      src="https://themes.kabum.com.br/conteudo/layout/6282/1744922107.png" 
+      alt="Processador em destaque - IronDragon" 
+      style="width: 100%; height: 100%; object-fit: cover;" 
+    />
+  </swiper-slide>
+
+  <swiper-slide>
+    <img 
+      src="https://themes.kabum.com.br/conteudo/layout/6072/1741776818.png" 
+      alt="Processador de alta performance - IronDragon" 
+      style="width: 100%; height: 100%; object-fit: cover;" 
+    />
+  </swiper-slide>
+
+  <swiper-slide>
+    <img 
+      src="https://themes.kabum.com.br/conteudo/layout/6167/1743712227.png" 
+      alt="Tecnologia de ponta em processadores - IronDragon" 
+      style="width: 100%; height: 100%; object-fit: cover;" 
+    />
+  </swiper-slide>
+</swiper-container>
+
+  <section class="benefits-section">
+    <div class="benefits-container">
+      <mat-card class="benefit-card">
+        <div class="benefit-icon">
+          <mat-icon>local_shipping</mat-icon>
+        </div>
+        <div class="benefit-content">
+          <mat-card-title>ENTREGA RÁPIDA</mat-card-title>
+          <mat-card-subtitle>Delivery em até 24/H</mat-card-subtitle>
+        </div>
+      </mat-card>
+
+      <mat-card class="benefit-card">
+        <div class="benefit-icon">
+          <mat-icon>assured_workload</mat-icon>
+        </div>
+        <div class="benefit-content">
+          <mat-card-title>ESTORNO</mat-card-title>
+          <mat-card-subtitle>100% de estorno garantido</mat-card-subtitle>
+        </div>
+      </mat-card>
+
+      <mat-card class="benefit-card">
+        <div class="benefit-icon">
+          <mat-icon>credit_card</mat-icon>
+        </div>
+        <div class="benefit-content">
+          <mat-card-title>PAGAMENTO SEGURO</mat-card-title>
+          <mat-card-subtitle>Seu dinheiro está seguro</mat-card-subtitle>
+        </div>
+      </mat-card>
+
+      <mat-card class="benefit-card">
+        <div class="benefit-icon">
+          <mat-icon>support_agent</mat-icon>
+        </div>
+        <div class="benefit-content">
+          <mat-card-title>SUPORTE 24/7</mat-card-title>
+          <mat-card-subtitle>Contato quando precisar</mat-card-subtitle>
+        </div>
+      </mat-card>
+    </div>
+  </section>
+
+  <section>
+   <div class="container">
+
+  
+      @for (produto of processadores; track $index) {
+        <div class="card">
+          <img
+            src="https://m.media-amazon.com/images/I/51D3DrDmwkL._AC_SL1000_.jpg"
+            alt="Foto do produto"
+          />
+          <p class="heading">
+            {{ produto.fabricante.nome }} {{ produto.nome }}
+          </p>
+          <p>
+            {{ produto.fabricante.nome }}
+          </p>
+          <p>
+            R${{ produto.preco }}
+          </p>
+          <p class="buy-button">
+            <mat-icon>shopping_cart</mat-icon> COMPRAR
+          </p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

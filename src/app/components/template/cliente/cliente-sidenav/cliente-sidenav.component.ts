@@ -8,7 +8,7 @@ import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { navbarDataCLiente } from './nav-data-cliente';
-import { SidebarService } from '../../../services/sidebar.service';
+import { SidebarService } from '../../../../services/sidebar.service';
 
 @Component({
   selector: 'app-cliente-sidenav',
