@@ -1,0 +1,378 @@
+/* Estilos Gerais */
+.force-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: "Roboto", sans-serif;
+    overflow: hidden;
+  }
+  
+  section {
+    margin-bottom: 64px;
+  }
+  
+  /* Hero Section */
+  .force-hero {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+    overflow: hidden;
+    border-radius: 12px;
+    margin: 24px 16px;
+    background-color: #000;
+  }
+  
+  .stars-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.7;
+    z-index: 1;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+  
+  .force-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+  
+  .title-dots {
+    display: inline-block;
+    animation: blink 1.5s infinite;
+  }
+  
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .force-subtitle {
+    font-size: 36px;
+    font-weight: 500;
+    color: #ffe81f; /* Star Wars yellow */
+    margin: 8px 0 24px;
+    text-shadow: 0 0 10px rgba(255, 236, 31, 0.7);
+  }
+  
+  .force-description {
+    font-size: 18px;
+    color: #fff;
+    margin: 0;
+    opacity: 0.9;
+  }
+  
+  /* Cards de Escolha */
+  .force-choice {
+    padding: 0 16px;
+  }
+  
+  .choice-container {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .force-card {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+    height: 500px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .force-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  
+  .force-card:hover .card-glow {
+    opacity: 0.8;
+  }
+  
+  .intel-side {
+    background-color: #0071c5; /* Intel blue */
+  }
+  
+  .intel-side .card-glow {
+    background: radial-gradient(circle at center, #00a2ff 0%, #0071c5 70%, #004a80 100%);
+    box-shadow: 0 0 40px rgba(0, 113, 197, 0.7);
+  }
+  
+  .amd-side {
+    background-color: #ed1c24; /* AMD red */
+  }
+  
+  .amd-side .card-glow {
+    background: radial-gradient(circle at center, #ff5a5f 0%, #ed1c24 70%, #a30000 100%);
+    box-shadow: 0 0 40px rgba(237, 28, 36, 0.7);
+  }
+  
+  .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-logo {
+    height: 60px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-logo img {
+    max-height: 100%;
+    max-width: 150px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+  
+  .card-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 16px;
+  }
+  
+  .card-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  
+  .card-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feature mat-icon {
+    color: #fff;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .feature span {
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 15px currentColor, 0 0 30px currentColor;
+    }
+    100% {
+      box-shadow: 0 0 25px currentColor, 0 0 50px currentColor;
+    }
+  }
+  
+  .force-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+  }
+  
+  .intel-button {
+    background-color: #fff;
+    color: #0071c5;
+  }
+  
+  .intel-button:hover {
+    background-color: #e6f3ff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  
+  .amd-button {
+    background-color: #fff;
+    color: #ed1c24;
+  }
+  
+  .amd-button:hover {
+    background-color: #fff0f0;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  
+  /* Seção de Comparação */
+  .force-comparison {
+    padding: 0 16px;
+    margin-top: 64px;
+  }
+  
+  .comparison-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin: 0 0 8px;
+  }
+  
+  .comparison-subtitle {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+    margin: 0 0 32px;
+  }
+  
+  .comparison-table {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  th,
+  td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .intel-column {
+    background-color: rgba(0, 113, 197, 0.05);
+    border-left: 3px solid #0071c5;
+  }
+  
+  th.intel-column {
+    background-color: rgba(0, 113, 197, 0.1);
+    color: #0071c5;
+  }
+  
+  .amd-column {
+    background-color: rgba(237, 28, 36, 0.05);
+    border-left: 3px solid #ed1c24;
+  }
+  
+  th.amd-column {
+    background-color: rgba(237, 28, 36, 0.1);
+    color: #ed1c24;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .force-title {
+      font-size: 36px;
+    }
+  
+    .force-subtitle {
+      font-size: 28px;
+    }
+  
+    .force-description {
+      font-size: 16px;
+    }
+  
+    .force-card {
+      height: auto;
+      min-height: 550px;
+    }
+  
+    .comparison-title {
+      font-size: 28px;
+    }
+  
+    .comparison-subtitle {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .force-hero {
+      height: 300px;
+    }
+  
+    .force-title {
+      font-size: 28px;
+    }
+  
+    .force-subtitle {
+      font-size: 22px;
+    }
+  
+    .card-title {
+      font-size: 24px;
+    }
+  
+    .lightsaber {
+      margin-bottom: 24px;
+    }
+  
+    .blade {
+      height: 80px;
+    }
+  
+    th,
+    td {
+      padding: 12px 8px;
+      font-size: 14px;
+    }
+  }
+  
