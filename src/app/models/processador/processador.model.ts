@@ -6,7 +6,7 @@ import { MemoriaCache } from "./memoriacache.model";
 import { PlacaIntegrada } from "./placaintegrada.model";
 
 export class Processador {
-    id?: number;
+    id!: number;
     nome!: string;
     socket!: string;
     threads!: number;
@@ -19,4 +19,5 @@ export class Processador {
     consumoEnergetico!: ConsumoEnergetico;
     conectividade!: Conectividade;
     fabricante!: Fabricante;
+    imagens!: string[];
 }

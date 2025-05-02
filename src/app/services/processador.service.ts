@@ -91,4 +91,10 @@ export class ProcessadorService {
 
     return this.httpClient.put<Processador>(`${this.configService.getApiBaseUrl()}/processadores/${processador.id}`, data);
   }
+
+
+
+  getUrlImage(id:string, nomeImagem: string): string{
+    return `${this.configService.getApiBaseUrl()}/processadores/${id}/download/imagem/${nomeImagem}`
+  }
 }
