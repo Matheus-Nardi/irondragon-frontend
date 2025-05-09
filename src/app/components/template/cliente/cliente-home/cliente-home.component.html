@@ -1,39 +1,7 @@
 <div class="ecommerce-container">
 
-  <swiper-container
-  slides-per-view="1"
-  space-between="10"
-  navigation="true"
-  pagination="true"
-  autoplay='{"delay": 5000}'
-  loop="true"
-  style="width: 100%; height: 300px; margin-top: 2em;"
->
-  <swiper-slide>
-    <img 
-      src="https://themes.kabum.com.br/conteudo/layout/6282/1744922107.png" 
-      alt="Processador em destaque - IronDragon" 
-      style="width: 100%; height: 100%; object-fit: cover;" 
-    />
-  </swiper-slide>
-
-  <swiper-slide>
-    <img 
-      src="https://themes.kabum.com.br/conteudo/layout/6072/1741776818.png" 
-      alt="Processador de alta performance - IronDragon" 
-      style="width: 100%; height: 100%; object-fit: cover;" 
-    />
-  </swiper-slide>
-
-  <swiper-slide>
-    <img 
-      src="https://themes.kabum.com.br/conteudo/layout/6167/1743712227.png" 
-      alt="Tecnologia de ponta em processadores - IronDragon" 
-      style="width: 100%; height: 100%; object-fit: cover;" 
-    />
-  </swiper-slide>
-</swiper-container>
-
+  <app-slider-image/>
+  
   <section class="benefits-section">
     <div class="benefits-container">
       <mat-card class="benefit-card">
@@ -78,44 +46,7 @@
     </div>
   </section>
 
-  <section class="products-section">
-    <h2 class="section-title">Nossos Produtos</h2>
-    <div class="container">
-      @for (produto of processadores; track $index) {
-        <div class="card">
-          <div class="product-image">
-            <img
-              src="https://m.media-amazon.com/images/I/51A6E9HPocL.__AC_SX300_SY300_QL70_ML2_.jpg"
-              alt="Foto do produto"
-            />
-          </div>
-          <div class="product-info">
-            <p class="brand">{{ produto.fabricante.nome }}</p>
-            <p class="heading"> Processador {{ produto.nome }}</p>
-            <div class="specs">
-              <span>{{ produto.nucleos }} Núcleos</span>
-              <span>{{ produto.threads }} Threads</span>  
-            </div>
-            <p class="price">R$ {{ produto.preco }}</p>
-            <button class="buy-button">
-              <mat-icon>shopping_cart</mat-icon> COMPRAR
-            </button>
-          </div>
-        </div>
-      }
-
-    
-    </div>
-    <mat-paginator
-    [pageSizeOptions]="[4, 10, 25, 50]"
-    [pageSize]="pageSize"
-    [length]="totalRecords"
-    (page)="paginar($event)"
-    aria-label="Selecione a página"
-  >
-  </mat-paginator>
-  </section>
-
+  <app-processador-card-list/>
 
   <app-intel-amd/>
 </div>

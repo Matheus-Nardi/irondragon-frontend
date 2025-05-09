@@ -1,0 +1,37 @@
+<section class="products-section">
+    <h2 class="section-title">Nossos Produtos</h2>
+    <div class="container">
+      @for (card of cards(); track $index) {
+        <div class="card">
+          <div class="product-image">
+            <img
+             [src]="card.imageUrl"
+            />
+          </div>
+          <div class="product-info">
+            <p class="brand">{{ card.fabricante }}</p>
+            <p class="heading"> Processador {{ card.title }}</p>
+            <div class="specs">
+              <span>{{ card.specs.nucleos }} Núcleos</span>
+              <span>{{ card.specs.threads }} Threads</span>  
+            </div>
+            <p class="price">R$ {{ card.preco }}</p>
+            <button class="buy-button">
+              <mat-icon>shopping_cart</mat-icon> COMPRAR
+            </button>
+          </div>
+        </div>
+      }
+
+    
+    </div>
+
+    <mat-paginator
+    [pageSizeOptions]="[4, 10, 25, 50]"
+    [pageSize]="pageSize"
+    [length]="totalRecords"
+    (page)="paginar($event)"
+    aria-label="Selecione a página"
+  >
+  </mat-paginator>
+  </section>
