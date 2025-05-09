@@ -97,4 +97,14 @@ export class ProcessadorService {
   getUrlImage(id:string, nomeImagem: string): string{
     return `${this.configService.getApiBaseUrl()}/processadores/${id}/download/imagem/${nomeImagem}`
   }
+
+
+  uploadImage(id: number, nomeImagem: string, imagem: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('nomeImagem', imagem.name);
+    formData.append('imagem', imagem, imagem.name);
+    
+    return this.httpClient.patch<Processador>(`${this.configService.getApiBaseUrl()}/processadores/${id}/upload/imagem`, formData);
+  }
 }

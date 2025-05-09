@@ -1,3 +1,5 @@
+import { CommonModule, Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -6,26 +8,25 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProcessadorService } from '../../../services/processador.service';
-import { FabricanteService } from '../../../services/fabricante.service';
-import { SnackbarService } from '../../../services/snackbar.service';
-import { Fabricante } from '../../../models/fabricante.model';
-import { PlacaIntegrada } from '../../../models/processador/placaintegrada.model';
-import { PlacaintegradaService } from '../../../services/placaintegrada.service';
-import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { HttpErrorResponse } from '@angular/common/http';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
-import { Processador } from '../../../models/processador/processador.model';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { Fabricante } from '../../../models/fabricante.model';
+import { PlacaIntegrada } from '../../../models/processador/placaintegrada.model';
+import { Processador } from '../../../models/processador/processador.model';
+import { FabricanteService } from '../../../services/fabricante.service';
+import { PlacaintegradaService } from '../../../services/placaintegrada.service';
+import { ProcessadorService } from '../../../services/processador.service';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-processador-form',
@@ -43,7 +44,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatSelectModule,
     MatSlideToggleModule,
     MatButtonModule,
-    MatStepperModule
+    MatStepperModule,
+    MatProgressBarModule
   ],
   styleUrls: ['./processador-form.component.css'],
 })
@@ -54,6 +56,12 @@ export class ProcessadorFormComponent implements OnInit {
   fabricantes: Fabricante[] = [];
   placasIntegradas: PlacaIntegrada[] = [];
 
+  isUploading = false;
+  isDragOver = false;
+  fileName: string = '';
+  selectedFile: File | null = null;
+  imagePreview: any = null;
+
   constructor(
     private formBuilder: FormBuilder,
     private processadorService: ProcessadorService,
@@ -61,9 +69,9 @@ export class ProcessadorFormComponent implements OnInit {
     private placaIntegradaService: PlacaintegradaService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {
-
     this.formGroupInfosBasicas = this.formBuilder.group({
       id: [null],
       nome: ['', Validators.required],
@@ -79,19 +87,35 @@ export class ProcessadorFormComponent implements OnInit {
       placaIntegrada: [null],
     });
 
-
     this.formGroupInfosEspecificas = this.formBuilder.group({
-      cacheL2: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
-      cacheL3: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
-      clockBasico: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
-      clockBoost: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
-      energiaBasica: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+      cacheL2: [
+        '',
+        [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
+      ],
+      cacheL3: [
+        '',
+        [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
+      ],
+      clockBasico: [
+        '',
+        [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
+      ],
+      clockBoost: [
+        '',
+        [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')],
+      ],
+      energiaBasica: [
+        '',
+        [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
+      ],
       energiaMaxima: ['', [Validators.pattern('^[1-9][0-9]*$')]],
       pci: ['', [Validators.required, Validators.pattern('^\\d+(\\.\\d+)?$')]],
       tipoMemoria: ['', Validators.required],
-      canaisMemoria: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+      canaisMemoria: [
+        '',
+        [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
+      ],
     });
-
   }
 
   ngOnInit(): void {
@@ -107,15 +131,24 @@ export class ProcessadorFormComponent implements OnInit {
   }
 
   initializeForm(): void {
-    const processador = this.activatedRoute.snapshot.data['processador'];
-  
+    const processador: Processador =
+      this.activatedRoute.snapshot.data['processador'];
+
     const fabricante = this.fabricantes.find(
       (f) => f.id === (processador?.fabricante?.id ?? null)
     );
     const placaIntegrada = this.placasIntegradas.find(
       (p) => p.id === (processador?.placaIntegrada?.id ?? null)
     );
-  
+
+    if (processador && processador.imagens) {
+      this.imagePreview = this.processadorService.getUrlImage(
+        processador.id.toString(),
+        processador.imagens[0]
+      );
+      this.fileName = processador.imagens[0];
+    }
+
     this.formGroupInfosBasicas = this.formBuilder.group({
       id: [processador && processador.id ? processador.id : null],
       nome: [processador && processador.nome ? processador.nome : ''],
@@ -127,9 +160,11 @@ export class ProcessadorFormComponent implements OnInit {
       ],
       preco: [processador && processador.preco ? processador.preco : ''],
       fabricante: [fabricante && fabricante?.id ? fabricante : null],
-      placaIntegrada: [placaIntegrada && placaIntegrada.id ? processador.placaIntegrada : null],
+      placaIntegrada: [
+        placaIntegrada && placaIntegrada.id ? processador.placaIntegrada : null,
+      ],
     });
-  
+
     this.formGroupInfosEspecificas = this.formBuilder.group({
       cacheL2: [processador?.memoriaCache?.cacheL2 ?? ''],
       cacheL3: [processador?.memoriaCache?.cacheL3 ?? ''],
@@ -145,11 +180,14 @@ export class ProcessadorFormComponent implements OnInit {
   onSubmit(): void {
     this.formGroupInfosBasicas.markAllAsTouched();
     this.formGroupInfosEspecificas.markAllAsTouched();
-  
-    if (this.formGroupInfosBasicas.valid && this.formGroupInfosEspecificas.valid) {
+
+    if (
+      this.formGroupInfosBasicas.valid &&
+      this.formGroupInfosEspecificas.valid
+    ) {
       const infosBasicas = this.formGroupInfosBasicas.value;
       const infosEspecificas = this.formGroupInfosEspecificas.value;
-  
+
       // Combine os valores dos dois formGroups em um único objeto 'processador'
       const processador = {
         id: infosBasicas.id,
@@ -179,17 +217,18 @@ export class ProcessadorFormComponent implements OnInit {
           canaisMemoria: infosEspecificas.canaisMemoria,
         },
       } as Processador;
-  
+
       console.log('Payload enviado:', processador);
-  
+
       const operacao =
         processador.id == null
           ? this.processadorService.create(processador)
           : this.processadorService.update(processador);
-  
+
       operacao.subscribe({
-        next: () => {
+        next: (processadorSalvo: Processador) => {
           console.log('Processador salvo com sucesso');
+          this.uploadImage(processadorSalvo.id);
           this.router.navigateByUrl('/admin/processadores');
           this.snackbarService.showSuccess('Processador salvo com sucesso');
         },
@@ -201,17 +240,18 @@ export class ProcessadorFormComponent implements OnInit {
       });
     }
   }
-  
 
   onDelete() {
     if (this.formGroup.valid) {
       const processador = this.formGroup.value;
       if (processador.id != null) {
-        this.processadorService.delete(processador).subscribe({ 
+        this.processadorService.delete(processador).subscribe({
           next: () => {
             console.log('Processador excluido com sucesso');
             this.router.navigateByUrl('/admin/processadores');
-            this.snackbarService.showSuccess('Processador deletado com sucesso');
+            this.snackbarService.showSuccess(
+              'Processador deletado com sucesso'
+            );
           },
           error: (err) => {
             console.log('Erro ao excluir o processador' + JSON.stringify(err));
@@ -260,7 +300,110 @@ export class ProcessadorFormComponent implements OnInit {
     }
   }
 
-  //Arrumar as validações aqui e no HTML
+
+  voltarPagina(){
+    this.location.back();
+  }
+
+  // Método para remover a imagem selecionada
+  removerImagem(event: Event) {
+    event.stopPropagation(); // Impede que o clique propague para o container
+    this.imagePreview = null;
+    this.fileName = '';
+    this.selectedFile = null;
+  }
+
+  // Métodos para suporte a drag and drop
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+    const element = event.currentTarget as HTMLElement;
+    element.classList.add('dragover');
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+    const element = event.currentTarget as HTMLElement;
+    element.classList.remove('dragover');
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+    const element = event.currentTarget as HTMLElement;
+    element.classList.remove('dragover');
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        this.processarArquivo(file);
+      } else {
+        // Mostrar mensagem de erro - formato inválido
+        this.snackbarService.showError(
+          'Formato de arquivo inválido. Por favor, selecione uma imagem.'
+        );
+      }
+    }
+  }
+
+  // Método para processar o arquivo selecionado
+  processarArquivo(file: File) {
+    if (file.size > 10 * 1024 * 1024) {
+      // Mostrar mensagem de erro - arquivo muito grande
+      this.snackbarService.showError(
+        'Arquivo muito grande. O tamanho máximo é 10MB.'
+      );
+      return;
+    }
+
+    this.fileName = file.name;
+    this.selectedFile = file;
+    this.isUploading = true;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imagePreview = e.target?.result;
+      this.isUploading = false;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Substituição do método existente
+  carregarImagemSelecionada(event: any) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.processarArquivo(file);
+    }
+  }
+
+  
+  private uploadImage(processadorId: number) {
+    if (this.selectedFile) {
+      this.isUploading = true;
+      this.processadorService
+        .uploadImage(processadorId, this.selectedFile.name, this.selectedFile)
+        .subscribe({
+          next: () => {
+            this.isUploading = false;
+            this.snackbarService.showSuccess('Imagem enviada com sucesso');
+            this.voltarPagina();
+          },
+          error: (err) => {
+            this.isUploading = false;
+            console.log('Erro ao fazer o upload da imagem');
+            this.snackbarService.showError('Erro ao enviar a imagem');
+          },
+        });
+    } else {
+      this.voltarPagina();
+    }
+  }
+
   errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
     nome: {
       required: 'O nome deve ser informado.',
