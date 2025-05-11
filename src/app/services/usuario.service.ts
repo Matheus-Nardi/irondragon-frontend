@@ -23,4 +23,8 @@ export class UsuarioService {
    findByCpf(cpf: string): Observable<Usuario> {
     return this.httpClient.get<Usuario>(`${this.configService.getApiBaseUrl()}usuarios/search/cpf/${cpf}`)
    }
+
+   create(usuario: Usuario): Observable<Usuario>{
+    return this.httpClient.post<Usuario>(`${this.configService.getApiBaseUrl()}usuarios`, usuario);
+   }
 }

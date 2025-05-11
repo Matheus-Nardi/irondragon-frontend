@@ -29,6 +29,7 @@ import { funcionarioResolver } from './components/funcionario/funcionario.resolv
 import { ClienteTemplateComponent } from './components/template/cliente/cliente-template/cliente-template.component';
 import { Component } from '@angular/core';
 import { ClienteHomeComponent } from './components/template/cliente/cliente-home/cliente-home.component';
+import { CadastroComponent } from './components/auth/cadastro/cadastro.component';
 
 export const routes: Routes = [
   {
@@ -81,6 +82,9 @@ export const routes: Routes = [
     children:[
       {
         path: '', component: ClienteHomeComponent , title: 'Home'
+      }, 
+      {
+        path: 'cadastrar', component: CadastroComponent, title: 'Cadastrar'
       }
     ]
   }

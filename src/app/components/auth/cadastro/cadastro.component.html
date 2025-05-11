@@ -1,0 +1,215 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <mat-icon> hiking </mat-icon>
+      <h1>Registre-se na IRONDRAGON</h1>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="formGroup" (ngSubmit)="cadastrar()">
+  <div class="form-content">
+    <div class="form-field">
+    
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> person </mat-icon>
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="username"
+          placeholder="Nome de usuario"
+          autocomplete="off"
+        />
+        @if (formGroup.get('username')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('username')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('username')?.errors &&
+            formGroup.get('username')?.touched
+          "
+        >
+          {{ getErrorMessage("username", formGroup.get("username")?.errors) }}
+
+          @if(formGroup.get('username')?.hasError('apiError')) {
+          <span>{{ formGroup.get("username")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-icon matPrefix> email </mat-icon>
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="email"
+          placeholder="Seu melhor email"
+          autocomplete="off"
+        />
+        @if (formGroup.get('email')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('email')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('email')?.errors && formGroup.get('email')?.touched
+          "
+        >
+          {{ getErrorMessage("email", formGroup.get("email")?.errors) }}
+
+          @if(formGroup.get('email')?.hasError('apiError')) {
+          <span>{{ formGroup.get("email")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-icon matPrefix> contact_emergency </mat-icon>
+        <mat-label>CPF</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="cpf"
+          placeholder="cpf"
+          autocomplete="off"
+        />
+        @if (formGroup.get('cpf')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('cpf')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="formGroup.get('cpf')?.errors && formGroup.get('cpf')?.touched"
+        >
+          {{ getErrorMessage("cpf", formGroup.get("cpf")?.errors) }}
+
+          @if(formGroup.get('cpf')?.hasError('apiError')) {
+          <span>{{ formGroup.get("cpf")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-icon matPrefix> lock </mat-icon>
+        <mat-label>senha</mat-label>
+        <input
+          matInput
+          [type]="mostrarSenha ? 'text' : 'password'"
+          formControlName="senha"
+        />
+
+        @if (formGroup.get('senha')?.value) {
+        <button
+          (click)="toggleSenha()"
+          matSuffix
+          mat-icon-button
+          aria-label="Ver senha"
+          matTooltip="Ver senha"
+        >
+          <mat-icon>{{
+            mostrarSenha ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('senha')?.errors && formGroup.get('senha')?.touched
+          "
+        >
+          {{ getErrorMessage("senha", formGroup.get("senha")?.errors) }}
+
+          @if(formGroup.get('senha')?.hasError('apiError')) {
+          <span>{{ formGroup.get("senha")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-icon matPrefix> lock </mat-icon>
+          <mat-label>Confirmar senha</mat-label>
+          <input
+            matInput
+            [type]="mostrarSenha ? 'text' : 'password'"
+            formControlName="confirmarSenha"
+          />
+  
+          @if (formGroup.get('confirmarSenha')?.value) {
+          <button
+            (click)="toggleSenha()"
+            matSuffix
+            mat-icon-button
+            aria-label="Ver senha"
+            matTooltip="Ver senha"
+          >
+            <mat-icon>{{
+              mostrarSenha ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+  
+          }
+          <mat-error
+            *ngIf="
+              formGroup.get('confirmarSenha')?.errors && formGroup.get('confirmarSenha')?.touched
+            "
+          >
+            {{ getErrorMessage("confirmarSenha", formGroup.get("confirmarSenha")?.errors) }}
+  
+            @if(formGroup.get('confirmarSenha')?.hasError('apiError')) {
+            <span>{{ formGroup.get("confirmarSenha")?.getError("apiError") }}</span>
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
+  
+  </div>
+
+  <div class="form-actions">
+    <div class="action-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="save-button"
+      >
+        <span>CADASTRAR</span>
+      </button>
+    </div>
+
+    <div class="form-redirect">
+        <span>Já possui uma conta ?</span>
+        <span class="login">Entrar</span>
+    </div>
+  </div>
+</form>
