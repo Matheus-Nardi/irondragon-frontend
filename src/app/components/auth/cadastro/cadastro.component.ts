@@ -16,6 +16,12 @@ import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 
 @Component({
   selector: 'app-cadastro',
@@ -26,15 +32,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     NgIf,
     MatInputModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDatepickerModule,
   ],
   templateUrl: './cadastro.component.html',
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
   styleUrl: './cadastro.component.css',
 })
 export class CadastroComponent {
   formGroup: FormGroup;
   mostrarSenha = false;
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,16 +49,30 @@ export class CadastroComponent {
     private usuarioService: UsuarioService,
     private router: Router
   ) {
-    this.formGroup = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]],
-      email: ['', [Validators.required, Validators.email]],
-      senha: ['', [Validators.required]],
-      confirmarSenha: ['', [Validators.required]],
-      cpf: ['', [Validators.required]],
-    }, {
-      validators: [this.confirmarSenhasIguais()] // Validador customizado
-    });
-    
+    this.formGroup = this.formBuilder.group(
+      {
+        nome: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        senha: ['', [Validators.required]],
+        dataNascimento: ['', [Validators.required]],
+        confirmarSenha: ['', [Validators.required]],
+        cpf: ['', [Validators.required]],
+        telefone: this.formBuilder.group({
+          codigoArea: [
+            '',
+            [
+              Validators.required,
+              Validators.minLength(2),
+              Validators.maxLength(2),
+            ],
+          ],
+          numero: ['', [Validators.required, Validators.pattern(/^\d{8,9}$/)]],
+        }),
+      },
+      {
+        validators: [this.confirmarSenhasIguais()], // Validador customizado
+      }
+    );
   }
 
   cadastrar() {
@@ -68,7 +89,7 @@ export class CadastroComponent {
         error: () => {
           console.log('Cadastro não foi realizado com sucesso');
           this.snackbarService.showError('Cadastro inválido');
-        }
+        },
       });
     }
   }
@@ -88,8 +109,6 @@ export class CadastroComponent {
   toggleSenha(): void {
     this.mostrarSenha = !this.mostrarSenha;
   }
-  
-  
 
   tratarErros(httpError: HttpErrorResponse): void {
     if (httpError.status === 400) {
@@ -128,12 +147,9 @@ export class CadastroComponent {
     return 'invalid field';
   }
 
-
   errorMessages: { [controlName: string]: { [errorName: string]: string } } = {
-    username: {
+    nome: {
       required: 'O nome deve ser informado.',
-      minlength: 'O nome deve ter no mínimo 4 caracteres.',
-      maxlength: 'O nome deve ter no máximo 60 caracteres.',
       apiError: ' ',
     },
     email: {
@@ -148,12 +164,26 @@ export class CadastroComponent {
     senha: {
       required: 'A senha deve ser informada',
       apiError: ' ',
-    },  
+    },
     confirmarSenha: {
       required: 'A confirmação de senha é obrigatória',
       mismatch: 'As senhas devem ser iguais',
       apiError: ' ',
-    }
-    
+    },
+    codigoArea: {
+      required: 'O código de área deve ser informado.',
+      minlength: 'O código de área deve ter 2 dígitos.',
+      maxlength: 'O código de área deve ter 2 dígitos.',
+      apiError: ' ',
+    },
+    numero: {
+      required: 'O número deve ser informado.',
+      pattern: 'O número deve conter entre 8 e 9 dígitos numéricos.',
+      apiError: ' ',
+    },
+    dataNascimento: {
+      required: 'A data de nascimento deve ser informada.',
+      apiError: ' ',
+    },
   };
 }

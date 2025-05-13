@@ -107,7 +107,23 @@
     text-decoration: underline;
     cursor: pointer;
   }
-  
+
+  .form-field[formGroupName="telefone"] {
+  display: flex; 
+  gap: 8px; 
+  width: 100%; 
+}
+
+.form-field.codigoArea {
+  flex-grow: 0; 
+  max-width: 150px;
+}
+
+.form-field.numero {
+  flex-grow: 1; 
+}
+
+ 
   /* Responsividade */
   @media (max-width: 768px) {
     .page-container {
