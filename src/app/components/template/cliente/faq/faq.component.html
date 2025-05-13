@@ -1,0 +1,12 @@
+<h2>FAQ</h2>
+<mat-accordion>
+    @for (faq of faqAccordion; track $index) {
+        <mat-expansion-panel >
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{faq.title}} </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>{{faq.description}}</p>
+  </mat-expansion-panel>
+}
+</mat-accordion>
+
