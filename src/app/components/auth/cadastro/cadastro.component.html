@@ -1,0 +1,341 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <mat-icon> hiking </mat-icon>
+      <h1>Registre-se na IRONDRAGON</h1>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="formGroup" (ngSubmit)="cadastrar()">
+  <div class="form-content">
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> person </mat-icon>
+        <mat-label>Nome</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="nome"
+          placeholder="Nome de usuario"
+          autocomplete="off"
+        />
+        @if (formGroup.get('nome')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('nome')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('nome')?.errors && formGroup.get('nome')?.touched
+          "
+        >
+          {{ getErrorMessage("nome", formGroup.get("nome")?.errors) }}
+
+          @if(formGroup.get('nome')?.hasError('apiError')) {
+          <span>{{ formGroup.get("nome")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> email </mat-icon>
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="email"
+          placeholder="Seu melhor email"
+          autocomplete="off"
+        />
+        @if (formGroup.get('email')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('email')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('email')?.errors && formGroup.get('email')?.touched
+          "
+        >
+          {{ getErrorMessage("email", formGroup.get("email")?.errors) }}
+
+          @if(formGroup.get('email')?.hasError('apiError')) {
+          <span>{{ formGroup.get("email")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> contact_emergency </mat-icon>
+        <mat-label>CPF</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="cpf"
+          placeholder="cpf"
+          autocomplete="off"
+        />
+        @if (formGroup.get('cpf')?.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Limpar"
+          matTooltip="Limpar campo"
+          (click)="formGroup.get('cpf')?.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-error
+          *ngIf="formGroup.get('cpf')?.errors && formGroup.get('cpf')?.touched"
+        >
+          {{ getErrorMessage("cpf", formGroup.get("cpf")?.errors) }}
+
+          @if(formGroup.get('cpf')?.hasError('apiError')) {
+          <span>{{ formGroup.get("cpf")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Data de Nascimento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataNascimento"
+            autocomplete="off"
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error
+            *ngIf="
+              formGroup.get('dataNascimento')?.errors &&
+              formGroup.get('dataNascimento')?.touched
+            "
+          >
+            {{
+              getErrorMessage(
+                "dataNascimento",
+                formGroup.get("dataNascimento")?.errors
+              )
+            }}
+
+            @if(formGroup.get('dataNascimento')?.hasError('apiError')) {
+            <span>{{
+              formGroup.get("dataNascimento")?.getError("apiError")
+            }}</span>
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      
+        <div class="form-field" formGroupName="telefone">
+        <mat-form-field appearance="outline" class="form-field codigoArea">
+          <mat-label>DDD</mat-label>
+          <input
+            matInput
+            type="tel"
+            formControlName="codigoArea"
+            placeholder="63"
+          />
+          @if (formGroup.get('telefone.codigoArea')?.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Limpar"
+            matTooltip="Limpar campo"
+            (click)="formGroup.get('telefone.codigoArea')?.setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+          <mat-error
+            *ngIf="
+              formGroup.get('telefone.codigoArea')?.errors &&
+              formGroup.get('telefone.codigoArea')?.touched
+            "
+          >
+            {{
+              getErrorMessage(
+                "codigoArea",
+                formGroup.get("telefone.codigoArea")?.errors
+              )
+            }}
+
+            @if(formGroup.get('telefone.codigoArea')?.hasError('apiError')) {
+            <span>{{
+              formGroup.get("telefone.codigoArea")?.getError("apiError")
+            }}</span>
+            }
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field numero">
+          <mat-label>Número</mat-label>
+          <input
+            matInput
+            type="tel"
+            formControlName="numero"
+            placeholder="999999999"
+          />
+          @if (formGroup.get('telefone.numero')?.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Limpar"
+            matTooltip="Limpar campo"
+            (click)="formGroup.get('telefone.numero')?.setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+          <mat-error
+            *ngIf="
+              formGroup.get('telefone.numero')?.errors &&
+              formGroup.get('telefone.numero')?.touched
+            "
+          >
+            {{
+              getErrorMessage(
+                "numero",
+                formGroup.get("telefone.numero")?.errors
+              )
+            }}
+
+            @if(formGroup.get('telefone.numero')?.hasError('apiError')) {
+            <span>{{
+              formGroup.get("telefone.numero")?.getError("apiError")
+            }}</span>
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> lock </mat-icon>
+        <mat-label>senha</mat-label>
+        <input
+          matInput
+          [type]="mostrarSenha ? 'text' : 'password'"
+          formControlName="senha"
+        />
+
+        @if (formGroup.get('senha')?.value) {
+        <button
+          (click)="toggleSenha()"
+          matSuffix
+          mat-icon-button
+          aria-label="Ver senha"
+          matTooltip="Ver senha"
+        >
+          <mat-icon>{{
+            mostrarSenha ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('senha')?.errors && formGroup.get('senha')?.touched
+          "
+        >
+          {{ getErrorMessage("senha", formGroup.get("senha")?.errors) }}
+
+          @if(formGroup.get('senha')?.hasError('apiError')) {
+          <span>{{ formGroup.get("senha")?.getError("apiError") }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-icon matPrefix> lock </mat-icon>
+        <mat-label>Confirmar senha</mat-label>
+        <input
+          matInput
+          [type]="mostrarSenha ? 'text' : 'password'"
+          formControlName="confirmarSenha"
+        />
+
+        @if (formGroup.get('confirmarSenha')?.value) {
+        <button
+          (click)="toggleSenha()"
+          matSuffix
+          mat-icon-button
+          aria-label="Ver senha"
+          matTooltip="Ver senha"
+        >
+          <mat-icon>{{
+            mostrarSenha ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+
+        }
+        <mat-error
+          *ngIf="
+            formGroup.get('confirmarSenha')?.errors &&
+            formGroup.get('confirmarSenha')?.touched
+          "
+        >
+          {{
+            getErrorMessage(
+              "confirmarSenha",
+              formGroup.get("confirmarSenha")?.errors
+            )
+          }}
+
+          @if(formGroup.get('confirmarSenha')?.hasError('apiError')) {
+          <span>{{
+            formGroup.get("confirmarSenha")?.getError("apiError")
+          }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <div class="action-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="save-button"
+      >
+        <span>CADASTRAR</span>
+      </button>
+    </div>
+
+    <div class="form-redirect">
+      <span>Já possui uma conta ?</span>
+      <span class="login">Entrar</span>
+    </div>
+  </div>
+</form>

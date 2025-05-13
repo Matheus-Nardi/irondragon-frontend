@@ -5,7 +5,7 @@ import { Telefone } from "./telefone.model";
 
 export class Usuario {
     id!: number;
-    username!:string;
+    nome!:string;
     email!: string;
     senha!: string;
     cpf!: string;

@@ -110,7 +110,7 @@ export class FuncionarioListComponent implements OnInit {
   
     const properties = {
       'ID': funcionario.id,
-      'Usuário': usuario.username,
+      'Nome': usuario.nome,
       'Email': usuario.email,
       'CPF': this.formatarCPF(usuario.cpf),
       'Perfil': usuario.perfil.label,

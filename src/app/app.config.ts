@@ -9,6 +9,7 @@ import { CustomPaginatorService } from './services/custompaginator.service';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { register as registerSwiperElements } from 'swiper/element/bundle';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 registerSwiperElements();
 registerLocaleData(localePt);
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(),
     { provide: MatPaginatorIntl, useClass: CustomPaginatorService },
-    { provide: LOCALE_ID, useValue: 'pt-BR' }
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    provideNativeDateAdapter()
   ],
 };
