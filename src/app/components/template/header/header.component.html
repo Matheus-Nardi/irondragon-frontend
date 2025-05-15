@@ -27,13 +27,16 @@
         <mat-icon>help_outline</mat-icon>
       </button>
       
+      <ng-container *ngIf="isAuthenticated">
+
       <button 
         mat-button 
         class="user-button" 
         [matMenuTriggerFor]="userMenu"
       >
+     
         <div class="user-info">
-          <span class="user-name">Admin</span>
+          <span class="user-name">{{ userProfile?.firstName }}</span>
         </div>
         <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
       </button>
@@ -41,8 +44,8 @@
       <mat-menu #userMenu="matMenu" class="user-menu">
         <div class="user-menu-header">
           <div class="user-menu-info">
-            <span class="user-menu-name">Admin</span>
-            <span class="user-menu-email">adminirondragon.com</span>
+            <span class="user-menu-name">{{ userProfile?.firstName }} {{userProfile?.lastName}}</span>
+            <span class="user-menu-email">{{userProfile?.email}}</span>
           </div>
         </div>
         
@@ -60,11 +63,17 @@
         
         <mat-divider></mat-divider>
         
-        <button mat-menu-item class="logout-button">
+        <button mat-menu-item class="logout-button" (click)="logout()">
           <mat-icon>exit_to_app</mat-icon>
           <span>Sair</span>
         </button>
       </mat-menu>
+       </ng-container>
+
+       <ng-container *ngIf="!isAuthenticated">
+        <button (click)="login()" mat-button>Entrar</button>
+        <button routerLink="/cadastrar" mat-button>Cadastrar</button>
+       </ng-container>
     </div>
   </div>
 </header>

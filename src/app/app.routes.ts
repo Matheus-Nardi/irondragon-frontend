@@ -30,12 +30,15 @@ import { ClienteTemplateComponent } from './components/template/cliente/cliente-
 import { Component } from '@angular/core';
 import { ClienteHomeComponent } from './components/template/cliente/cliente-home/cliente-home.component';
 import { CadastroComponent } from './components/auth/cadastro/cadastro.component';
+import { AuthGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'admin',
     component: AdminTemplateComponent,
     title: 'Administração',
+    canActivate: [AuthGuard],
+    data: {roles: ['Super','Admin']},
     children: [
       { path: '', component: AdminHomeComponent, title: 'Home',},
 
@@ -79,6 +82,7 @@ export const routes: Routes = [
     path: '',
     component: ClienteTemplateComponent,
     title: 'IRONDRAGON',
+    data: {roles: ['']},
     children:[
       {
         path: '', component: ClienteHomeComponent , title: 'Home'

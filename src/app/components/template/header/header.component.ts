@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SidebarService } from '../../../services/sidebar.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,12 +8,16 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatBadgeModule} from '@angular/material/badge';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { KeycloakOperationService } from '../../../services/keycloak.service';
+import { KeycloakProfile } from 'keycloak-js';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     MatIconModule,
     MatToolbarModule,
     MatButtonModule,
@@ -21,15 +25,51 @@ import {MatMenuModule} from '@angular/material/menu';
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-  MatBadgeModule, 
-MatMenuModule],
+    MatBadgeModule,
+    MatMenuModule,
+    RouterLink
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
-  constructor(private sidebarService: SidebarService) {}
+export class HeaderComponent implements OnInit{
+  isAuthenticated = false;
+  userProfile?: KeycloakProfile;
+  
+  constructor(
+    private sidebarService: SidebarService,
+    private keycloakService: KeycloakOperationService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUserInfo();
+  }
+
+  async loadUserInfo() {
+    this.isAuthenticated = this.keycloakService.isLoggedIn();
+
+    if (this.isAuthenticated) {
+      this.userProfile = await this.keycloakService.getUserProfile();
+    }
+  }
 
   clickMenu() {
     this.sidebarService.toggle();
+  }
+
+  login() {
+    this.keycloakService.login('/');
+  }
+
+  logout() {
+    this.keycloakService.logout(window.location.origin);
+  }
+
+  getUsername(): string {
+    return this.userProfile?.firstName || 'Usuário';
+  }
+
+  getEmail(): string {
+    return this.userProfile?.email || '';
   }
 }
