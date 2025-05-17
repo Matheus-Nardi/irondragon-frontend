@@ -26,30 +26,4 @@ import { FaqComponent } from '../faq/faq.component';
   styleUrl: './cliente-home.component.css',
 })
 export class ClienteHomeComponent {
-  processadores: Processador[] = [];
-  totalRecords = 0;
-  pageSize = 10;
-  page = 0;
-
-  constructor(private processadorService: ProcessadorService) {}
-
-  ngOnInit(): void {
-    this.loadProcessadores();
-  }
-
-  loadProcessadores() {
-    this.processadorService
-      .findAll(this.page, this.pageSize)
-      .subscribe((data) => {
-        console.log(data);
-        this.processadores = data.results;
-        this.totalRecords = data.count;
-      });
-  }
-
-  paginar(event: PageEvent): void {
-    this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadProcessadores();
-  }
 }

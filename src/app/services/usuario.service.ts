@@ -27,4 +27,9 @@ export class UsuarioService {
    create(usuario: Usuario): Observable<Usuario>{
     return this.httpClient.post<Usuario>(`${this.configService.getApiBaseUrl()}usuarios`, usuario);
    }
+
+   getPerfil(): Observable<Usuario>{
+    return this.httpClient.get<Usuario>(`${this.configService.getApiBaseUrl()}usuarios/meu-perfil`);
+   }
+
 }

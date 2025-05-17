@@ -1,0 +1,229 @@
+<app-header/>
+
+@if(cliente.usuario) {
+
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="avatar-container">
+      <div class="avatar-circle mat-elevation-z3">
+        <span>{{keycloakProfile?.firstName?.charAt(0) || 'U' }}</span>
+      </div>
+    </div>
+    <div class="profile-title">
+      <h1 class="mat-headline-4">Meu Perfil</h1>
+      <p class="mat-subtitle-1">Olá, {{ keycloakProfile?.firstName  }}</p>
+    </div>
+  </div>
+
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="300ms" class="profile-tabs mat-elevation-z1">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">person</mat-icon>
+        <span class="tab-label">Informações</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <!-- Informações Pessoais -->
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">person</mat-icon>
+            <mat-card-title>Informações Pessoais</mat-card-title>
+            <mat-card-subtitle>Seus dados cadastrais</mat-card-subtitle>
+            <button mat-icon-button color="primary" class="edit-button">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-card-header>
+
+          <mat-card-content>
+            <mat-list>
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">badge</mat-icon>
+                <div matListItemTitle>Nome</div>
+                <div matListItemLine>{{ keycloakProfile?.firstName }}</div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">email</mat-icon>
+                <div matListItemTitle>Email</div>
+                <div matListItemLine>{{ cliente.usuario.email }}</div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">pin</mat-icon>
+                <div matListItemTitle>CPF</div>
+                <div matListItemLine>{{ cliente.usuario.cpf }}</div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">cake</mat-icon>
+                <div matListItemTitle>Data de Nascimento</div>
+                 {{ cliente.usuario.dataNascimento ? (cliente.usuario.dataNascimento | date:'dd/MM/yyyy') : 'Não informado' }}
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">phone</mat-icon>
+                <div matListItemTitle>Telefone</div>
+                <div matListItemLine>({{ cliente.usuario.telefone.codigoArea }}) {{ cliente.usuario.telefone.numero }}</div>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+
+              <mat-list-item>
+                <mat-icon matListItemIcon color="primary">event</mat-icon>
+                <div matListItemTitle>Membro desde</div>
+                <div matListItemLine>{{ cliente.usuario.dataCriacao | date:'dd/MM/yyyy' }}</div>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Endereços -->
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">home</mat-icon>
+            <mat-card-title>Endereços</mat-card-title>
+            <mat-card-subtitle>Seus endereços cadastrados</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div *ngIf="cliente.usuario?.enderecos?.length === 0" class="empty-state">
+              <mat-icon class="empty-icon">location_off</mat-icon>
+              <p>Nenhum endereço adicionado ainda</p>
+              <button mat-flat-button color="primary">
+                <mat-icon>add</mat-icon>
+                Adicionar Endereço
+              </button>
+            </div>
+
+            <mat-list *ngIf="cliente.usuario.enderecos.length > 0">
+              <mat-list-item *ngFor="let endereco of cliente.usuario.enderecos; let i = index">
+                <mat-icon matListItemIcon color="primary">home</mat-icon>
+                <div matListItemTitle>Endereço {{ i + 1 }}</div>
+                <div matListItemLine>{{ endereco }}</div>
+                <div matListItemMeta>
+                  <button mat-icon-button color="primary">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+
+          <mat-card-actions *ngIf="cliente.usuario.enderecos.length > 0" align="end">
+            <button mat-stroked-button color="primary">
+              <mat-icon>add</mat-icon>
+              Adicionar Novo
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">credit_card</mat-icon>
+        <span class="tab-label">Pagamentos</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">credit_card</mat-icon>
+            <mat-card-title>Meus Cartões</mat-card-title>
+            <mat-card-subtitle>Gerencie seus métodos de pagamento</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="empty-state" *ngIf="!cliente.listaDeCartoes || cliente.listaDeCartoes.length === 0">
+              <mat-icon class="empty-icon">credit_card_off</mat-icon>
+              <p>Nenhum cartão cadastrado</p>
+              <button mat-flat-button color="primary">
+                <mat-icon>add</mat-icon>
+                Adicionar Cartão
+              </button>
+            </div>
+
+            <div class="cards-grid" *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0">
+              <mat-card class="payment-card visa mat-elevation-z2">
+                <p>Exibir cartões </p>
+              </mat-card>
+              
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0" align="end">
+            <button mat-stroked-button color="warn">
+              <mat-icon>delete</mat-icon>
+              Remover
+            </button>
+            <button mat-stroked-button color="primary">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+            <button mat-flat-button color="primary">
+              <mat-icon>add</mat-icon>
+              Adicionar
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">favorite</mat-icon>
+        <span class="tab-label">Desejos</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">favorite</mat-icon>
+            <mat-card-title>Minha Lista de Desejos</mat-card-title>
+            <mat-card-subtitle>Produtos que você deseja adquirir</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="empty-state" *ngIf="!cliente.listaDeDesejos || cliente.listaDeDesejos.length === 0">
+              <mat-icon class="empty-icon">favorite_border</mat-icon>
+              <p>Nenhum processador na sua lista de desejos</p>
+              <button mat-flat-button color="primary">Ver Opções</button>
+            </div>
+
+            <div class="wishlist-grid" *ngIf="cliente.listaDeDesejos && cliente.listaDeDesejos.length > 0">
+              <mat-card class="product-card mat-elevation-z2" *ngFor="let produto of cliente.listaDeDesejos">
+                <p>Exibir produtos</p>
+              </mat-card>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="profile-actions">
+    <button mat-stroked-button color="warn">
+      <mat-icon>logout</mat-icon>
+      Sair
+    </button>
+    <button mat-flat-button color="primary">
+      <mat-icon>save</mat-icon>
+      Salvar Alterações
+    </button>
+  </div>
+</div>
+
+}
+
+<app-footer/>

@@ -19,14 +19,7 @@
     </div>
     
     <div class="header-right">
-      <button mat-icon-button class="action-button" matTooltip="Notificações">
-        <mat-icon [matBadge]="3" matBadgeColor="warn">notifications</mat-icon>
-      </button>
-      
-      <button mat-icon-button class="action-button" matTooltip="Ajuda">
-        <mat-icon>help_outline</mat-icon>
-      </button>
-      
+     
       <ng-container *ngIf="isAuthenticated">
 
       <button 
@@ -51,7 +44,7 @@
         
         <mat-divider></mat-divider>
         
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/perfil">
           <mat-icon>person</mat-icon>
           <span>Meu Perfil</span>
         </button>

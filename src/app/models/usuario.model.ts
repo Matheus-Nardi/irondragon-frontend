@@ -1,6 +1,7 @@
 
 import { Endereco } from "./endereco/endereco.model";
 import { Perfil } from "./perfil.model";
+import { Processador } from "./processador/processador.model";
 import { Telefone } from "./telefone.model";
 
 export class Usuario {
