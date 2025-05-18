@@ -7,29 +7,43 @@ import { ConfigService } from './config.service';
 import { Usuario } from '../models/usuario.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
+  constructor(
+    private httpClient: HttpClient,
+    private configService: ConfigService
+  ) {}
 
- constructor(
-     private httpClient: HttpClient,
-     private configService: ConfigService
-   ) {}
- 
-   findByUsername(username: string): Observable<Usuario> {
-    return this.httpClient.get<Usuario>(`${this.configService.getApiBaseUrl()}usuarios/search/${username}`)
-   }
+  findByUsername(username: string): Observable<Usuario> {
+    return this.httpClient.get<Usuario>(
+      `${this.configService.getApiBaseUrl()}usuarios/search/${username}`
+    );
+  }
 
-   findByCpf(cpf: string): Observable<Usuario> {
-    return this.httpClient.get<Usuario>(`${this.configService.getApiBaseUrl()}usuarios/search/cpf/${cpf}`)
-   }
+  findByCpf(cpf: string): Observable<Usuario> {
+    return this.httpClient.get<Usuario>(
+      `${this.configService.getApiBaseUrl()}usuarios/search/cpf/${cpf}`
+    );
+  }
 
-   create(usuario: Usuario): Observable<Usuario>{
-    return this.httpClient.post<Usuario>(`${this.configService.getApiBaseUrl()}usuarios`, usuario);
-   }
+  create(usuario: Usuario): Observable<Usuario> {
+    return this.httpClient.post<Usuario>(
+      `${this.configService.getApiBaseUrl()}usuarios`,
+      usuario
+    );
+  }
 
-   getPerfil(): Observable<Usuario>{
-    return this.httpClient.get<Usuario>(`${this.configService.getApiBaseUrl()}usuarios/meu-perfil`);
-   }
+  getPerfil(): Observable<Usuario> {
+    return this.httpClient.get<Usuario>(
+      `${this.configService.getApiBaseUrl()}usuarios/meu-perfil`
+    );
+  }
 
+  updateInfoBasica(usuarioUpdateBasico: any): Observable<any> {
+    return this.httpClient.patch<Usuario>(
+      `${this.configService.getApiBaseUrl()}usuarios/info-basica`,
+      usuarioUpdateBasico
+    );
+  }
 }

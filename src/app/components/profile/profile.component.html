@@ -1,21 +1,25 @@
-<app-header/>
+<app-header />
 
 @if(cliente.usuario) {
-
 <div class="profile-container">
   <div class="profile-header">
     <div class="avatar-container">
       <div class="avatar-circle mat-elevation-z3">
-        <span>{{keycloakProfile?.firstName?.charAt(0) || 'U' }}</span>
+        <span>{{ keycloakProfile?.firstName?.charAt(0) || "U" }}</span>
       </div>
     </div>
     <div class="profile-title">
       <h1 class="mat-headline-4">Meu Perfil</h1>
-      <p class="mat-subtitle-1">Olá, {{ keycloakProfile?.firstName  }}</p>
+      <p class="mat-subtitle-1">Olá, {{ keycloakProfile?.firstName }}</p>
     </div>
   </div>
 
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="300ms" class="profile-tabs mat-elevation-z1">
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="start"
+    animationDuration="300ms"
+    class="profile-tabs mat-elevation-z1"
+  >
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">person</mat-icon>
@@ -24,17 +28,126 @@
 
       <div class="tab-content">
         <!-- Informações Pessoais -->
-        <mat-card appearance="outlined" class="profile-card">
+        <mat-card appearance="outlined" class="profile-card" [class.editing-card]="editandoInfoPessoais">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">person</mat-icon>
             <mat-card-title>Informações Pessoais</mat-card-title>
-            <mat-card-subtitle>Seus dados cadastrais</mat-card-subtitle>
-            <button mat-icon-button color="primary" class="edit-button">
+            <mat-card-subtitle>
+              <span *ngIf="!editandoInfoPessoais">Seus dados cadastrais</span>
+              <span *ngIf="editandoInfoPessoais" class="editing-label">
+                <mat-icon class="edit-indicator-icon">edit</mat-icon> Editando informações
+              </span>
+            </mat-card-subtitle>
+            <button
+              mat-icon-button
+              color="primary"
+              class="edit-button"
+              (click)="editandoInfoPessoais = true"
+              *ngIf="!editandoInfoPessoais"
+            >
               <mat-icon>edit</mat-icon>
             </button>
           </mat-card-header>
 
-          <mat-card-content>
+          <mat-card-content *ngIf="editandoInfoPessoais; else modoVisualizacao">
+            <div class="edit-mode-indicator">
+              <mat-icon>mode_edit</mat-icon>
+              <span>Modo de edição ativo</span>
+            </div>
+            <form [formGroup]="formInfoPessoais" class="form-container">
+              <mat-form-field appearance="outline" class="full-width editable-field">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="nome" />
+                <mat-icon matPrefix>badge</mat-icon>
+                <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+                <mat-error
+                  *ngIf="formInfoPessoais.get('nome')?.hasError('required')"
+                >
+                  Nome é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width readonly-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+                <mat-icon matPrefix>email</mat-icon>
+                <mat-hint>Email não pode ser alterado</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width readonly-field">
+                <mat-label>CPF</mat-label>
+                <input matInput formControlName="cpf" />
+                <mat-icon matPrefix>pin</mat-icon>
+                <mat-hint>CPF não pode ser alterado</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field editable-field">
+                <mat-label>Data de nascimento</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataNascimento" autocomplete="off" />
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-icon matPrefix>cake</mat-icon>
+                <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+              </mat-form-field>
+
+              <div formGroupName="telefone" class="telefone-group">
+                <mat-form-field appearance="outline" class="codigo-area editable-field">
+                  <mat-label>Código de Área</mat-label>
+                  <input matInput formControlName="codigoArea" maxlength="2" />
+                  <mat-icon matPrefix>phone</mat-icon>
+                  <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+                  <mat-error
+                    *ngIf="
+                      formInfoPessoais
+                        .get('telefone.codigoArea')
+                        ?.hasError('required')
+                    "
+                  >
+                    Código de área é obrigatório
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      formInfoPessoais
+                        .get('telefone.codigoArea')
+                        ?.hasError('minlength') ||
+                      formInfoPessoais
+                        .get('telefone.codigoArea')
+                        ?.hasError('maxlength')
+                    "
+                  >
+                    Código de área deve ter 2 dígitos
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="numero-telefone editable-field">
+                  <mat-label>Telefone</mat-label>
+                  <input matInput formControlName="numero" maxlength="9" />
+                  <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+                  <mat-error
+                    *ngIf="
+                      formInfoPessoais
+                        .get('telefone.numero')
+                        ?.hasError('required')
+                    "
+                  >
+                    Número é obrigatório
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      formInfoPessoais
+                        .get('telefone.numero')
+                        ?.hasError('pattern')
+                    "
+                  >
+                    Número inválido. Deve ter 8 ou 9 dígitos
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-card-content>
+
+          <ng-template #modoVisualizacao>
             <mat-list>
               <mat-list-item>
                 <mat-icon matListItemIcon color="primary">badge</mat-icon>
@@ -63,7 +176,13 @@
               <mat-list-item>
                 <mat-icon matListItemIcon color="primary">cake</mat-icon>
                 <div matListItemTitle>Data de Nascimento</div>
-                 {{ cliente.usuario.dataNascimento ? (cliente.usuario.dataNascimento | date:'dd/MM/yyyy') : 'Não informado' }}
+                <div matListItemLine>
+                  {{
+                    cliente.usuario.dataNascimento
+                      ? (cliente.usuario.dataNascimento | date : "dd/MM/yyyy")
+                      : "Não informado"
+                  }}
+                </div>
               </mat-list-item>
 
               <mat-divider></mat-divider>
@@ -71,7 +190,10 @@
               <mat-list-item>
                 <mat-icon matListItemIcon color="primary">phone</mat-icon>
                 <div matListItemTitle>Telefone</div>
-                <div matListItemLine>({{ cliente.usuario.telefone.codigoArea }}) {{ cliente.usuario.telefone.numero }}</div>
+                <div matListItemLine>
+                  ({{ cliente.usuario.telefone.codigoArea }})
+                  {{ cliente.usuario.telefone.numero }}
+                </div>
               </mat-list-item>
 
               <mat-divider></mat-divider>
@@ -79,10 +201,12 @@
               <mat-list-item>
                 <mat-icon matListItemIcon color="primary">event</mat-icon>
                 <div matListItemTitle>Membro desde</div>
-                <div matListItemLine>{{ cliente.usuario.dataCriacao | date:'dd/MM/yyyy' }}</div>
+                <div matListItemLine>
+                  {{ cliente.usuario.dataCriacao | date : "dd/MM/yyyy" }}
+                </div>
               </mat-list-item>
             </mat-list>
-          </mat-card-content>
+          </ng-template>
         </mat-card>
 
         <!-- Endereços -->
@@ -94,7 +218,10 @@
           </mat-card-header>
 
           <mat-card-content>
-            <div *ngIf="cliente.usuario?.enderecos?.length === 0" class="empty-state">
+            <div
+              *ngIf="cliente.usuario?.enderecos?.length === 0"
+              class="empty-state"
+            >
               <mat-icon class="empty-icon">location_off</mat-icon>
               <p>Nenhum endereço adicionado ainda</p>
               <button mat-flat-button color="primary">
@@ -103,24 +230,61 @@
               </button>
             </div>
 
-            <mat-list *ngIf="cliente.usuario.enderecos.length > 0">
-              <mat-list-item *ngFor="let endereco of cliente.usuario.enderecos; let i = index">
-                <mat-icon matListItemIcon color="primary">home</mat-icon>
-                <div matListItemTitle>Endereço {{ i + 1 }}</div>
-                <div matListItemLine>{{ endereco }}</div>
-                <div matListItemMeta>
-                  <button mat-icon-button color="primary">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button color="warn">
-                    <mat-icon>delete</mat-icon>
-                  </button>
+            <div class="address-cards" *ngIf="cliente.usuario.enderecos.length > 0">
+              <mat-card 
+                *ngFor="let endereco of cliente.usuario.enderecos; let i = index"
+                class="address-card mat-elevation-z1"
+              >
+                <div class="address-header">
+                  <div class="address-title">
+                    <mat-icon color="primary">home</mat-icon>
+                    <h3>Endereço {{ i + 1 }}</h3>
+                  </div>
+                  <div class="address-actions">
+                    <button mat-icon-button color="primary" (click)="editarEndereco(endereco)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
                 </div>
-              </mat-list-item>
-            </mat-list>
+                
+                <div class="address-content">
+                  <div class="address-row">
+                    <span class="address-label">Logradouro:</span>
+                    <span class="address-value">{{ endereco.logradouro }}, {{ endereco.numero }}</span>
+                  </div>
+                  
+                  <div class="address-row" *ngIf="endereco.complemento">
+                    <span class="address-label">Complemento:</span>
+                    <span class="address-value">{{ endereco.complemento }}</span>
+                  </div>
+                  
+                  <div class="address-row">
+                    <span class="address-label">Bairro:</span>
+                    <span class="address-value">{{ endereco.bairro }}</span>
+                  </div>
+                  
+                  <div class="address-row">
+                    <span class="address-label">Cidade/UF:</span>
+                    <span class="address-value">{{ endereco.cidade.nome }} - {{ endereco.cidade.estado.sigla }}</span>
+                  </div>
+                  
+                  <div class="address-row">
+                    <span class="address-label">CEP:</span>
+                    <span class="address-value">{{ endereco.cep }}</span>
+                  </div>
+                </div>
+                
+              </mat-card>
+            </div>
           </mat-card-content>
 
-          <mat-card-actions *ngIf="cliente.usuario.enderecos.length > 0" align="end">
+          <mat-card-actions
+            *ngIf="cliente.usuario.enderecos.length > 0"
+            align="end"
+          >
             <button mat-stroked-button color="primary">
               <mat-icon>add</mat-icon>
               Adicionar Novo
@@ -141,11 +305,18 @@
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">credit_card</mat-icon>
             <mat-card-title>Meus Cartões</mat-card-title>
-            <mat-card-subtitle>Gerencie seus métodos de pagamento</mat-card-subtitle>
+            <mat-card-subtitle
+              >Gerencie seus métodos de pagamento</mat-card-subtitle
+            >
           </mat-card-header>
 
           <mat-card-content>
-            <div class="empty-state" *ngIf="!cliente.listaDeCartoes || cliente.listaDeCartoes.length === 0">
+            <div
+              class="empty-state"
+              *ngIf="
+                !cliente.listaDeCartoes || cliente.listaDeCartoes.length === 0
+              "
+            >
               <mat-icon class="empty-icon">credit_card_off</mat-icon>
               <p>Nenhum cartão cadastrado</p>
               <button mat-flat-button color="primary">
@@ -154,15 +325,22 @@
               </button>
             </div>
 
-            <div class="cards-grid" *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0">
+            <div
+              class="cards-grid"
+              *ngIf="
+                cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0
+              "
+            >
               <mat-card class="payment-card visa mat-elevation-z2">
-                <p>Exibir cartões </p>
+                <p>Exibir cartões</p>
               </mat-card>
-              
             </div>
           </mat-card-content>
 
-          <mat-card-actions *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0" align="end">
+          <mat-card-actions
+            *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0"
+            align="end"
+          >
             <button mat-stroked-button color="warn">
               <mat-icon>delete</mat-icon>
               Remover
@@ -191,18 +369,33 @@
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">favorite</mat-icon>
             <mat-card-title>Minha Lista de Desejos</mat-card-title>
-            <mat-card-subtitle>Produtos que você deseja adquirir</mat-card-subtitle>
+            <mat-card-subtitle
+              >Produtos que você deseja adquirir</mat-card-subtitle
+            >
           </mat-card-header>
 
           <mat-card-content>
-            <div class="empty-state" *ngIf="!cliente.listaDeDesejos || cliente.listaDeDesejos.length === 0">
+            <div
+              class="empty-state"
+              *ngIf="
+                !cliente.listaDeDesejos || cliente.listaDeDesejos.length === 0
+              "
+            >
               <mat-icon class="empty-icon">favorite_border</mat-icon>
               <p>Nenhum processador na sua lista de desejos</p>
               <button mat-flat-button color="primary">Ver Opções</button>
             </div>
 
-            <div class="wishlist-grid" *ngIf="cliente.listaDeDesejos && cliente.listaDeDesejos.length > 0">
-              <mat-card class="product-card mat-elevation-z2" *ngFor="let produto of cliente.listaDeDesejos">
+            <div
+              class="wishlist-grid"
+              *ngIf="
+                cliente.listaDeDesejos && cliente.listaDeDesejos.length > 0
+              "
+            >
+              <mat-card
+                class="product-card mat-elevation-z2"
+                *ngFor="let produto of cliente.listaDeDesejos"
+              >
                 <p>Exibir produtos</p>
               </mat-card>
             </div>
@@ -213,17 +406,24 @@
   </mat-tab-group>
 
   <div class="profile-actions">
-    <button mat-stroked-button color="warn">
-      <mat-icon>logout</mat-icon>
-      Sair
-    </button>
-    <button mat-flat-button color="primary">
+    @if (editandoInfoPessoais) {
+      <button mat-stroked-button color="warn" (click)="editandoInfoPessoais = false">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+
+    }@else {
+      <button mat-stroked-button color="warn">
+        <mat-icon>logout</mat-icon>
+        Sair
+      </button>
+    }
+    <button mat-flat-button color="primary" [hidden]="!editandoInfoPessoais" (click)="atualizarInfoBasicas()">
       <mat-icon>save</mat-icon>
       Salvar Alterações
     </button>
   </div>
 </div>
-
 }
 
-<app-footer/>
+<app-footer />
