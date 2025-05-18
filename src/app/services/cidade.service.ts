@@ -43,6 +43,11 @@ export class CidadeService {
       return this.httpClient.get<PageResponse<Cidade>>(`${this.configService.getApiBaseUrl()}/cidades/search/${nome}`, {params});
     }
 
+
+    findByEstado(idEstado: number): Observable<Cidade[]>{
+      return this.httpClient.get<Cidade[]>(`${this.configService.getApiBaseUrl()}/cidades/estado/${idEstado}`)
+    }
+
   create(cidade: Cidade): Observable<Cidade> {
     const novaCidade = {
       nome: cidade.nome,

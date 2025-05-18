@@ -12,7 +12,7 @@ import { Route, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
+import { DatePipe, NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -22,6 +22,7 @@ import {
   MatNativeDateModule,
   provideNativeDateAdapter,
 } from '@angular/material/core';
+import { KeycloakOperationService } from '../../../services/keycloak.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -34,9 +35,10 @@ import {
     MatButtonModule,
     MatTooltipModule,
     MatDatepickerModule,
+    DatePipe
   ],
   templateUrl: './cadastro.component.html',
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }, DatePipe],
   styleUrl: './cadastro.component.css',
 })
 export class CadastroComponent {
@@ -47,7 +49,8 @@ export class CadastroComponent {
     private formBuilder: FormBuilder,
     private snackbarService: SnackbarService,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private keycloakService: KeycloakOperationService,
   ) {
     this.formGroup = this.formBuilder.group(
       {
@@ -79,15 +82,17 @@ export class CadastroComponent {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       const usuario = this.formGroup.value;
+       console.log(usuario);
       this.usuarioService.create(usuario).subscribe({
+      
         next: () => {
           console.log('Cadastro realizado com sucesso');
           this.snackbarService.showSuccess('Cadastro realizado com sucesso');
-          // redirecionar para tela de login
+          this.keycloakService.login('/');
         },
 
-        error: () => {
-          console.log('Cadastro não foi realizado com sucesso');
+        error: (error) => {
+          console.log('Cadastro não foi realizado com sucesso' , error);
           this.snackbarService.showError('Cadastro inválido');
         },
       });
