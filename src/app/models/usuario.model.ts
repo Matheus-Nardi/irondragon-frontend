@@ -15,5 +15,5 @@ export class Usuario {
     dataNascimento!: Date;
     telefone!: Telefone;
     enderecos!: Array<Endereco>;
-    //falta adicionar enderecos e imagens
+    nomeImagem!: string;
 }

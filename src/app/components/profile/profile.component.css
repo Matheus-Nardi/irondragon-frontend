@@ -1,9 +1,9 @@
-/* Main Container */
 .profile-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px 48px;
 }
+
 
 /* Profile Header */
 .profile-header {
@@ -12,10 +12,29 @@
   margin-bottom: 32px;
 }
 
+/* Avatar Container */
 .avatar-container {
   margin-right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Avatar Wrapper with Position Relative for Overlay */
+.avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+  opacity: 1;
+}
+
+/* Avatar Circle */
 .avatar-circle {
   width: 80px;
   height: 80px;
@@ -27,8 +46,87 @@
   color: white;
   font-size: 32px;
   font-weight: 500;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
+/* Profile Image */
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Upload Overlay */
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+}
+
+.avatar-overlay mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  margin-bottom: 4px;
+}
+
+.avatar-overlay span {
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Upload Progress Spinner */
+.upload-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Uploading State */
+.uploading .avatar-circle {
+  opacity: 0.6;
+}
+
+.uploading .avatar-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Avatar Actions */
+.avatar-actions {
+  margin-top: 8px;
+}
+
+.photo-options-button {
+  font-size: 12px;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 8px;
+}
+
+.photo-options-button mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+/* Profile Title */
 .profile-title h1 {
   margin: 0;
   color: var(--mat-sys-on-surface);
@@ -38,6 +136,20 @@
   margin: 4px 0 0;
   color: var(--mat-sys-on-surface-variant);
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .avatar-container {
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+}
+
 
 /* Tabs */
 .profile-tabs {

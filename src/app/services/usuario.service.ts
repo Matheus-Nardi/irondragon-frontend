@@ -46,4 +46,18 @@ export class UsuarioService {
       usuarioUpdateBasico
     );
   }
+
+   getUrlImage(id:string, nomeImagem: string): string{
+      return `${this.configService.getApiBaseUrl()}/usuarios/${id}/download/imagem/${nomeImagem}`
+    }
+  
+  
+    uploadImage(id: number, nomeImagem: string, imagem: File): Observable<any> {
+      const formData: FormData = new FormData();
+      formData.append('id', id.toString());
+      formData.append('nomeImagem', imagem.name);
+      formData.append('imagem', imagem, imagem.name);
+      
+      return this.httpClient.patch<Usuario>(`${this.configService.getApiBaseUrl()}/usuarios/${id}/upload/imagem`, formData);
+    }
 }
