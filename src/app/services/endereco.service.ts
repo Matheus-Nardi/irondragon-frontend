@@ -23,11 +23,36 @@ export class EnderecoService {
       cep: endereco.cep,
       complemento: endereco.complemento,
       idCidade: endereco.cidade.id,
-      numero: endereco.numero
-    }
+      numero: endereco.numero,
+    };
     return this.httpClient.put<Endereco>(
       `${this.configService.getApiBaseUrl()}/enderecos/${endereco.id}`,
       data
     );
+  }
+
+  create(endereco: Endereco): Observable<Endereco> {
+    const data = {
+      logradouro: endereco.logradouro,
+      bairro: endereco.bairro,
+      cep: endereco.cep,
+      complemento: endereco.complemento,
+      idCidade: endereco.cidade.id,
+      numero: endereco.numero,
+    };
+    return this.httpClient.post<Endereco>(
+      `${this.configService.getApiBaseUrl()}/enderecos`,
+      data
+    );
+  }
+
+  getByUsuario(): Observable<Endereco[]> {
+    return this.httpClient.get<Endereco[]>(
+      `${this.configService.getApiBaseUrl()}/enderecos/usuarios`
+    );
+  }
+
+  delete(endereco: Endereco): Observable<any> {
+    return this.httpClient.delete(`${this.configService.getApiBaseUrl()}/enderecos/${endereco.id}`);
   }
 }

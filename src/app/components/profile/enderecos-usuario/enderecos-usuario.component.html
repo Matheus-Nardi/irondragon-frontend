@@ -1,0 +1,102 @@
+ <!-- Endereços -->
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">home</mat-icon>
+            <mat-card-title>Endereços</mat-card-title>
+            <mat-card-subtitle>Seus endereços cadastrados</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div
+              *ngIf="cliente.usuario?.enderecos?.length === 0"
+              class="empty-state"
+            >
+              <mat-icon class="empty-icon">location_off</mat-icon>
+              <p>Nenhum endereço adicionado ainda</p>
+              <button mat-flat-button color="primary" (click)="novoEndereco()">
+                <mat-icon>add</mat-icon>
+                Adicionar Endereço
+              </button>
+            </div>
+
+            <div
+              class="address-cards"
+              *ngIf="cliente.usuario.enderecos.length > 0"
+            >
+              <mat-card
+                *ngFor="
+                  let endereco of cliente.usuario.enderecos;
+                  let i = index
+                "
+                class="address-card mat-elevation-z1"
+              >
+                <div class="address-header">
+                  <div class="address-title">
+                    <mat-icon color="primary">home</mat-icon>
+                    <h3>Endereço {{ i + 1 }}</h3>
+                  </div>
+                  <div class="address-actions">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="editarEndereco(endereco)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (click)="onDeleteEndereco(endereco)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="address-content">
+                  <div class="address-row">
+                    <span class="address-label">Logradouro:</span>
+                    <span class="address-value"
+                      >{{ endereco.logradouro }}, {{ endereco.numero }}</span
+                    >
+                  </div>
+
+                  <div class="address-row" *ngIf="endereco.complemento">
+                    <span class="address-label">Complemento:</span>
+                    <span class="address-value">{{
+                      endereco.complemento
+                    }}</span>
+                  </div>
+
+                  <div class="address-row">
+                    <span class="address-label">Bairro:</span>
+                    <span class="address-value">{{ endereco.bairro }}</span>
+                  </div>
+
+                  <div class="address-row">
+                    <span class="address-label">Cidade/UF:</span>
+                    <span class="address-value"
+                      >{{ endereco.cidade.nome }} -
+                      {{ endereco.cidade.estado.sigla }}</span
+                    >
+                  </div>
+
+                  <div class="address-row">
+                    <span class="address-label">CEP:</span>
+                    <span class="address-value">{{ endereco.cep }}</span>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions
+            *ngIf="cliente.usuario.enderecos.length > 0"
+            align="end"
+          >
+            <button mat-stroked-button color="primary" (click)="novoEndereco()">
+              <mat-icon>add</mat-icon>
+              Adicionar Novo
+            </button>
+          </mat-card-actions>
+        </mat-card>
