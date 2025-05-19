@@ -1,63 +1,168 @@
-<h1 mat-dialog-title>{{ endereco.id ? 'Editar Endereço' : 'Novo Endereço' }}</h1>
+<h1 mat-dialog-title>
+  {{ endereco.id ? "Editar Endereço" : "Novo Endereço" }}
+</h1>
 
-<form [formGroup]="formEndereco" *ngIf="formEndereco" (ngSubmit)="salvar()" class="form-container">
+<form
+  [formGroup]="formEndereco"
+  *ngIf="formEndereco"
+  (ngSubmit)="salvar()"
+  class="form-container"
+>
+  <div class="input-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>CEP</mat-label>
+      <input matInput formControlName="cep" required maxlength="9" placeholder="00000-000" />
+      <mat-icon matPrefix>location_on</mat-icon>
+      <mat-error
+        *ngIf="
+          formEndereco.get('cep')?.errors && formEndereco.get('cep')?.touched
+        "
+      >
+        {{ getErrorMessage("cep", formEndereco.get("cep")?.errors) }}
 
-  
-<mat-form-field appearance="outline" class="full-width">
-    <mat-label>Logradouro</mat-label>
-    <input matInput formControlName="logradouro" required  />
-    <mat-error *ngIf="formEndereco.get('logradouro')?.hasError('required')">
-      Logradouro é obrigatório.
-    </mat-error>
-  </mat-form-field>
+        @if(formEndereco.get('cep')?.hasError('apiError')) {
+        <span>{{ formEndereco.get("cep")?.getError("apiError") }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>CEP</mat-label>
-    <input matInput formControlName="cep" required maxlength="9" />
-    <mat-error *ngIf="formEndereco.get('cep')?.hasError('required')">
-      CEP é obrigatório.
+    <mat-label>Logradouro</mat-label>
+    <input matInput formControlName="logradouro" required placeholder="Rua, Avenida, etc." />
+    <mat-icon matPrefix>signpost</mat-icon>
+    <mat-error
+      *ngIf="
+        formEndereco.get('logradouro')?.errors &&
+        formEndereco.get('logradouro')?.touched
+      "
+    >
+      {{
+        getErrorMessage("logradouro", formEndereco.get("logradouro")?.errors)
+      }}
+
+      @if(formEndereco.get('logradouro')?.hasError('apiError')) {
+      <span>{{ formEndereco.get("logradouro")?.getError("apiError") }}</span>
+      }
     </mat-error>
   </mat-form-field>
+
+  <div class="input-group">
+    <mat-form-field appearance="outline">
+      <mat-label>Número</mat-label>
+      <input matInput type="text" formControlName="numero" placeholder="123" />
+      <mat-icon matPrefix>tag</mat-icon>
+      <mat-error
+        *ngIf="
+          formEndereco.get('numero')?.errors &&
+          formEndereco.get('numero')?.touched
+        "
+      >
+        {{ getErrorMessage("numero", formEndereco.get("numero")?.errors) }}
+
+        @if(formEndereco.get('numero')?.hasError('apiError')) {
+        <span>{{ formEndereco.get("numero")?.getError("apiError") }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Complemento</mat-label>
+      <input matInput formControlName="complemento" placeholder="Apto, Bloco, etc." />
+      <mat-icon matPrefix>apartment</mat-icon>
+      <mat-error
+        *ngIf="
+          formEndereco.get('complemento')?.errors &&
+          formEndereco.get('complemento')?.touched
+        "
+      >
+        {{
+          getErrorMessage("complemento", formEndereco.get("complemento")?.errors)
+        }}
+
+        @if(formEndereco.get('complemento')?.hasError('apiError')) {
+        <span>{{ formEndereco.get("complemento")?.getError("apiError") }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Bairro</mat-label>
-    <input matInput formControlName="bairro" required />
-    <mat-error *ngIf="formEndereco.get('bairro')?.hasError('required')">
-      Bairro é obrigatório.
+    <input matInput formControlName="bairro" required placeholder="Nome do bairro" />
+    <mat-icon matPrefix>domain</mat-icon>
+    <mat-error
+      *ngIf="
+        formEndereco.get('bairro')?.errors &&
+        formEndereco.get('bairro')?.touched
+      "
+    >
+      {{ getErrorMessage("bairro", formEndereco.get("bairro")?.errors) }}
+
+      @if(formEndereco.get('bairro')?.hasError('apiError')) {
+      <span>{{ formEndereco.get("bairro")?.getError("apiError") }}</span>
+      }
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Complemento</mat-label>
-    <input matInput formControlName="complemento" />
-  </mat-form-field>
+  <div class="input-group">
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let estado of estados" [value]="estado">
+          {{ estado.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>map</mat-icon>
+      <mat-error
+        *ngIf="
+          formEndereco.get('estado')?.errors &&
+          formEndereco.get('estado')?.touched
+        "
+      >
+        {{ getErrorMessage("estado", formEndereco.get("estado")?.errors) }}
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Número</mat-label>
-    <input matInput type="text" formControlName="numero" />
-  </mat-form-field>
+        @if(formEndereco.get('estado')?.hasError('apiError')) {
+        <span>{{ formEndereco.get("estado")?.getError("apiError") }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Estado</mat-label>
-    <mat-select formControlName="estado">
-      <mat-option *ngFor="let estado of estados" [value]="estado">
-        {{ estado.nome }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Cidade</mat-label>
+      <mat-select formControlName="cidade">
+        <mat-option *ngFor="let cidade of cidades" [value]="cidade">
+          {{ cidade.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>location_city</mat-icon>
+      <mat-error
+        *ngIf="
+          formEndereco.get('cidade')?.errors &&
+          formEndereco.get('cidade')?.touched
+        "
+      >
+        {{ getErrorMessage("cidade", formEndereco.get("cidade")?.errors) }}
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Cidade</mat-label>
-    <mat-select formControlName="cidade">
-      <mat-option *ngFor="let cidade of cidades" [value]="cidade">
-        {{ cidade.nome }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        @if(formEndereco.get('cidade')?.hasError('apiError')) {
+        <span>{{ formEndereco.get("cidade")?.getError("apiError") }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <div mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
-    <button mat-flat-button color="primary" type="submit" [disabled]="formEndereco.invalid">
+    <button mat-button type="button" (click)="cancelar()">
+      <mat-icon>close</mat-icon>
+      Cancelar
+    </button>
+    <button
+    class="saveButton"
+      mat-flat-button
+      color="primary"
+      type="submit"
+    >
+      <mat-icon>save</mat-icon>
       Salvar
     </button>
   </div>

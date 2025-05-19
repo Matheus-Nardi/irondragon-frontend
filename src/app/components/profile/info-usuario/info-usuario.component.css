@@ -1,0 +1,114 @@
+ Cards */
+.profile-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.profile-card mat-card-header {
+  padding: 16px;
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.profile-card mat-card-content {
+  padding: 16px;
+}
+
+.edit-button {
+  margin-left: auto;
+}
+
+/* Editing Mode Styles */
+.editing-card {
+  border: 2px solid var(--mat-sys-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.editing-label {
+  display: flex;
+  align-items: center;
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+}
+
+.edit-indicator-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+.edit-mode-indicator {
+  display: flex;
+  align-items: center;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.edit-mode-indicator mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+/* Form Styles */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.telefone-group {
+  display: flex;
+  gap: 16px;
+}
+
+.codigo-area {
+  width: 30%;
+}
+
+.numero-telefone {
+  width: 70%;
+}
+
+/* Editable vs Non-editable Fields */
+.editable-field {
+  background-color: rgba(var(--mat-sys-primary-rgb), 0.04);
+  border-radius: 4px;
+}
+
+.editable-field .mat-mdc-form-field-focus-overlay {
+  background-color: rgba(var(--mat-sys-primary-rgb), 0.08);
+}
+
+.editable-icon {
+  color: var(--mat-sys-primary);
+  opacity: 0.6;
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+.readonly-field {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.readonly-field .mat-mdc-input-element {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 20px;
+}

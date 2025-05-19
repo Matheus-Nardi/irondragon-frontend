@@ -1,0 +1,217 @@
+
+  <mat-card
+    appearance="outlined"
+    class="profile-card"
+    [class.editing-card]="editandoInfoPessoais"
+  >
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">person</mat-icon>
+      <mat-card-title>Informações Pessoais</mat-card-title>
+      <mat-card-subtitle>
+        <span *ngIf="!editandoInfoPessoais">Seus dados cadastrais</span>
+        <span *ngIf="editandoInfoPessoais" class="editing-label">
+          <mat-icon class="edit-indicator-icon">edit</mat-icon> Editando
+          informações
+        </span>
+      </mat-card-subtitle>
+      <button
+        mat-icon-button
+        color="primary"
+        class="edit-button"
+        (click)="editar()"
+        *ngIf="!editandoInfoPessoais"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="editandoInfoPessoais; else modoVisualizacao">
+      <div class="edit-mode-indicator">
+        <mat-icon>mode_edit</mat-icon>
+        <span>Modo de edição ativo</span>
+      </div>
+      <form [formGroup]="formInfoPessoais" class="form-container">
+        <mat-form-field appearance="outline" class="full-width editable-field">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+          <mat-error *ngIf="formInfoPessoais.get('nome')?.hasError('required')">
+            Nome é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width readonly-field">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" />
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-hint>Email não pode ser alterado</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width readonly-field">
+          <mat-label>CPF</mat-label>
+          <input matInput formControlName="cpf" />
+          <mat-icon matPrefix>pin</mat-icon>
+          <mat-hint>CPF não pode ser alterado</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field editable-field">
+          <mat-label>Data de nascimento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataNascimento"
+            autocomplete="off"
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-icon matPrefix>cake</mat-icon>
+          <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+        </mat-form-field>
+
+        <div formGroupName="telefone" class="telefone-group">
+          <mat-form-field
+            appearance="outline"
+            class="codigo-area editable-field"
+          >
+            <mat-label>Código de Área</mat-label>
+            <input matInput formControlName="codigoArea" maxlength="2" />
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+            <mat-error
+              *ngIf="
+                formInfoPessoais
+                  .get('telefone.codigoArea')
+                  ?.hasError('required')
+              "
+            >
+              Código de área é obrigatório
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formInfoPessoais
+                  .get('telefone.codigoArea')
+                  ?.hasError('minlength') ||
+                formInfoPessoais
+                  .get('telefone.codigoArea')
+                  ?.hasError('maxlength')
+              "
+            >
+              Código de área deve ter 2 dígitos
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="outline"
+            class="numero-telefone editable-field"
+          >
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="numero" maxlength="9" />
+            <mat-icon matSuffix class="editable-icon">edit</mat-icon>
+            <mat-error
+              *ngIf="
+                formInfoPessoais.get('telefone.numero')?.hasError('required')
+              "
+            >
+              Número é obrigatório
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formInfoPessoais.get('telefone.numero')?.hasError('pattern')
+              "
+            >
+              Número inválido. Deve ter 8 ou 9 dígitos
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <ng-template #modoVisualizacao>
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">badge</mat-icon>
+          <div matListItemTitle>Nome</div>
+          <div matListItemLine>{{ keycloakProfile?.firstName  || usuario.nome}}</div>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">email</mat-icon>
+          <div matListItemTitle>Email</div>
+          <div matListItemLine>{{ cliente.usuario.email }}</div>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">pin</mat-icon>
+          <div matListItemTitle>CPF</div>
+          <div matListItemLine>{{ cliente.usuario.cpf }}</div>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">cake</mat-icon>
+          <div matListItemTitle>Data de Nascimento</div>
+          <div matListItemLine>
+            {{
+              cliente.usuario.dataNascimento
+                ? (cliente.usuario.dataNascimento | date : "dd/MM/yyyy")
+                : "Não informado"
+            }}
+          </div>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">phone</mat-icon>
+          <div matListItemTitle>Telefone</div>
+          <div matListItemLine>
+            ({{ cliente.usuario.telefone.codigoArea }})
+            {{ cliente.usuario.telefone.numero }}
+          </div>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">event</mat-icon>
+          <div matListItemTitle>Membro desde</div>
+          <div matListItemLine>
+            {{ cliente.usuario.dataCriacao | date : "dd/MM/yyyy" }}
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </ng-template>
+    <div class="profile-actions">
+      @if (editandoInfoPessoais) {
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="cancelar()"
+      >
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+
+      }
+      <button
+        mat-flat-button
+        color="primary"
+        [hidden]="!editandoInfoPessoais"
+        (click)="submit()"
+      >
+        <mat-icon>save</mat-icon>
+        Salvar Alterações
+      </button>
+    </div>
+  </mat-card>
+  

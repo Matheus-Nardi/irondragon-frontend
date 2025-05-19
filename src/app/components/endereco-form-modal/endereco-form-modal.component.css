@@ -1,0 +1,95 @@
+/* Modal Container Styles */
+:host {
+  display: block;
+  font-family: var(--mat-sys-brand-font-family);
+}
+
+
+
+h1.mat-dialog-title {
+  margin: 0;
+  padding: 16px 24px;
+  background-color: var(--mat-sys-primary);
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 4px 4px 0 0;
+}
+
+h1{
+   padding: 10px 16px; 
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  max-width: 500px;
+}
+
+/* Form Field Styles */
+.full-width {
+  width: 100%;
+}
+
+/* Input Group Styles */
+.input-group {
+  display: flex;
+  gap: 16px;
+}
+
+.input-group .mat-form-field {
+  flex: 1;
+}
+
+.saveButton > mat-icon{
+    color: var(--mat-sys-on-secondary)
+}
+
+/* Icon Styles */
+mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+/* Dialog Actions */
+[mat-dialog-actions] {
+  padding: 8px 24px 24px;
+  margin-bottom: 0;
+}
+
+/* Error Message Styling */
+mat-error {
+  font-size: 12px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 16px;
+  }
+
+  .input-group {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* Field Focus Effect */
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--mat-sys-primary);
+}
+
+/* Select Dropdown Styling */
+::ng-deep .mat-select-panel {
+  border-radius: 8px !important;
+}
+
+/* Animation for Form Fields */
+.mat-form-field {
+  transition: all 0.3s ease;
+}
+
+.mat-form-field:focus-within {
+  transform: translateY(-2px);
+}

@@ -32,6 +32,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { EnderecoFormModalComponent } from '../endereco-form-modal/endereco-form-modal.component';
 import { Endereco } from '../../models/endereco/endereco.model';
 import { EnderecoService } from '../../services/endereco.service';
+import { InfoUsuarioComponent } from './info-usuario/info-usuario.component';
+import { EnderecosUsuarioComponent } from "./enderecos-usuario/enderecos-usuario.component";
 
 @Component({
   selector: 'app-profile',
@@ -43,12 +45,10 @@ import { EnderecoService } from '../../services/endereco.service';
     MatTableModule,
     MatDividerModule,
     MatListModule,
-    DatePipe,
     HeaderComponent,
     FooterComponent,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    CurrencyPipe,
     MatTableModule,
     MatTabsModule,
     NgIf,
@@ -57,16 +57,20 @@ import { EnderecoService } from '../../services/endereco.service';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-  ],
+    InfoUsuarioComponent,
+    EnderecosUsuarioComponent
+],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
+  enderecos: Endereco[] = [];
   editandoInfoPessoais = false;
   formInfoPessoais!: FormGroup;
   keycloakProfile?: Keycloak.KeycloakProfile;
   usuario!: Usuario;
   cliente!: Cliente;
+
   ngOnInit(): void {
     this.keycloakService.getUserProfile().then((profile) => {
       this.keycloakProfile = profile;
@@ -74,6 +78,7 @@ export class ProfileComponent implements OnInit {
 
       if (profile?.email) {
         this.loadCliente(profile);
+        this.loadUsuario(profile);
       }
     });
   }
@@ -82,9 +87,9 @@ export class ProfileComponent implements OnInit {
     private keycloakService: KeycloakOperationService,
     private usuarioService: UsuarioService,
     private clienteService: ClienteService,
-    private formBuilder: FormBuilder,
     private snackbarService: SnackbarService,
     private matDialog: MatDialog,
+    private matDialogConfirmService: DialogService,
     private enderecoService: EnderecoService
   ) {}
 
@@ -93,8 +98,6 @@ export class ProfileComponent implements OnInit {
       next: (cliente) => {
         this.cliente = cliente;
         console.log('Cliente: ', cliente);
-        this.criarFormulario();
-        console.log(this.cliente.usuario.dataNascimento);
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -103,7 +106,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private loadUsuario(profile: any) {
-    this.usuarioService.findByUsername(profile).subscribe({
+    this.usuarioService.findByUsername(profile.email).subscribe({
       next: (usuario) => {
         this.usuario = usuario;
       },
@@ -119,88 +122,69 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private criarFormulario() {
-    this.formInfoPessoais = this.formBuilder.group({
-      
-      nome: [
-        this.cliente?.usuario.nome || this.keycloakProfile?.firstName || '',
-        Validators.required,
-      ],
-
-      email: [{ value: this.cliente?.usuario.email || '', disabled: true }], // campo desabilitado
-
-      telefone: this.formBuilder.group({
-        codigoArea: [
-          this.cliente?.usuario.telefone?.codigoArea || '',
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(2),
-          ],
-        ],
-        numero: [
-          this.cliente?.usuario.telefone?.numero || '',
-          [Validators.required, Validators.pattern(/^\d{8,9}$/)],
-        ],
-      }),
-
-      cpf: [{ value: this.cliente?.usuario.cpf || '', disabled: true }],
-      dataNascimento: [
-        {
-          value: this.cliente?.usuario.dataNascimento
-            ? new Date(this.cliente.usuario.dataNascimento)
-            : '',
-        },
-      ],
+  loadEnderecos() {
+    this.enderecoService.getByUsuario().subscribe((enderecos) => {
+      this.enderecos = enderecos;
+      this.cliente.usuario.enderecos = this.enderecos;
     });
   }
 
-  atualizarInfoBasicas() {
-    this.formInfoPessoais.markAllAsTouched();
-    if (this.formInfoPessoais.valid) {
-      const formValue = this.formInfoPessoais.value;
-
-      this.usuarioService.updateInfoBasica(formValue).subscribe({
-        next: () => {
-          console.log('Usuario atualizado com sucesso');
-          this.snackbarService.showSuccess(
-            'Informações atualizadas com sucesso'
-          );
-          this.editandoInfoPessoais = false;
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        },
-        error: (error) => {
-          console.log('Erro na requisição', error);
-          this.snackbarService.showError('Erro ao salvar informaçoes');
-          this.editandoInfoPessoais = false;
-        },
-      });
-    }
+  atualizarInfoBasicas(update: {
+    nome: string;
+    dataNascimento: Date | null;
+    telefone: { codigoArea: string; numero: string };
+  }) {
+    this.usuarioService.updateInfoBasica(update).subscribe({
+      next: () => {
+        this.snackbarService.showSuccess('Informações atualizadas com sucesso');
+        this.loadCliente(this.keycloakProfile); // recarrega os dados
+      },
+      error: () => {
+        this.snackbarService.showError('Erro ao atualizar informações');
+      },
+    });
   }
 
-  editarEndereco(endereco: Endereco) {
-    console.log("id do endereco: " + endereco.id);
-    
+   abrirModalEndereco(endereco: Endereco | null) {
+    const enderecoParaModal = endereco ? { ...endereco } : ({} as Endereco);
+
     this.matDialog
       .open(EnderecoFormModalComponent, {
         width: 'auto',
-        data: endereco,
+        data: enderecoParaModal,
       })
       .afterClosed()
-      .subscribe((resultado) => {
-        this.enderecoService.update(resultado).subscribe({
+      .subscribe((enderecoAtualizado: Endereco) => {
+        if (!enderecoAtualizado) return;
+
+        const operacao$ = enderecoAtualizado.id
+          ? this.enderecoService.update(enderecoAtualizado)
+          : this.enderecoService.create(enderecoAtualizado);
+
+        operacao$.subscribe({
           next: () => {
-            console.log('Endereco atualizado com sucesso !');
-            this.snackbarService.showSuccess('Endereço atualizado com sucesso');
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
+            this.snackbarService.showSuccess('Endereço salvo com sucesso');
+            this.loadEnderecos();
           },
-          error: (error) => {
-            console.log('Erro ao atualizar o endereço !', error);
-            this.snackbarService.showError('Erro ao atualizar o endereço');
+          error: () => {
+            this.snackbarService.showError('Erro ao salvar o endereço');
+          },
+        });
+      });
+  }
+
+  deletarEndereco(endereco: Endereco) {
+    this.matDialogConfirmService
+      .openConfirmDialog('Deletar Endereço', 'Deseja realmente deletar este endereço?', 'warning')
+      .subscribe((confirmou) => {
+        if (!confirmou) return;
+        this.enderecoService.delete(endereco).subscribe({
+          next: () => {
+            this.snackbarService.showSuccess('Endereço deletado com sucesso');
+            this.loadEnderecos();
+          },
+          error: () => {
+            this.snackbarService.showError('Erro ao deletar o endereço');
           },
         });
       });
