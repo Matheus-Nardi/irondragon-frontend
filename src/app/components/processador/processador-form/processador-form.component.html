@@ -8,7 +8,7 @@
       <!-- Etapa 1: Informações Básicas -->
       <mat-step [stepControl]="formGroupInfosBasicas">
         <ng-template matStepLabel>Informações Básicas</ng-template>
-        
+
         <div class="step-content">
           <div class="step-header">
             <div class="step-icon">
@@ -25,33 +25,70 @@
             <div class="form-column">
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Nome</mat-label>
-                <input matInput formControlName="nome" placeholder="Ex: Intel Core i7-12700K" required>
+                <input
+                  matInput
+                  formControlName="nome"
+                  placeholder="Ex: Intel Core i7-12700K"
+                  required
+                />
                 <mat-icon matSuffix>label</mat-icon>
-                <mat-error *ngIf="formGroupInfosBasicas.get('nome')?.hasError('required')">Nome é obrigatório</mat-error>
-                <mat-error *ngIf="formGroupInfosBasicas.get('nome')?.hasError('apiError')">
-                  {{ getErrorMessage('nome', formGroupInfosBasicas.get('nome')?.errors) }}
+                <mat-error
+                  *ngIf="
+                    formGroupInfosBasicas.get('nome')?.hasError('required')
+                  "
+                  >Nome é obrigatório</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    formGroupInfosBasicas.get('nome')?.hasError('apiError')
+                  "
+                >
+                  {{
+                    getErrorMessage(
+                      "nome",
+                      formGroupInfosBasicas.get("nome")?.errors
+                    )
+                  }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Socket</mat-label>
-                <input matInput formControlName="socket" placeholder="Ex: LGA 1700" required>
+                <input
+                  matInput
+                  formControlName="socket"
+                  placeholder="Ex: LGA 1700"
+                  required
+                />
                 <mat-icon matSuffix>settings_input_component</mat-icon>
-                <mat-error *ngIf="formGroupInfosBasicas.get('socket')?.hasError('required')">Socket é obrigatório</mat-error>
+                <mat-error
+                  *ngIf="
+                    formGroupInfosBasicas.get('socket')?.hasError('required')
+                  "
+                  >Socket é obrigatório</mat-error
+                >
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Fabricante</mat-label>
                 <mat-select formControlName="fabricante" required>
-                  <mat-option *ngFor="let fabricante of fabricantes" [value]="fabricante">
+                  <mat-option
+                    *ngFor="let fabricante of fabricantes"
+                    [value]="fabricante"
+                  >
                     {{ fabricante.nome }}
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>business</mat-icon>
-                <mat-error *ngIf="formGroupInfosBasicas.get('fabricante')?.hasError('required')">Fabricante é obrigatório</mat-error>
+                <mat-error
+                  *ngIf="
+                    formGroupInfosBasicas
+                      .get('fabricante')
+                      ?.hasError('required')
+                  "
+                  >Fabricante é obrigatório</mat-error
+                >
               </mat-form-field>
-
-           
             </div>
 
             <!-- Segunda coluna -->
@@ -59,18 +96,50 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Núcleos</mat-label>
-                  <input matInput type="number" formControlName="nucleos" placeholder="Ex: 8" required>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="nucleos"
+                    placeholder="Ex: 8"
+                    required
+                  />
                   <mat-icon matSuffix>grid_3x3</mat-icon>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('nucleos')?.hasError('required')">Número de núcleos é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('nucleos')?.hasError('pattern')">Informe um número inteiro positivo</mat-error>
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('nucleos')?.hasError('required')
+                    "
+                    >Número de núcleos é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('nucleos')?.hasError('pattern')
+                    "
+                    >Informe um número inteiro positivo</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Threads</mat-label>
-                  <input matInput type="number" formControlName="threads" placeholder="Ex: 16" required>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="threads"
+                    placeholder="Ex: 16"
+                    required
+                  />
                   <mat-icon matSuffix>timeline</mat-icon>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('threads')?.hasError('required')">Número de threads é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('threads')?.hasError('pattern')">Informe um número inteiro positivo</mat-error>
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('threads')?.hasError('required')
+                    "
+                    >Número de threads é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('threads')?.hasError('pattern')
+                    "
+                    >Informe um número inteiro positivo</mat-error
+                  >
                 </mat-form-field>
               </div>
 
@@ -78,7 +147,10 @@
                 <mat-label>Placa Integrada</mat-label>
                 <mat-select formControlName="placaIntegrada">
                   <mat-option [value]="null">-- Nenhum --</mat-option>
-                  <mat-option *ngFor="let placa of placasIntegradas" [value]="placa">
+                  <mat-option
+                    *ngFor="let placa of placasIntegradas"
+                    [value]="placa"
+                  >
                     {{ placa.nome }}
                   </mat-option>
                 </mat-select>
@@ -86,37 +158,53 @@
               </mat-form-field>
 
               <div class="flex-row">
-
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Preço</mat-label>
-                  <input matInput type="number" formControlName="preco" placeholder="Ex: 1999.99" required>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="preco"
+                    placeholder="Ex: 1999.99"
+                    required
+                  />
                   <mat-icon matSuffix>attach_money</mat-icon>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('preco')?.hasError('required')">Preço é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosBasicas.get('preco')?.hasError('pattern')">Informe um valor decimal válido, ex: 199.99</mat-error>
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('preco')?.hasError('required')
+                    "
+                    >Preço é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosBasicas.get('preco')?.hasError('pattern')
+                    "
+                    >Informe um valor decimal válido, ex: 199.99</mat-error
+                  >
                 </mat-form-field>
 
                 <div class="toggle-container">
-                  <mat-slide-toggle formControlName="desbloqueado" color="primary">
+                  <mat-slide-toggle
+                    formControlName="desbloqueado"
+                    color="primary"
+                  >
                     Desbloqueado
                   </mat-slide-toggle>
                 </div>
-                
               </div>
             </div>
           </form>
         </div>
 
         <div class="step-actions">
-
           <button
-          mat-stroked-button
-          type="button"
-          routerLink="/admin/processadores"
-          class="cancel-button"
-        >
-          <mat-icon>close</mat-icon>
-          <span>Cancelar</span>
-        </button>
+            mat-stroked-button
+            type="button"
+            routerLink="/admin/processadores"
+            class="cancel-button"
+          >
+            <mat-icon>close</mat-icon>
+            <span>Cancelar</span>
+          </button>
           <button mat-raised-button color="primary" matStepperNext>
             <mat-icon>arrow_forward</mat-icon>
             Próximo
@@ -127,7 +215,7 @@
       <!-- Etapa 2: Informações Específicas -->
       <mat-step [stepControl]="formGroupInfosEspecificas">
         <ng-template matStepLabel>Informações Específicas</ng-template>
-        
+
         <div class="step-content">
           <div class="step-header">
             <div class="step-icon">
@@ -149,16 +237,56 @@
               <div class="section-content">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Cache L2 (MB)</mat-label>
-                  <input matInput type="number" formControlName="cacheL2" placeholder="Ex: 4" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('cacheL2')?.hasError('required')">Cache L2 é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('cacheL2')?.hasError('pattern')">Informe um número decimal válido</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="cacheL2"
+                    placeholder="Ex: 4"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('cacheL2')
+                        ?.hasError('required')
+                    "
+                    >Cache L2 é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('cacheL2')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número decimal válido</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Cache L3 (MB)</mat-label>
-                  <input matInput type="number" formControlName="cacheL3" placeholder="Ex: 12" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('cacheL3')?.hasError('required')">Cache L3 é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('cacheL3')?.hasError('pattern')">Informe um número decimal válido</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="cacheL3"
+                    placeholder="Ex: 12"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('cacheL3')
+                        ?.hasError('required')
+                    "
+                    >Cache L3 é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('cacheL3')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número decimal válido</mat-error
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -172,16 +300,56 @@
               <div class="section-content">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Clock Básico (GHz)</mat-label>
-                  <input matInput type="number" formControlName="clockBasico" placeholder="Ex: 3.6" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('clockBasico')?.hasError('required')">Clock básico é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('clockBasico')?.hasError('pattern')">Informe um número decimal válido</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="clockBasico"
+                    placeholder="Ex: 3.6"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('clockBasico')
+                        ?.hasError('required')
+                    "
+                    >Clock básico é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('clockBasico')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número decimal válido</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Clock Boost (GHz)</mat-label>
-                  <input matInput type="number" formControlName="clockBoost" placeholder="Ex: 5.0" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('clockBoost')?.hasError('required')">Clock boost é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('clockBoost')?.hasError('pattern')">Informe um número decimal válido</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="clockBoost"
+                    placeholder="Ex: 5.0"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('clockBoost')
+                        ?.hasError('required')
+                    "
+                    >Clock boost é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('clockBoost')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número decimal válido</mat-error
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -195,15 +363,47 @@
               <div class="section-content">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Energia Básica (W)</mat-label>
-                  <input matInput type="number" formControlName="energiaBasica" placeholder="Ex: 65" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('energiaBasica')?.hasError('required')">Energia básica é obrigatória</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('energiaBasica')?.hasError('pattern')">Informe um número inteiro positivo</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="energiaBasica"
+                    placeholder="Ex: 65"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('energiaBasica')
+                        ?.hasError('required')
+                    "
+                    >Energia básica é obrigatória</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('energiaBasica')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número inteiro positivo</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Energia Máxima (W)</mat-label>
-                  <input matInput type="number" formControlName="energiaMaxima" placeholder="Ex: 125">
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('energiaMaxima')?.hasError('pattern')">Informe um número inteiro positivo</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="energiaMaxima"
+                    placeholder="Ex: 125"
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('energiaMaxima')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número inteiro positivo</mat-error
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -217,22 +417,70 @@
               <div class="section-content">
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>PCI Express</mat-label>
-                  <input matInput type="number" formControlName="pci" placeholder="Ex: 4.0" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('pci')?.hasError('required')">PCI Express é obrigatório</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('pci')?.hasError('pattern')">Informe um número decimal válido</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="pci"
+                    placeholder="Ex: 4.0"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas.get('pci')?.hasError('required')
+                    "
+                    >PCI Express é obrigatório</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas.get('pci')?.hasError('pattern')
+                    "
+                    >Informe um número decimal válido</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Tipo de Memória</mat-label>
-                  <input matInput formControlName="tipoMemoria" placeholder="Ex: DDR4" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('tipoMemoria')?.hasError('required')">Tipo de memória é obrigatório</mat-error>
+                  <input
+                    matInput
+                    formControlName="tipoMemoria"
+                    placeholder="Ex: DDR4"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('tipoMemoria')
+                        ?.hasError('required')
+                    "
+                    >Tipo de memória é obrigatório</mat-error
+                  >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Canais de Memória</mat-label>
-                  <input matInput type="number" formControlName="canaisMemoria" placeholder="Ex: 2" required>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('canaisMemoria')?.hasError('required')">Canais de memória são obrigatórios</mat-error>
-                  <mat-error *ngIf="formGroupInfosEspecificas.get('canaisMemoria')?.hasError('pattern')">Informe um número inteiro positivo</mat-error>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="canaisMemoria"
+                    placeholder="Ex: 2"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('canaisMemoria')
+                        ?.hasError('required')
+                    "
+                    >Canais de memória são obrigatórios</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      formGroupInfosEspecificas
+                        .get('canaisMemoria')
+                        ?.hasError('pattern')
+                    "
+                    >Informe um número inteiro positivo</mat-error
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -240,13 +488,6 @@
         </div>
 
         <div class="step-actions">
-          <button mat-stroked-button matStepperPrevious>
-            <mat-icon>arrow_back</mat-icon>
-            Voltar
-          </button>
-          
-          <div class="action-spacer"></div>
-
           <button
             mat-stroked-button
             type="button"
@@ -256,26 +497,126 @@
             <mat-icon>close</mat-icon>
             <span>Cancelar</span>
           </button>
-          
-          <button
-          mat-raised-button
-          color="warn"
-          type="button"
-          [disabled]="!formGroupInfosBasicas.get('id')?.value"
-          (click)="onDelete()"
-          class="delete-button"
+          <button mat-raised-button color="primary" matStepperNext>
+            <mat-icon>arrow_forward</mat-icon>
+            Próximo
+          </button>
+        </div>
+      </mat-step>
 
-        >
-          <mat-icon>delete</mat-icon>
-          <span>Excluir</span>
-        </button>
+      <mat-step>
+        <ng-template matStepLabel>Imagens</ng-template>
+        
+        <div class="image-upload-container">
+          <div class="upload-instructions">
+            <h3>Imagens do Processador</h3>
+            <p>Adicione imagens do produto para exibição na loja</p>
+          </div>
           
+          <!-- Área de Upload -->
+          <div 
+            class="upload-area" 
+            [class.has-files]="imagePreview"
+            (click)="fileInput.click()" 
+            (dragover)="onDragOver($event)" 
+            (dragleave)="onDragLeave($event)" 
+            (drop)="onDrop($event)"
+          >
+            <input
+              type="file"
+              (change)="carregarImagemSelecionada($event)"
+              hidden
+              #fileInput
+              accept="image/*"
+            />
+            
+            <div class="upload-placeholder" *ngIf="!imagePreview">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              <p>Arraste e solte uma imagem aqui ou clique para selecionar</p>
+              <span class="file-types">Formatos aceitos: JPG, PNG (máx. 10MB)</span>
+            </div>
+            
+            <div class="upload-preview" *ngIf="imagePreview">
+              <div class="preview-container">
+                <img [src]="imagePreview" alt="Preview da imagem" class="preview-image">
+                <button mat-mini-fab color="warn" class="remove-button" (click)="removerImagem($event)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Preview do Card do Produto -->
+          <div class="product-preview-container" *ngIf="imagePreview">
+            <h3>Visualização na Loja</h3>
+            
+            <div class="product-card">
+              <div class="product-image">
+                <img [src]="imagePreview" alt="Imagem do produto">
+              </div>
+              <div class="product-info">
+                <p class="product-brand">{{ formGroupInfosBasicas.get('fabricante')?.value?.nome || 'Fabricante' }}</p>
+                <h4 class="product-name">{{ formGroupInfosBasicas.get('nome')?.value || 'Nome do Processador' }}</h4>
+                <div class="product-specs">
+                  <span>{{ formGroupInfosBasicas.get('nucleos')?.value || '0' }} Núcleos</span>
+                  <span>{{ formGroupInfosBasicas.get('threads')?.value || '0' }} Threads</span>
+                </div>
+                <p class="product-price">R$ {{ formGroupInfosBasicas.get('preco')?.value || '0.00' }}</p>
+                <button class="buy-button">
+                  <mat-icon>shopping_cart</mat-icon> COMPRAR
+                </button>
+              </div>
+            </div>
+            
+            <div class="preview-note">
+              <mat-icon>info</mat-icon>
+              <p>Esta é uma prévia de como o produto será exibido na loja</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="upload-status" *ngIf="isUploading">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          <p>Enviando imagem...</p>
+        </div>
+        
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+      
+          <div class="action-spacer"></div>
+      
+          <button
+            mat-stroked-button
+            type="button"
+            routerLink="/admin/processadores"
+            class="cancel-button"
+          >
+            <mat-icon>close</mat-icon>
+            <span>Cancelar</span>
+          </button>
+      
+          <button
+            mat-raised-button
+            color="warn"
+            type="button"
+            [disabled]="!formGroupInfosBasicas.get('id')?.value"
+            (click)="onDelete()"
+            class="delete-button"
+          >
+            <mat-icon>delete</mat-icon>
+            <span>Excluir</span>
+          </button>
+      
           <button mat-raised-button color="primary" (click)="onSubmit()">
             <mat-icon>save</mat-icon>
             Salvar
           </button>
         </div>
       </mat-step>
+      
     </mat-horizontal-stepper>
   </div>
 </div>
