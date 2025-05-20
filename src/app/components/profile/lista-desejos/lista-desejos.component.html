@@ -1,0 +1,59 @@
+<div class="tab-content">
+  <mat-card appearance="outlined" class="profile-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">favorite</mat-icon>
+      <mat-card-title>Minha Lista de Desejos</mat-card-title>
+      <mat-card-subtitle>Produtos que você deseja adquirir</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div
+        class="empty-state"
+        *ngIf="!listaDesejos || listaDesejos.length === 0"
+      >
+        <mat-icon class="empty-icon">favorite_border</mat-icon>
+        <p>Nenhum processador na sua lista de desejos</p>
+        <button mat-flat-button color="primary" [routerLink]="''">Ver Opções</button>
+      </div>
+
+      <div
+        class="wishlist-grid"
+        *ngIf="listaDesejos && listaDesejos.length > 0"
+      >
+        <!-- Mini-card para cada item na lista de desejos -->
+        <div
+          class="wishlist-mini-card"
+          *ngFor="let produto of listaDesejos"
+        >
+          <div class="wishlist-item-image">
+            <img [src]="getImagemUrl(produto)" [alt]="produto.nome">
+          </div>
+          
+          <div class="wishlist-item-details">
+            <div class="wishlist-item-header">
+              <span class="wishlist-item-brand">{{ produto.fabricante.nome }}</span>
+              <h3 class="wishlist-item-title">{{ produto.nome }}</h3>
+            </div>
+            
+            <div class="wishlist-item-specs">
+              <span class="spec-chip">{{ produto.nucleos }} Núcleos</span>
+              <span class="spec-chip">{{ produto.threads }} Threads</span>
+            </div>
+            
+            <div class="wishlist-item-footer">
+              <span class="wishlist-item-price">R$ {{ produto.preco }}</span>
+              <div class="wishlist-item-actions">
+                <button mat-icon-button color="primary" matTooltip="Adicionar ao carrinho">
+                  <mat-icon>shopping_cart</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" matTooltip="Remover dos favoritos" (click)="onRemoverDesejo(produto)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

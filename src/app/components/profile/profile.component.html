@@ -2,17 +2,72 @@
 
 @if(cliente?.usuario) {
 <div class="profile-container">
-  <div class="profile-header">
-    <div class="avatar-container">
+<div class="profile-header">
+  <div class="avatar-container">
+    <!-- Avatar with upload overlay -->
+    <div class="avatar-wrapper">
       <div class="avatar-circle mat-elevation-z3">
-        <span>{{ keycloakProfile?.firstName?.charAt(0) || "U" }}</span>
+        <ng-container *ngIf="cliente?.usuario?.nomeImagem && imagemUrl; else inicial">
+          <img
+            [src]="imagemUrl"
+            alt="Imagem de perfil"
+            class="profile-image"
+          />
+        </ng-container>
+        <ng-template #inicial>
+          <span>{{ keycloakProfile?.firstName?.charAt(0) || "U" }}</span>
+        </ng-template>
       </div>
+      
+      <!-- Upload overlay with hover effect -->
+      <div class="avatar-overlay" (click)="fileInput.click()">
+        <mat-icon>photo_camera</mat-icon>
+        <span>Alterar foto</span>
+      </div>
+      
+      <!-- Upload progress indicator -->
     </div>
-    <div class="profile-title">
-      <h1 class="mat-headline-4">Meu Perfil</h1>
-      <p class="mat-subtitle-1">Olá, {{ keycloakProfile?.firstName }}</p>
+    
+    <!-- Hidden file input -->
+    <input
+      type="file"
+      hidden
+      #fileInput
+      accept="image/*"
+      (change)="carregarImagemSelecionada($event)"
+    />
+    
+    <!-- Image options menu -->
+    <div class="avatar-actions" *ngIf="cliente?.usuario?.nomeImagem">
+      <button
+        mat-button
+        color="primary"
+        [matMenuTriggerFor]="photoMenu"
+        class="photo-options-button"
+      >
+        <mat-icon>more_horiz</mat-icon>
+        <span>Opções</span>
+      </button>
+      
+      <mat-menu #photoMenu="matMenu">
+        <button mat-menu-item (click)="fileInput.click()">
+          <mat-icon>edit</mat-icon>
+          <span>Alterar foto</span>
+        </button>
+        <button mat-menu-item (click)="removerImagem()" color="warn">
+          <mat-icon>delete</mat-icon>
+          <span>Remover foto</span>
+        </button>
+      </mat-menu>
     </div>
   </div>
+
+  <div class="profile-title">
+    <h1 class="mat-headline-4">Meu Perfil</h1>
+    <p class="mat-subtitle-1">Olá, {{ keycloakProfile?.firstName }}</p>
+  </div>
+</div>
+
 
   <mat-tab-group
     mat-stretch-tabs="false"
@@ -109,49 +164,13 @@
     </mat-tab>
 
     <mat-tab>
-      <ng-template mat-tab-label>
+       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">favorite</mat-icon>
         <span class="tab-label">Desejos</span>
       </ng-template>
+     <app-lista-desejos [cliente]="cliente" [usuario]="usuario" [listaDesejos]="listaDesejos" (remover)="removerDesejo($event)">
 
-      <div class="tab-content">
-        <mat-card appearance="outlined" class="profile-card">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">favorite</mat-icon>
-            <mat-card-title>Minha Lista de Desejos</mat-card-title>
-            <mat-card-subtitle
-              >Produtos que você deseja adquirir</mat-card-subtitle
-            >
-          </mat-card-header>
-
-          <mat-card-content>
-            <div
-              class="empty-state"
-              *ngIf="
-                !cliente.listaDeDesejos || cliente.listaDeDesejos.length === 0
-              "
-            >
-              <mat-icon class="empty-icon">favorite_border</mat-icon>
-              <p>Nenhum processador na sua lista de desejos</p>
-              <button mat-flat-button color="primary">Ver Opções</button>
-            </div>
-
-            <div
-              class="wishlist-grid"
-              *ngIf="
-                cliente.listaDeDesejos && cliente.listaDeDesejos.length > 0
-              "
-            >
-              <mat-card
-                class="product-card mat-elevation-z2"
-                *ngFor="let produto of cliente.listaDeDesejos"
-              >
-                <p>Exibir produtos</p>
-              </mat-card>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+     </app-lista-desejos>
     </mat-tab>
   </mat-tab-group>
 </div>

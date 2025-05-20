@@ -33,7 +33,10 @@ import { EnderecoFormModalComponent } from '../endereco-form-modal/endereco-form
 import { Endereco } from '../../models/endereco/endereco.model';
 import { EnderecoService } from '../../services/endereco.service';
 import { InfoUsuarioComponent } from './info-usuario/info-usuario.component';
-import { EnderecosUsuarioComponent } from "./enderecos-usuario/enderecos-usuario.component";
+import { EnderecosUsuarioComponent } from './enderecos-usuario/enderecos-usuario.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { ListaDesejosComponent } from './lista-desejos/lista-desejos.component';
+import { Processador } from '../../models/processador/processador.model';
 
 @Component({
   selector: 'app-profile',
@@ -58,18 +61,24 @@ import { EnderecosUsuarioComponent } from "./enderecos-usuario/enderecos-usuario
     MatInputModule,
     MatDatepickerModule,
     InfoUsuarioComponent,
-    EnderecosUsuarioComponent
-],
+    EnderecosUsuarioComponent,
+    MatMenuModule,
+    ListaDesejosComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   enderecos: Endereco[] = [];
+  listaDesejos: Processador[] = [];
   editandoInfoPessoais = false;
   formInfoPessoais!: FormGroup;
   keycloakProfile?: Keycloak.KeycloakProfile;
   usuario!: Usuario;
   cliente!: Cliente;
+  fileName: string = '';
+  selectedFile: File | null = null;
+  imagemUrl: string = '';
 
   ngOnInit(): void {
     this.keycloakService.getUserProfile().then((profile) => {
@@ -79,6 +88,13 @@ export class ProfileComponent implements OnInit {
       if (profile?.email) {
         this.loadCliente(profile);
         this.loadUsuario(profile);
+
+        if (this.cliente?.usuario?.id && this.cliente?.usuario?.nomeImagem) {
+          this.imagemUrl = this.usuarioService.getUrlImage(
+            this.cliente.usuario.id.toString(),
+            this.cliente.usuario.nomeImagem
+          );
+        }
       }
     });
   }
@@ -98,6 +114,7 @@ export class ProfileComponent implements OnInit {
       next: (cliente) => {
         this.cliente = cliente;
         console.log('Cliente: ', cliente);
+        this.loadListaDesejos();
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -109,6 +126,10 @@ export class ProfileComponent implements OnInit {
     this.usuarioService.findByUsername(profile.email).subscribe({
       next: (usuario) => {
         this.usuario = usuario;
+        this.imagemUrl = this.usuarioService.getUrlImage(
+          this.usuario.id.toString(),
+          this.usuario.nomeImagem
+        );
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -118,7 +139,8 @@ export class ProfileComponent implements OnInit {
 
   loadListaDesejos() {
     this.clienteService.getListaDesejos().subscribe((lista) => {
-      this.cliente.listaDeDesejos = lista;
+      this.listaDesejos = lista;
+      console.log(this.listaDesejos);
     });
   }
 
@@ -145,7 +167,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-   abrirModalEndereco(endereco: Endereco | null) {
+  abrirModalEndereco(endereco: Endereco | null) {
     const enderecoParaModal = endereco ? { ...endereco } : ({} as Endereco);
 
     this.matDialog
@@ -175,7 +197,11 @@ export class ProfileComponent implements OnInit {
 
   deletarEndereco(endereco: Endereco) {
     this.matDialogConfirmService
-      .openConfirmDialog('Deletar Endereço', 'Deseja realmente deletar este endereço?', 'warning')
+      .openConfirmDialog(
+        'Deletar Endereço',
+        'Deseja realmente deletar este endereço?',
+        'warning'
+      )
       .subscribe((confirmou) => {
         if (!confirmou) return;
         this.enderecoService.delete(endereco).subscribe({
@@ -187,6 +213,72 @@ export class ProfileComponent implements OnInit {
             this.snackbarService.showError('Erro ao deletar o endereço');
           },
         });
+      });
+  }
+
+  carregarImagemSelecionada(event: any) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.processarArquivo(file);
+
+      if (this.cliente?.usuario?.id) {
+        this.uploadImage(this.cliente.usuario.id);
+      }
+    }
+  }
+
+  processarArquivo(file: File) {
+    if (file.size > 10 * 1024 * 1024) {
+      this.snackbarService.showError(
+        'Arquivo muito grande. O tamanho máximo é 10MB.'
+      );
+      return;
+    }
+
+    this.fileName = file.name;
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+  }
+
+  private uploadImage(usuarioId: number) {
+    if (this.selectedFile) {
+      this.usuarioService
+        .uploadImage(usuarioId, this.selectedFile.name, this.selectedFile)
+        .subscribe({
+          next: () => {
+            this.snackbarService.showSuccess('Imagem enviada com sucesso');
+            this.loadUsuario(this.keycloakProfile);
+            this.loadCliente(this.keycloakProfile);
+          },
+          error: (err) => {
+            console.log('Erro ao fazer o upload da imagem', err);
+            this.snackbarService.showError('Erro ao enviar a imagem');
+          },
+        });
+    }
+  }
+
+  removerImagem() {
+    this.imagemUrl = 'null';
+
+    if (this.cliente && this.cliente.usuario) {
+      this.cliente.usuario.nomeImagem = '';
+    }
+
+    this.snackbarService.showSuccess('Imagem removida com sucesso');
+  }
+
+  removerDesejo(processador: Processador){
+     this.clienteService.removeFromListaDeDesejos(processador.id).subscribe({
+        next: () => {
+          this.snackbarService.showSuccess('Processador removido da lista de desejos');
+          this.loadListaDesejos(); 
+        },
+        error: () => {
+          this.snackbarService.showError('Erro ao remover o processador');
+        }
       });
   }
 }
