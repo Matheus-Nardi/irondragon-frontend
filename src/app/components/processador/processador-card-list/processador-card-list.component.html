@@ -2,7 +2,7 @@
   <h2 class="section-title">Nossos Produtos</h2>
   <div class="container">
     @for (card of cards(); track card.id) {
-      <div class="card">
+      <div class="card" [routerLink]="['/processadores', card.id]">
         <!-- Botão de favoritos -->
         <button 
           class="wishlist-button" 

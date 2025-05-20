@@ -1,15 +1,15 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { Processador } from '../../models/processador/processador.model';
-import { ProcessadorService } from '../../services/processador.service';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterOutlet } from '@angular/router';
-import { UsuarioService } from '../../services/usuario.service';
-import { ClienteService } from '../../services/cliente.service';
-import { Cliente } from '../../models/cliente.model';
-import { KeycloakOperationService } from '../../services/keycloak.service';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { Cliente } from '../../../models/cliente.model';
+import { Processador } from '../../../models/processador/processador.model';
+import { ClienteService } from '../../../services/cliente.service';
+import { KeycloakOperationService } from '../../../services/keycloak.service';
+import { ProcessadorService } from '../../../services/processador.service';
+
 type Card = {
   id: number;
   title: string;
@@ -30,6 +30,7 @@ type Card = {
     MatIconModule,
     MatButtonModule,
     MatPaginatorModule,
+    RouterLink
   ],
   templateUrl: './processador-card-list.component.html',
   styleUrl: './processador-card-list.component.css',

@@ -31,6 +31,7 @@ import { ClienteHomeComponent } from './components/template/cliente/cliente-home
 import { ClienteTemplateComponent } from './components/template/cliente/cliente-template/cliente-template.component';
 import { AuthGuard } from './guard/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
 
 export const routes: Routes = [
   {
@@ -187,6 +188,11 @@ export const routes: Routes = [
         path: '',
         component: ClienteHomeComponent,
         title: 'Home',
+      },
+      { 
+        path: 'processadores/:id',
+        component: ProcessadorDetailsComponent,
+        title: "Processador"
       },
       {
         path: 'cadastrar',
