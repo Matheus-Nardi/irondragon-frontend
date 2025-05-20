@@ -20,4 +20,5 @@ export class Processador {
     conectividade!: Conectividade;
     fabricante!: Fabricante;
     imagens!: string[];
+    isFavorite?: boolean = false;
 }
