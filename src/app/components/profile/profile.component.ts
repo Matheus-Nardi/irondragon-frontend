@@ -35,6 +35,8 @@ import { EnderecoService } from '../../services/endereco.service';
 import { InfoUsuarioComponent } from './info-usuario/info-usuario.component';
 import { EnderecosUsuarioComponent } from './enderecos-usuario/enderecos-usuario.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { ListaDesejosComponent } from './lista-desejos/lista-desejos.component';
+import { Processador } from '../../models/processador/processador.model';
 
 @Component({
   selector: 'app-profile',
@@ -61,12 +63,14 @@ import { MatMenuModule } from '@angular/material/menu';
     InfoUsuarioComponent,
     EnderecosUsuarioComponent,
     MatMenuModule,
+    ListaDesejosComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   enderecos: Endereco[] = [];
+  listaDesejos: Processador[] = [];
   editandoInfoPessoais = false;
   formInfoPessoais!: FormGroup;
   keycloakProfile?: Keycloak.KeycloakProfile;
@@ -110,6 +114,7 @@ export class ProfileComponent implements OnInit {
       next: (cliente) => {
         this.cliente = cliente;
         console.log('Cliente: ', cliente);
+        this.loadListaDesejos();
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -134,7 +139,8 @@ export class ProfileComponent implements OnInit {
 
   loadListaDesejos() {
     this.clienteService.getListaDesejos().subscribe((lista) => {
-      this.cliente.listaDeDesejos = lista;
+      this.listaDesejos = lista;
+      console.log(this.listaDesejos);
     });
   }
 
@@ -218,7 +224,6 @@ export class ProfileComponent implements OnInit {
 
       if (this.cliente?.usuario?.id) {
         this.uploadImage(this.cliente.usuario.id);
-       
       }
     }
   }
@@ -259,9 +264,21 @@ export class ProfileComponent implements OnInit {
     this.imagemUrl = 'null';
 
     if (this.cliente && this.cliente.usuario) {
-      this.cliente.usuario.nomeImagem = ''
+      this.cliente.usuario.nomeImagem = '';
     }
 
     this.snackbarService.showSuccess('Imagem removida com sucesso');
+  }
+
+  removerDesejo(processador: Processador){
+     this.clienteService.removeFromListaDeDesejos(processador.id).subscribe({
+        next: () => {
+          this.snackbarService.showSuccess('Processador removido da lista de desejos');
+          this.loadListaDesejos(); 
+        },
+        error: () => {
+          this.snackbarService.showError('Erro ao remover o processador');
+        }
+      });
   }
 }

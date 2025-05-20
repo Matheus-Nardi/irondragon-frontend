@@ -23,4 +23,19 @@ export class ClienteService {
       `${this.configService.getApiBaseUrl()}clientes/search/desejos`
     );
   }
+
+ addToListaDeDesejos(idProcessador: number): Observable<any> {
+  return this.httpClient.post<any>(
+    `${this.configService.getApiBaseUrl()}clientes/desejos/${idProcessador}`,
+    null 
+  );
+}
+
+removeFromListaDeDesejos(id: number): Observable<any> {
+  return this.httpClient.delete(
+    `${this.configService.getApiBaseUrl()}clientes/desejos/${id}`
+  );
+}
+
+
 }

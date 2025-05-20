@@ -16,7 +16,7 @@ import { Cliente } from '../../../models/cliente.model';
 })
 export class EnderecosUsuarioComponent {
 
- @Input() cliente!: Cliente;
+  @Input() cliente!: Cliente;
   @Input() usuario!: Usuario;
 
   @Input() enderecos: Endereco[] = []; // lista de endereços para exibir

@@ -164,49 +164,13 @@
     </mat-tab>
 
     <mat-tab>
-      <ng-template mat-tab-label>
+       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">favorite</mat-icon>
         <span class="tab-label">Desejos</span>
       </ng-template>
+     <app-lista-desejos [cliente]="cliente" [usuario]="usuario" [listaDesejos]="listaDesejos" (remover)="removerDesejo($event)">
 
-      <div class="tab-content">
-        <mat-card appearance="outlined" class="profile-card">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">favorite</mat-icon>
-            <mat-card-title>Minha Lista de Desejos</mat-card-title>
-            <mat-card-subtitle
-              >Produtos que você deseja adquirir</mat-card-subtitle
-            >
-          </mat-card-header>
-
-          <mat-card-content>
-            <div
-              class="empty-state"
-              *ngIf="
-                !cliente.listaDeDesejos || cliente.listaDeDesejos.length === 0
-              "
-            >
-              <mat-icon class="empty-icon">favorite_border</mat-icon>
-              <p>Nenhum processador na sua lista de desejos</p>
-              <button mat-flat-button color="primary">Ver Opções</button>
-            </div>
-
-            <div
-              class="wishlist-grid"
-              *ngIf="
-                cliente.listaDeDesejos && cliente.listaDeDesejos.length > 0
-              "
-            >
-              <mat-card
-                class="product-card mat-elevation-z2"
-                *ngFor="let produto of cliente.listaDeDesejos"
-              >
-                <p>Exibir produtos</p>
-              </mat-card>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+     </app-lista-desejos>
     </mat-tab>
   </mat-tab-group>
 </div>
