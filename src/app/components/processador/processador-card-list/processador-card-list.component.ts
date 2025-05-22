@@ -9,6 +9,7 @@ import { Processador } from '../../../models/processador/processador.model';
 import { ClienteService } from '../../../services/cliente.service';
 import { KeycloakOperationService } from '../../../services/keycloak.service';
 import { ProcessadorService } from '../../../services/processador.service';
+import { CarrinhoService } from '../../../services/carrinho.service';
 
 type Card = {
   id: number;

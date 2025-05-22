@@ -1,0 +1,62 @@
+<div class="carrinho-container" role="region" aria-label="Carrinho de compras">
+    <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+        <div *ngFor="let item of carrinhoItens; let i = index" class="item-carrinho" [attr.data-item-id]="item.id">
+            <div class="item-info">
+                <img [src]="item.imagem" [alt]="'Imagem de ' + item.nome" class="item-imagem">
+                <div class="item-detalhes">
+                    <h3 class="item-nome">{{ item.nome }}</h3>
+                    <p class="item-preco">Preço: R$ {{ item.preco }}</p>
+                    <p class="item-quantidade">Quantidade: {{ item.quantidade }}</p>
+                    <p class="item-subtotal">Subtotal: R$ {{ item.preco * item.quantidade }}</p>
+                </div>
+            </div>
+            <div class="item-acoes">
+                <button mat-mini-fab color="primary" (click)="adicionarUnidade(item)" 
+                        class="btn-action btn-add" aria-label="Adicionar uma unidade"
+                        matTooltip="Adicionar unidade">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button mat-mini-fab color="accent" (click)="removerUnidade(item)" 
+                        class="btn-action btn-remover" aria-label="Remover uma unidade"
+                        [disabled]="item.quantidade <= 1"
+                        matTooltip="Remover unidade">
+                    <mat-icon>remove</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" (click)="removerItem(item)" 
+                        class="btn-action btn-remover-tudo" aria-label="Remover item do carrinho"
+                        matTooltip="Remover item">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="resumo-compra">
+            <p class="total-itens">Total de itens: {{ getTotalItens() }}</p>
+            <p class="valor-total">Valor total: R$ {{ calcularTotal() }}</p>
+        </div>
+
+        <div class="acoes-finalizar">
+            <button mat-raised-button color="primary" class="btn-principal btn-finalizar" (click)="finalizarCompra()">
+                <mat-icon>shopping_cart_checkout</mat-icon>
+                <span>Finalizar Compra</span>
+            </button>
+            <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/']">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Continuar Comprando</span>
+            </button>
+        </div>
+    </ng-container>
+
+    <ng-template #carrinhoVazio>
+        <div class="carrinho-vazio-box" role="alert">
+            <span class="material-icons carrinho-vazio-icon">shopping_cart</span>
+            <p class="carrinho-vazio-text">Seu carrinho está vazio</p>
+            <button mat-raised-button color="primary" [routerLink]="['/']" 
+            aria-label="Ver produtos disponíveis" class="btn-principal btn-ver-produtos">
+        <mat-icon>storefront</mat-icon>
+        <span>Ver produtos</span>
+    </button>
+        </div>
+    </ng-template>
+</div>

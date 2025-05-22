@@ -1,0 +1,296 @@
+.carrinho-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #e6f2ff 0%, #f0f8ff 100%);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-carrinho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  border-left: 4px solid #1e88e5;
+}
+
+.item-carrinho:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.item-imagem {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-detalhes {
+  flex: 1;
+}
+
+.item-nome {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1565c0;
+}
+
+.item-preco,
+.item-quantidade {
+  margin: 0.25rem 0;
+  color: #546e7a;
+}
+
+.item-subtotal {
+  font-weight: 500;
+  color: #0d47a1;
+  margin: 0.25rem 0;
+}
+
+.item-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add,
+.btn-remover,
+.btn-remover-tudo {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important; /* Fully rounded circular buttons */
+  border: none !important; /* Remove borders */
+}
+
+/* Make all icons white */
+mat-icon {
+  color: white !important;
+}
+
+.material-icons {
+  color: white !important;
+}
+
+.resumo-compra {
+  background: linear-gradient(135deg, #bbdefb 0%, #e3f2fd 100%);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.total-itens {
+  margin: 0.5rem 0;
+  color: #1976d2;
+}
+
+.valor-total {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #0d47a1;
+  margin: 0.5rem 0;
+}
+
+.acoes-finalizar {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-finalizar,
+.btn-continuar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.carrinho-vazio-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 16px;
+}
+
+.carrinho-vazio-icon {
+  font-size: 4rem;
+  color: white !important; /* Make empty cart icon white */
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+}
+
+.carrinho-vazio-text {
+  font-size: 1.2rem;
+  color: #1565c0;
+  margin-bottom: 1.5rem;
+}
+
+/* Button styles */
+.btn-action {
+  margin: 0 4px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 50% !important; /* Ensure circular buttons */
+  border: none !important; /* Remove borders */
+  outline: none !important; /* Remove outline */
+}
+
+.btn-action:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action:active:not([disabled]) {
+  transform: translateY(0);
+}
+
+.btn-action[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-add {
+  background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+}
+
+.btn-remover {
+  background: linear-gradient(135deg, #64b5f6 0%, #2196f3 100%);
+}
+
+.btn-remover-tudo {
+  background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+}
+
+.btn-principal {
+  height: 48px;
+  border-radius: 30px !important; /* More rounded corners for main buttons */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 28px;
+  min-width: 180px;
+  overflow: hidden; /* Ensure content stays within rounded corners */
+  border: none !important; /* Remove borders */
+  outline: none !important; /* Remove outline */
+}
+
+.btn-principal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-principal:active {
+  transform: translateY(0);
+}
+
+.btn-finalizar {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: white;
+}
+
+.btn-continuar {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(13, 71, 161, 0.1) 100%);
+  color: #1976d2;
+  box-shadow: 0 0 0 2px #1976d2; /* Replace border with box-shadow */
+}
+
+/* Override icon color in continue shopping button */
+.btn-continuar mat-icon {
+  color: #1976d2 !important;
+}
+
+.btn-continuar:hover {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.1) 0%, rgba(13, 71, 161, 0.15) 100%);
+}
+
+.btn-ver-produtos {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: white;
+  margin-top: 16px;
+  min-width: 200px;
+}
+
+/* Add this to ensure all Angular Material buttons have rounded corners and no borders */
+::ng-deep .mat-button-base {
+  border-radius: 30px !important;
+  border: none !important;
+}
+
+/* Make all mat-icons white by default */
+::ng-deep mat-icon {
+  color: white !important;
+}
+
+/* Override for the continue shopping button icon */
+::ng-deep .btn-continuar mat-icon {
+  color: #1976d2 !important;
+}
+
+/* Remove focus outline but keep accessibility */
+::ng-deep .mat-button-focus-overlay {
+  background-color: transparent !important;
+}
+
+/* For accessibility, show a subtle focus indicator only when using keyboard */
+::ng-deep .mat-button-base:focus-visible {
+  outline: 2px solid rgba(25, 118, 210, 0.4) !important;
+  outline-offset: 2px !important;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .item-carrinho {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-info {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .item-acoes {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .acoes-finalizar {
+    flex-direction: column-reverse;
+  }
+
+  .btn-principal {
+    width: 100%;
+  }
+}

@@ -16,6 +16,7 @@ import type { Processador } from '../../../models/processador/processador.model'
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClienteService } from '../../../services/cliente.service';
+import { CarrinhoService } from '../../../services/carrinho.service';
 
 @Component({
   selector: 'app-processador-details',
@@ -71,7 +72,8 @@ export class ProcessadorDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private processadorService: ProcessadorService,
     private clienteService: ClienteService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private carrinhoService: CarrinhoService
   ) {}
 
   ngOnInit(): void {
@@ -205,7 +207,7 @@ toggleFavorite() {
 
 
 
-  addToCart(): void {
+  addToCart(processador: Processador): void {
     this.snackBar.open(
       `${this.quantity} unidade(s) adicionada(s) ao carrinho`,
       'Ver Carrinho',
@@ -213,6 +215,14 @@ toggleFavorite() {
         duration: 3000,
       }
     );
+
+    this.carrinhoService.adicionar({
+      id: processador.id,
+      nome: processador.nome,
+      quantidade: 1,
+      preco: processador.preco,
+      imagem: processador.imagens[0]
+    });
   }
 
   buyNow(): void {
