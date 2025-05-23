@@ -82,11 +82,11 @@
           <div class="quantity-selector">
             <span class="quantity-label">Quantidade:</span>
             <div class="quantity-controls">
-              <button mat-icon-button [disabled]="quantity <= 1">
+              <button mat-icon-button (click)="decreaseQuantity()" [disabled]="quantity <= 1">
                 <mat-icon>remove</mat-icon>
               </button>
               <span class="quantity-value">{{ quantity }}</span>
-              <button mat-icon-button>
+              <button mat-icon-button (click)="increaseQuantity()">
                 <mat-icon>add</mat-icon>
               </button>
             </div>

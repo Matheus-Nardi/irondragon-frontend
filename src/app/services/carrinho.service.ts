@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ItemCarrinho } from '../interfaces/item-carrinho.interface';
 import { LocalStorageService } from './local-storage.service';
 
@@ -21,7 +21,7 @@ export class CarrinhoService {
     const itemExistente = carrinhoAtual.find(itemCarrinho => itemCarrinho.id === item.id);
 
     if(itemExistente) {
-      itemExistente.quantidade++;
+      itemExistente.quantidade += item.quantidade;
     } else {
       carrinhoAtual.push({... item});
     }
@@ -61,6 +61,10 @@ export class CarrinhoService {
 
   obter(): ItemCarrinho[] {
     return this.carrinhoSubject.value;
+  }
+
+  obterTempoReal(): Observable<ItemCarrinho[]> {
+    return this.carrinhoSubject.asObservable();
   }
 
   atualizarArmazenamentoLocal(): void {

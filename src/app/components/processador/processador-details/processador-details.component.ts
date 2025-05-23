@@ -219,7 +219,7 @@ toggleFavorite() {
     this.carrinhoService.adicionar({
       id: processador.id,
       nome: processador.nome,
-      quantidade: 1,
+      quantidade: this.quantity,
       preco: processador.preco,
       imagem: processador.imagens[0]
     });
@@ -237,5 +237,13 @@ toggleFavorite() {
       style: 'currency',
       currency: 'BRL',
     });
+  }
+
+  increaseQuantity(): void {
+    this.quantity++;
+  }
+
+  decreaseQuantity(): void {
+    this.quantity--;
   }
 }

@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { KeycloakOperationService } from '../../../services/keycloak.service';
 import { KeycloakProfile } from 'keycloak-js';
 import { Router, RouterLink } from '@angular/router';
+import { CarrinhoService } from '../../../services/carrinho.service';
 
 @Component({
   selector: 'app-header',
@@ -35,10 +36,12 @@ import { Router, RouterLink } from '@angular/router';
 export class HeaderComponent implements OnInit{
   isAuthenticated = false;
   userProfile?: KeycloakProfile;
+  cartLength: number = 0;
   
   constructor(
     private sidebarService: SidebarService,
-    private keycloakService: KeycloakOperationService
+    private keycloakService: KeycloakOperationService,
+    private carrinhoService: CarrinhoService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +53,7 @@ export class HeaderComponent implements OnInit{
 
     if (this.isAuthenticated) {
       this.userProfile = await this.keycloakService.getUserProfile();
+      this.getCartLength();
     }
   }
 
@@ -71,5 +75,11 @@ export class HeaderComponent implements OnInit{
 
   getEmail(): string {
     return this.userProfile?.email || '';
+  }
+
+  getCartLength() {
+    this.carrinhoService.obterTempoReal().subscribe((data) => {
+      this.cartLength = data.length;
+    });
   }
 }
