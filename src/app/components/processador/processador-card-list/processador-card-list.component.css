@@ -12,6 +12,61 @@
   padding: 24px 0;
 }
 
+/* Título da seção com ícone */
+.section-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon {
+  color: var(--mat-sys-primary);
+  margin-right: 8px;
+  font-size: 28px;
+  height: 28px;
+  width: 28px;
+}
+
+/* Divisor entre seções */
+.section-divider {
+  height: 48px; /* Aumenta o espaçamento entre as seções */
+  margin: 32px 0; /* Margem adicional */
+}
+
+/* Customização do Swiper */
+.custom-swiper {
+  padding: 0 40px;
+  margin-bottom: 24px;
+}
+
+/* Estilização das setas de navegação */
+::ng-deep .custom-swiper .swiper-button-next,
+::ng-deep .custom-swiper .swiper-button-prev {
+  color: var(--mat-sys-primary);
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .custom-swiper .swiper-button-next:after,
+::ng-deep .custom-swiper .swiper-button-prev:after {
+  font-size: 18px;
+}
+
+::ng-deep .custom-swiper .swiper-button-next {
+  right: 5px;
+}
+
+::ng-deep .custom-swiper .swiper-button-prev {
+  left: 5px;
+}
+
 .card {
   cursor: pointer;
   position: relative;
@@ -134,6 +189,7 @@
   color: var(--mat-sys-on-surface-variant, #757575);
   text-transform: uppercase;
   margin: 0;
+  font-family: "Poppins", sans-serif;
 }
 
 .heading {
@@ -147,6 +203,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   transition: color 0.3s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .card:hover .heading {
@@ -166,6 +223,7 @@
   padding: 4px 8px;
   border-radius: 4px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .card:hover .specs span {
@@ -179,6 +237,7 @@
   color: #1565c0;
   margin: 8px 0;
   transition: color 0.3s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .card:hover .price {
@@ -200,6 +259,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .buy-button:hover {
@@ -209,4 +269,155 @@
 
 .buy-button mat-icon {
   font-size: 18px;
+}
+
+/* Seção de Call-to-Action */
+.cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+  padding: 32px 0;
+}
+
+/* Botão Ver Todos os Produtos */
+.view-all-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--mat-sys-primary) 0%, #1565c0 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 220px;
+}
+
+.view-all-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.view-all-button:hover::before {
+  left: 100%;
+}
+
+.view-all-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
+}
+
+.view-all-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.view-all-button mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.view-all-button:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Divisor de texto "ou" */
+.divider-text {
+  margin-top: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--mat-sys-outline-variant), transparent);
+}
+
+.divider-text span {
+  padding: 0 20px;
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  background-color: var(--mat-sys-surface);
+  position: relative;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  ::ng-deep .custom-swiper .swiper-button-next,
+  ::ng-deep .custom-swiper .swiper-button-prev {
+    display: none;
+  }
+
+  .custom-swiper {
+    padding: 0;
+  }
+
+  .section-divider {
+    height: 32px;
+    margin: 24px 0;
+  }
+
+  .view-all-button {
+    padding: 14px 24px;
+    font-size: 15px;
+    min-width: 200px;
+  }
+
+  .cta-section {
+    margin-top: 32px;
+    padding: 24px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .view-all-button {
+    padding: 12px 20px;
+    font-size: 14px;
+    min-width: 180px;
+  }
+
+  .view-all-button span {
+    display: none;
+  }
+
+  .view-all-button {
+    min-width: auto;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .view-all-button mat-icon:first-child {
+    display: none;
+  }
 }

@@ -61,4 +61,8 @@ export class LoteService {
     delete(lote: Lote): Observable<any> {
       return this.httpClient.delete<Lote>(`${this.configService.getApiBaseUrl()}/lotes/${lote.id}`);
     }
+
+    findLastLotes() : Observable<Lote[]>{
+        return this.httpClient.get<Lote[]>(`${this.configService.getApiBaseUrl()}/lotes/recentes`);
+    }
 }

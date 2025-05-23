@@ -1,28 +1,40 @@
 <section class="products-section">
-  <h2 class="section-title">Nossos Produtos</h2>
-  <div class="container">
-    @for (card of cards(); track card.id) {
+   <h2 class="section-title">
+    <mat-icon class="section-icon">rocket</mat-icon>
+    Acabaram de chegar
+  </h2>
+
+  <swiper-container
+    [attr.slides-per-view]="
+      cardsLastLotes().length >= 4 ? 4 : cardsLastLotes().length"
+    space-between="30"
+    navigation="true"
+    loop="true"
+    class="custom-swiper"
+  >
+    @for (card of cardsLastLotes(); track card.id) {
+    <swiper-slide>
       <div class="card" [routerLink]="['/processadores', card.id]">
-        <!-- Botão de favoritos -->
-        <button 
-          class="wishlist-button" 
+       
+        <button
+          class="wishlist-button"
           aria-label="Adicionar à lista de desejos"
-          (click)="toggleFavorite(card)"
+          (click)="toggleFavorite(card); $event.stopPropagation()"
         >
           <mat-icon>
-             {{ card.isFavorite ? 'favorite' : 'favorite_border' }}
+            {{ card.isFavorite ? "favorite" : "favorite_border" }}
           </mat-icon>
         </button>
 
         <div class="product-image">
-          <img [src]="card.imageUrl" />
+          <img [src]="card.imageUrl" alt="Imagem do produto" />
         </div>
         <div class="product-info">
           <p class="brand">{{ card.fabricante }}</p>
-          <p class="heading"> Processador {{ card.title }}</p>
+          <p class="heading">Processador {{ card.title }}</p>
           <div class="specs">
             <span>{{ card.specs.nucleos }} Núcleos</span>
-            <span>{{ card.specs.threads }} Threads</span>  
+            <span>{{ card.specs.threads }} Threads</span>
           </div>
           <p class="price">R$ {{ card.preco }}</p>
           <button class="buy-button">
@@ -30,15 +42,70 @@
           </button>
         </div>
       </div>
+    </swiper-slide>
     }
-  </div>
+  </swiper-container>
 
-  <mat-paginator
-    [pageSizeOptions]="[4, 10, 25, 50]"
-    [pageSize]="pageSize"
-    [length]="totalRecords"
-    (page)="paginar($event)"
-    aria-label="Selecione a página"
+  <!-- Espaçamento adicional entre as seções -->
+  <div class="section-divider"></div>
+
+   <h2 class="section-title">
+    <mat-icon class="section-icon">bolt</mat-icon>
+   Mais vendidos
+  </h2>
+
+   <swiper-container
+    [attr.slides-per-view]="
+      cardsMaisVendidos().length >= 4 ? 4 : cardsMaisVendidos().length"
+    space-between="30"
+    navigation="true"
+    loop="true"
+    class="custom-swiper"
   >
-  </mat-paginator>
+    @for (card of cardsMaisVendidos(); track card.id) {
+    <swiper-slide>
+      <div class="card" [routerLink]="['/processadores', card.id]">
+       
+        <button
+          class="wishlist-button"
+          aria-label="Adicionar à lista de desejos"
+          (click)="toggleFavorite(card); $event.stopPropagation()"
+        >
+          <mat-icon>
+            {{ card.isFavorite ? "favorite" : "favorite_border" }}
+          </mat-icon>
+        </button>
+
+        <div class="product-image">
+          <img [src]="card.imageUrl" alt="Imagem do produto" />
+        </div>
+        <div class="product-info">
+          <p class="brand">{{ card.fabricante }}</p>
+          <p class="heading">Processador {{ card.title }}</p>
+          <div class="specs">
+            <span>{{ card.specs.nucleos }} Núcleos</span>
+            <span>{{ card.specs.threads }} Threads</span>
+          </div>
+          <p class="price">R$ {{ card.preco }}</p>
+          <button class="buy-button">
+            <mat-icon>shopping_cart</mat-icon> COMPRAR
+          </button>
+        </div>
+      </div>
+    </swiper-slide>
+    }
+  </swiper-container>
+
+  <!-- Seção de call-to-action -->
+  <div class="cta-section">
+    <button class="view-all-button" [routerLink]="['/processadores']">
+      <mat-icon>inventory</mat-icon>
+      <span>Ver todos os produtos</span>
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+    </button>
+
+    <div class="divider-text">
+      <span>ou</span>
+    </div>
+  </div>
 </section>
