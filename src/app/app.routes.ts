@@ -32,6 +32,7 @@ import { ClienteTemplateComponent } from './components/template/cliente/cliente-
 import { AuthGuard } from './guard/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
+import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 
 export const routes: Routes = [
   {
@@ -199,6 +200,11 @@ export const routes: Routes = [
         component: CadastroComponent,
         title: 'Cadastrar',
       },
+      {
+        path: 'carrinho',
+        component: CarrinhoComponent,
+        title: 'Carrinho de Compras'
+      }
     ],
   },
   {
