@@ -104,63 +104,9 @@
         <mat-icon class="tab-icon">credit_card</mat-icon>
         <span class="tab-label">Pagamentos</span>
       </ng-template>
+      <app-pagamentos [cliente]="cliente"  [usuario]="usuario" [cartoes]="cartoes" (abrirModal)="abrirModalCartao($event)" (deletar)="deletarCartao($event)">
 
-      <div class="tab-content">
-        <mat-card appearance="outlined" class="profile-card">
-          <mat-card-header>
-            <mat-icon mat-card-avatar color="primary">credit_card</mat-icon>
-            <mat-card-title>Meus Cartões</mat-card-title>
-            <mat-card-subtitle
-              >Gerencie seus métodos de pagamento</mat-card-subtitle
-            >
-          </mat-card-header>
-
-          <mat-card-content>
-            <div
-              class="empty-state"
-              *ngIf="
-                !cliente.listaDeCartoes || cliente.listaDeCartoes.length === 0
-              "
-            >
-              <mat-icon class="empty-icon">credit_card_off</mat-icon>
-              <p>Nenhum cartão cadastrado</p>
-              <button mat-flat-button color="primary">
-                <mat-icon>add</mat-icon>
-                Adicionar Cartão
-              </button>
-            </div>
-
-            <div
-              class="cards-grid"
-              *ngIf="
-                cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0
-              "
-            >
-              <mat-card class="payment-card visa mat-elevation-z2">
-                <p>Exibir cartões</p>
-              </mat-card>
-            </div>
-          </mat-card-content>
-
-          <mat-card-actions
-            *ngIf="cliente.listaDeCartoes && cliente.listaDeCartoes.length > 0"
-            align="end"
-          >
-            <button mat-stroked-button color="warn">
-              <mat-icon>delete</mat-icon>
-              Remover
-            </button>
-            <button mat-stroked-button color="primary">
-              <mat-icon>edit</mat-icon>
-              Editar
-            </button>
-            <button mat-flat-button color="primary">
-              <mat-icon>add</mat-icon>
-              Adicionar
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+      </app-pagamentos>
     </mat-tab>
 
     <mat-tab>

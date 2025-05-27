@@ -37,6 +37,10 @@ import { EnderecosUsuarioComponent } from './enderecos-usuario/enderecos-usuario
 import { MatMenuModule } from '@angular/material/menu';
 import { ListaDesejosComponent } from './lista-desejos/lista-desejos.component';
 import { Processador } from '../../models/processador/processador.model';
+import { PagamentosComponent } from "./pagamentos/pagamentos.component";
+import { Cartao } from '../../models/cartao.model';
+import { CartaoFormModalComponent } from '../cartao-form-modal/cartao-form-modal.component';
+import { CartaoService } from '../../services/cartao.service';
 
 @Component({
   selector: 'app-profile',
@@ -64,11 +68,13 @@ import { Processador } from '../../models/processador/processador.model';
     EnderecosUsuarioComponent,
     MatMenuModule,
     ListaDesejosComponent,
-  ],
+    PagamentosComponent
+],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
+  cartoes: Cartao[] = [];
   enderecos: Endereco[] = [];
   listaDesejos: Processador[] = [];
   editandoInfoPessoais = false;
@@ -94,7 +100,7 @@ export class ProfileComponent implements OnInit {
             this.cliente.usuario.id.toString(),
             this.cliente.usuario.nomeImagem
           );
-        }
+        } 
       }
     });
   }
@@ -106,7 +112,8 @@ export class ProfileComponent implements OnInit {
     private snackbarService: SnackbarService,
     private matDialog: MatDialog,
     private matDialogConfirmService: DialogService,
-    private enderecoService: EnderecoService
+    private enderecoService: EnderecoService,
+    private cartaoService: CartaoService
   ) {}
 
   private loadCliente(profile: any) {
@@ -115,6 +122,7 @@ export class ProfileComponent implements OnInit {
         this.cliente = cliente;
         console.log('Cliente: ', cliente);
         this.loadListaDesejos();
+        this.loadCartoes();
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -149,6 +157,15 @@ export class ProfileComponent implements OnInit {
       this.enderecos = enderecos;
       this.cliente.usuario.enderecos = this.enderecos;
     });
+  }
+
+  loadCartoes(){
+    this.cartaoService.getByUsuario().subscribe((cartoes) => {
+      this.cartoes = cartoes;
+      this.cliente.listaDeCartoes = this.cartoes;
+      console.log(this.cartoes);
+      
+    })
   }
 
   atualizarInfoBasicas(update: {
@@ -195,6 +212,34 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+ abrirModalCartao(cartao: Cartao | null) {
+  const cartaoParaModal = cartao ? { ...cartao } : ({} as Cartao);
+
+  this.matDialog
+    .open(CartaoFormModalComponent, {
+      width: 'auto',
+      data: cartaoParaModal,
+    })
+    .afterClosed()
+    .subscribe((cartaoAtualizado: Cartao) => {
+      if (!cartaoAtualizado) return;
+
+      const operacao$ = cartaoAtualizado.id
+        ? this.cartaoService.update(cartaoAtualizado)
+        : this.cartaoService.create(cartaoAtualizado);
+
+      operacao$.subscribe({
+        next: () => {
+          this.snackbarService.showSuccess('Cartão salvo com sucesso');
+          this.loadCartoes();
+        },
+        error: () => {
+          this.snackbarService.showError('Erro ao salvar o cartão');
+        },
+      });
+    });
+}
+
   deletarEndereco(endereco: Endereco) {
     this.matDialogConfirmService
       .openConfirmDialog(
@@ -211,6 +256,27 @@ export class ProfileComponent implements OnInit {
           },
           error: () => {
             this.snackbarService.showError('Erro ao deletar o endereço');
+          },
+        });
+      });
+  }
+
+  deletarCartao(cartao: Cartao) {
+    this.matDialogConfirmService
+      .openConfirmDialog(
+        'Deletar Cartão',
+        'Deseja realmente deletar este cartão?',
+        'warning'
+      )
+      .subscribe((confirmou) => {
+        if (!confirmou) return;
+        this.cartaoService.delete(cartao).subscribe({
+          next: () => {
+            this.snackbarService.showSuccess('Cartão deletado com sucesso');
+            this.loadCartoes();
+          },
+          error: () => {
+            this.snackbarService.showError('Erro ao deletar o cartão');
           },
         });
       });

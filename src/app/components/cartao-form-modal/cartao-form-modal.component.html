@@ -1,0 +1,213 @@
+<div class="modal-header">
+  <h1 mat-dialog-title>
+    <mat-icon class="title-icon">{{ cartao.id ? "edit" : "add_card" }}</mat-icon>
+    {{ cartao.id ? 'Editar Cartão' : 'Novo Cartão' }}
+  </h1>
+  <div class="security-badge">
+    <mat-icon>verified_user</mat-icon>
+    <span>Dados protegidos</span>
+  </div>
+</div>
+
+<form
+  [formGroup]="formCartao"
+  *ngIf="formCartao"
+  (ngSubmit)="salvar()"
+  class="form-container"
+>
+  <!-- Dados do Titular -->
+  <div class="form-section">
+    <h3 class="section-title">
+      <mat-icon>person</mat-icon>
+      Dados do Titular
+    </h3>
+
+    <!-- Nome do Titular -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome do Titular</mat-label>
+      <input
+        matInput
+        formControlName="nomeTitular"
+        required
+        placeholder="Nome completo como no cartão"
+      />
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-hint>Digite o nome exatamente como aparece no cartão</mat-hint>
+      <mat-error
+        *ngIf="
+          formCartao.get('nomeTitular')?.errors &&
+          formCartao.get('nomeTitular')?.touched
+        "
+      >
+        {{ getErrorMessage('nomeTitular', formCartao.get('nomeTitular')?.errors) }}
+        <span *ngIf="formCartao.get('nomeTitular')?.hasError('apiError')">
+          {{ formCartao.get('nomeTitular')?.getError('apiError') }}
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- CPF -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>CPF do Titular</mat-label>
+      <input
+        matInput
+        formControlName="cpf"
+        required
+        maxlength="14"
+        placeholder="000.000.000-00"
+      />
+      <mat-icon matPrefix>badge</mat-icon>
+      <mat-hint>CPF deve ser o mesmo do titular do cartão</mat-hint>
+      <mat-error
+        *ngIf="
+          formCartao.get('cpf')?.errors &&
+          formCartao.get('cpf')?.touched
+        "
+      >
+        {{ getErrorMessage('cpf', formCartao.get('cpf')?.errors) }}
+        <span *ngIf="formCartao.get('cpf')?.hasError('apiError')">
+          {{ formCartao.get('cpf')?.getError('apiError') }}
+        </span>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Dados do Cartão -->
+  <div class="form-section">
+    <h3 class="section-title">
+      <mat-icon>credit_card</mat-icon>
+      Dados do Cartão
+    </h3>
+
+    <!-- Número do Cartão -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Número do Cartão</mat-label>
+      <input
+        matInput
+        formControlName="numero"
+        required
+        maxlength="19"
+        placeholder="0000 0000 0000 0000"
+      />
+      <mat-icon matPrefix>credit_card</mat-icon>
+      <mat-hint>Digite os 16 dígitos do cartão</mat-hint>
+      <mat-error
+        *ngIf="
+          formCartao.get('numero')?.errors &&
+          formCartao.get('numero')?.touched
+        "
+      >
+        {{ getErrorMessage('numero', formCartao.get('numero')?.errors) }}
+        <span *ngIf="formCartao.get('numero')?.hasError('apiError')">
+          {{ formCartao.get('numero')?.getError('apiError') }}
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <div class="input-group">
+      <!-- Validade -->
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Validade</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="validade"
+          autocomplete="off"
+        />
+        <mat-hint>MM/AA</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+        <mat-icon matPrefix>event</mat-icon>
+        <mat-error
+          *ngIf="
+            formCartao.get('validade')?.errors &&
+            formCartao.get('validade')?.touched
+          "
+        >
+          {{ getErrorMessage('validade', formCartao.get('validade')?.errors) }}
+          <span *ngIf="formCartao.get('validade')?.hasError('apiError')">
+            {{ formCartao.get('validade')?.getError('apiError') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- CVC -->
+      <mat-form-field appearance="outline" class="cvc-field">
+        <mat-label>CVC</mat-label>
+        <input
+          matInput
+          formControlName="cvc"
+          required
+          maxlength="4"
+          placeholder="000"
+          type="password"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <mat-hint>3 ou 4 dígitos</mat-hint>
+        <mat-error
+          *ngIf="
+            formCartao.get('cvc')?.errors &&
+            formCartao.get('cvc')?.touched
+          "
+        >
+          {{ getErrorMessage('cvc', formCartao.get('cvc')?.errors) }}
+          <span *ngIf="formCartao.get('cvc')?.hasError('apiError')">
+            {{ formCartao.get('cvc')?.getError('apiError') }}
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Tipo de Cartão -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de Cartão</mat-label>
+      <mat-select formControlName="tipoCartao" required>
+        <mat-option *ngFor="let tipo of tiposCartao" [value]="tipo.id">
+          <div class="card-type-option">
+            <span>{{ tipo.label }}</span>
+          </div>
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>payment</mat-icon>
+      <mat-hint>Selecione o tipo do seu cartão</mat-hint>
+      <mat-error
+        *ngIf="
+          formCartao.get('tipoCartao')?.errors &&
+          formCartao.get('tipoCartao')?.touched
+        "
+      >
+        {{ getErrorMessage('tipoCartao', formCartao.get('tipoCartao')?.errors) }}
+        <span *ngIf="formCartao.get('tipoCartao')?.hasError('apiError')">
+          {{ formCartao.get('tipoCartao')?.getError('apiError') }}
+        </span>
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Informações de Segurança -->
+  <div class="security-info">
+    <mat-icon>security</mat-icon>
+    <div class="security-text">
+      <p><strong>Seus dados estão seguros</strong></p>
+      <p>Utilizamos criptografia de ponta para proteger suas informações financeiras.</p>
+    </div>
+  </div>
+
+  <!-- Ações -->
+  <div mat-dialog-actions class="modal-actions">
+    <button mat-button type="button" (click)="cancelar()" class="cancel-button">
+      <mat-icon>close</mat-icon>
+      Cancelar
+    </button>
+    <button 
+      mat-flat-button 
+      color="primary" 
+      type="submit" 
+      [disabled]="formCartao.invalid"
+      class="save-button"
+    >
+      <mat-icon>{{ cartao.id ? "save" : "add_card" }}</mat-icon>
+      {{ cartao.id ? "Salvar Alterações" : "Adicionar Cartão" }}
+    </button>
+  </div>
+</form>

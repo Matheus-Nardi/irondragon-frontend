@@ -1,0 +1,137 @@
+<ng-container *ngIf="cliente?.listaDeCartoes as cartoes">
+  <mat-card appearance="outlined" class="profile-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">credit_card</mat-icon>
+      <mat-card-title>Meus Cartões</mat-card-title>
+      <mat-card-subtitle>Gerencie seus métodos de pagamento</mat-card-subtitle>
+      
+      <!-- Contador de cartões -->
+      <div class="cards-counter" [class.pulse]="cartoes.length > 0">
+        <span class="counter-value">{{ cartoes?.length || 0 }}</span>
+        <span class="counter-label">cartões</span>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Estado vazio -->
+      <div *ngIf="cartoes.length === 0" class="empty-state">
+        <div class="empty-animation">
+          <mat-icon class="empty-icon">credit_card_off</mat-icon>
+          <div class="pulse-circle"></div>
+        </div>
+        <p>Nenhum cartão cadastrado</p>
+        <p class="empty-subtitle">Adicione seus cartões para facilitar suas compras</p>
+        <button mat-flat-button color="primary" (click)="novoCartao()">
+          <mat-icon>add</mat-icon>
+          Adicionar Cartão
+        </button>
+      </div>
+
+      <!-- Grid de cartões -->
+      <div class="cards-grid" *ngIf="cartoes.length > 0">
+        <div
+          *ngFor="let cartao of cartoes; let i = index"
+          class="card-item"
+
+        >
+          <!-- Mini cartão visual -->
+          <div class="mini-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
+            <div class="card-background">
+              
+              <!-- Logo da bandeira -->
+              <div class="brand-logo">
+                <mat-icon>{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
+              </div>
+              
+              <!-- Badge de cartão principal -->
+            </div>
+            
+            <!-- Número do cartão (mascarado) -->
+            <div class="card-number">
+              {{ formatCardNumber(cartao.numero) }}
+            </div>
+            
+            <!-- Informações do cartão -->
+            <div class="card-info">
+              <div class="card-holder">
+                <span class="label">TITULAR</span>
+                <span class="value">{{ cartao.nomeTitular | titlecase }}</span>
+              </div>
+              <div class="card-expiry">
+                <span class="label">VÁLIDO ATÉ</span>
+                <span class="value">{{ formatValidade(cartao.validade) }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detalhes do cartão -->
+          <div class="card-details">
+            <div class="card-header">
+              <div class="card-title">
+                <h3>{{ getBandeiraLabel(cartao.bandeira) }}</h3>
+                <span class="card-type">{{ getTipoLabel(cartao.tipo) }}</span>
+              </div>
+              
+              <div class="card-actions">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  class="edit-btn"
+                  (click)="editarCartao(cartao)"
+                  matTooltip="Editar cartão"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  class="delete-btn"
+                  (click)="onDeleteCartao(cartao)"
+                  matTooltip="Remover cartão"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Informações adicionais -->
+            <div class="card-info-list">
+              <div class="info-item">
+                <mat-icon>credit_card</mat-icon>
+                <span class="info-label">Final:</span>
+                <span class="info-value">{{ getLastFourDigits(cartao.numero) }}</span>
+              </div>
+              
+              <div class="info-item">
+                <mat-icon>person</mat-icon>
+                <span class="info-label">Titular:</span>
+                <span class="info-value">{{ cartao.nomeTitular | titlecase }}</span>
+              </div>
+              
+              <div class="info-item">
+                <mat-icon>event</mat-icon>
+                <span class="info-label">Validade:</span>
+                <span class="info-value">{{ formatValidade(cartao.validade) }}</span>
+              </div>
+              
+              <div class="info-item">
+                <mat-icon>credit_card</mat-icon>
+                <span class="info-label">Tipo:</span>
+                <span class="info-value">{{ getTipoLabel(cartao.tipo) }}</span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <!-- Ação de adicionar novo -->
+    <mat-card-actions *ngIf="cartoes.length > 0" align="end">
+      <button mat-stroked-button color="primary" (click)="novoCartao()">
+        <mat-icon>add</mat-icon>
+        Adicionar Novo Cartão
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>
