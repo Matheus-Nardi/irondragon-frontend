@@ -1,0 +1,502 @@
+/* Container principal */
+.profile-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: var(--mat-sys-brand-font-family);
+}
+
+.profile-card mat-card-header {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--mat-sys-primary) 0%, #1565c0 100%);
+  color: white;
+  position: relative;
+}
+
+.profile-card mat-card-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: white;
+}
+
+.profile-card mat-card-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+}
+
+.profile-card mat-card-avatar {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Contador de cartões */
+.cards-counter {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cards-counter.pulse {
+  animation: counterPulse 2s infinite;
+}
+
+@keyframes counterPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.counter-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.counter-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Estado vazio */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 16px;
+  text-align: center;
+}
+
+.empty-animation {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  height: 64px;
+  width: 64px;
+  color: var(--mat-sys-primary);
+  opacity: 0.8;
+  position: relative;
+  z-index: 2;
+}
+
+.pulse-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(var(--mat-sys-primary-rgb), 0.1);
+  z-index: 1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.8;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.empty-state p {
+  margin-bottom: 8px;
+  color: var(--mat-sys-on-surface);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.empty-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Grid de cartões */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+}
+
+/* Item do cartão */
+.card-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background-color: var(--mat-sys-surface-container-lowest);
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-item:hover {
+  border-color: rgba(var(--mat-sys-primary-rgb), 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card-item.principal {
+  border-color: #ffc107;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.05) 0%, rgba(255, 193, 7, 0.02) 100%);
+}
+
+.card-item.principal::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ffc107, #ff9800);
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Mini cartão visual */
+.mini-card {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.mini-card:hover {
+  transform: scale(1.02);
+}
+
+/* Estilos por bandeira */
+.mini-card.visa {
+  background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+}
+
+.mini-card.mastercard {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+}
+
+.mini-card.elo {
+  background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+}
+
+.mini-card.amex {
+  background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+}
+
+.mini-card.hipercard {
+  background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
+}
+
+.mini-card.diners {
+  background: linear-gradient(135deg, #424242 0%, #757575 100%);
+}
+
+.mini-card.discover {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+}
+
+.mini-card.desconhecida {
+  background: linear-gradient(135deg, #607d8b 0%, #90a4ae 100%);
+}
+
+/* Background do cartão */
+.card-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+}
+
+/* Chip do cartão */
+.card-chip {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 35px;
+  height: 28px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-chip mat-icon {
+  color: #333;
+  font-size: 16px;
+}
+
+/* Logo da bandeira */
+.brand-logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  opacity: 0.9;
+}
+
+.brand-logo mat-icon {
+  font-size: 28px;
+  height: 28px;
+  width: 28px;
+}
+
+/* Badge de cartão principal */
+.principal-badge {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffc107;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.principal-badge mat-icon {
+  font-size: 12px;
+  height: 12px;
+  width: 12px;
+}
+
+/* Número do cartão */
+.card-number {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  right: 20px;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  font-family: "Courier New", monospace;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Informações do cartão */
+.card-info {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.card-holder,
+.card-expiry {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-info .label {
+  font-size: 9px;
+  opacity: 0.8;
+  margin-bottom: 2px;
+  letter-spacing: 1px;
+}
+
+.card-info .value {
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Detalhes do cartão */
+.card-details {
+  flex: 1;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-title h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.card-type {
+  font-size: 12px;
+  color: var(--mat-sys-on-surface-variant);
+  background-color: var(--mat-sys-surface-container-high);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.edit-btn,
+.delete-btn {
+  font-size: 14px;
+  height: 32px;
+  padding: 0 12px;
+}
+
+.edit-btn{
+  color: var(--mat-sys-primary);
+
+}
+
+.delete-btn {
+  color: #e53935 !important;
+}
+
+/* Lista de informações */
+.card-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.info-item mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  color: var(--mat-sys-primary);
+}
+
+.info-label {
+  color: var(--mat-sys-on-surface-variant);
+  min-width: auto;
+}
+
+.info-value {
+  color: var(--mat-sys-on-surface);
+  font-weight: 500;
+}
+
+/* Footer do cartão */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.set-principal-btn {
+  font-size: 12px;
+  height: 32px;
+}
+
+.set-principal-btn mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffc107;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card-status mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-item {
+    padding: 16px;
+  }
+
+  .mini-card {
+    height: 160px;
+  }
+
+  .card-number {
+    font-size: 16px;
+  }
+
+  .cards-counter {
+    position: static;
+    transform: none;
+    margin-top: 8px;
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-actions {
+    align-self: flex-end;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+}

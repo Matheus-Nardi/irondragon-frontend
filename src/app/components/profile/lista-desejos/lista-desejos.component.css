@@ -9,8 +9,19 @@
 }
 
 .profile-card mat-card-header {
-  padding: 16px;
-  background-color: var(--mat-sys-surface-container-low);
+  padding: 20px;
+  background: linear-gradient(135deg, var(--mat-sys-primary) 0%, #1565c0 100%);
+  color: white;
+}
+
+.profile-card mat-card-header mat-icon {
+  color: white;
+  margin-right: 8px;
+}
+
+.profile-card mat-card-title,
+.profile-card mat-card-subtitle {
+  color: white;
 }
 
 .profile-card mat-card-content {
@@ -152,6 +163,10 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
+}
+
+.wishlist-item-actions button.delete-btn mat-icon {
+  color: #e53935 !important;
 }
 
 .wishlist-item-actions mat-icon {
