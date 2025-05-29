@@ -36,15 +36,15 @@ function initializeKeycloak(keycloak: KeycloakService) {
         realm: 'quarkus',
         clientId: 'backend-service',
       },
+
       initOptions: {
         onLoad: 'check-sso',
-        flow: 'implicit',
+        flow: 'standard',
         pkceMethod: 'S256',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: false,
         scope: 'openid email profile roles',
       },
-      loadUserProfileAtStartUp: true, // Adicione esta linha para carregar o perfil do usuário na inicialização
+
     });
 }
 

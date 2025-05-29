@@ -4,10 +4,23 @@ import { Observable } from 'rxjs';
 import { Processador } from '../models/processador/processador.model';
 import { ConfigService } from './config.service';
 import { PageResponse } from '../interfaces/pageresponse.interface';
+import { ProcessadorFiltroResponse } from '../interfaces/processador-filtro-response';
+
+
+type Filtro = {
+  fabricante: string;
+  precoMin: number;
+  precoMax: number;
+  sockets: string[];
+  graficosIntegrados: string;
+  sortBy: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class ProcessadorService {
   constructor(private readonly httpClient: HttpClient, private readonly configService: ConfigService) { }
 
@@ -27,6 +40,50 @@ export class ProcessadorService {
 
     return this.httpClient.get<PageResponse<Processador>>(`${this.configService.getApiBaseUrl()}/processadores`, {params});
   }
+
+
+  findByFiltros(page?: number, pageSize?: number, filtro?: Filtro): Observable<PageResponse<Processador>> {
+  let params: any = {};
+
+  // Paginação
+  if (page !== undefined) {
+    params.page = page.toString();
+  }
+  if (pageSize !== undefined) {
+    params.page_size = pageSize.toString();
+  }
+
+  // Filtros (se existirem)
+  if (filtro) {
+    if (filtro.fabricante) {
+      params.fabricante = filtro.fabricante;
+    }
+    if (filtro.precoMin !== undefined) {
+      params.precoMin = filtro.precoMin.toString();
+    }
+    if (filtro.precoMax !== undefined) {
+      params.precoMax = filtro.precoMax.toString();
+    }
+    if (filtro.sockets && filtro.sockets.length > 0) {
+      // Lista convertida para múltiplos parâmetros: ?sockets=AM4&sockets=LGA1200
+      filtro.sockets.forEach((s, index) => {
+        params[`sockets[${index}]`] = s;
+      });
+    }
+    if (filtro.graficosIntegrados) {
+      params.graficosIntegrados = filtro.graficosIntegrados;
+    }
+    if (filtro.sortBy) {
+      params.sortBy = filtro.sortBy;
+    }
+  }
+
+  return this.httpClient.get<PageResponse<Processador>>(
+    `${this.configService.getApiBaseUrl()}/processadores/filtros`,
+    { params }
+  );
+}
+
 
   findByNome(nome: string, page?:number, pageSize?:number): Observable<PageResponse<Processador>> {
     let params = {};
@@ -106,5 +163,9 @@ export class ProcessadorService {
     formData.append('imagem', imagem, imagem.name);
     
     return this.httpClient.patch<Processador>(`${this.configService.getApiBaseUrl()}/processadores/${id}/upload/imagem`, formData);
+  }
+
+    getFiltrosValue(): Observable<ProcessadorFiltroResponse> {
+    return this.httpClient.get<ProcessadorFiltroResponse>(`${this.configService.getApiBaseUrl()}/processadores/filtros`);
   }
 }

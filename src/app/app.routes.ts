@@ -33,6 +33,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
+import { ProcessadoresFiltrosComponent } from './components/processadores-filtros/processadores-filtros.component';
 
 export const routes: Routes = [
   {
@@ -190,10 +191,10 @@ export const routes: Routes = [
         component: ClienteHomeComponent,
         title: 'Home',
       },
-      { 
+      {
         path: 'processadores/:id',
         component: ProcessadorDetailsComponent,
-        title: "Processador"
+        title: 'Processador',
       },
       {
         path: 'cadastrar',
@@ -203,20 +204,18 @@ export const routes: Routes = [
       {
         path: 'carrinho',
         component: CarrinhoComponent,
-        title: 'Carrinho de Compras'
+        title: 'Carrinho de Compras',
+      },
+      {
+        path: 'perfil',
+        component: ProfileComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'processadores',
+        component: ProcessadoresFiltrosComponent,
+        title: 'Todos os processadores'
       }
     ],
-  },
-  {
-    path: 'perfil',
-    component: ProfileComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'usuario',
-    component: ClienteTemplateComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['User'] },
-    children: [],
   },
 ];
