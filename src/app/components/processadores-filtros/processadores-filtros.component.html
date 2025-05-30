@@ -173,12 +173,6 @@
                   <span class="socket-name">LGA 1200</span>
                 </div>
               </mat-checkbox>
-
-              <mat-checkbox formControlName="tr4" class="filter-checkbox">
-                <div class="checkbox-content">
-                  <span class="socket-name">TR4</span>
-                </div>
-              </mat-checkbox>
             </div>
           </mat-expansion-panel>
 
@@ -260,6 +254,13 @@
               {{ filtroForm.get("precoMax")?.value }}
               <mat-icon matChipRemove (click)="clearPriceFilter()">cancel</mat-icon>
             </mat-chip>
+            <!-- Chips para sockets -->
+            <ng-container *ngFor="let socket of getSelectedSockets()">
+              <mat-chip (removed)="removeSocket(socket)">
+                {{ socket | uppercase }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </ng-container>
           </mat-chip-set>
         </div>
       </div>

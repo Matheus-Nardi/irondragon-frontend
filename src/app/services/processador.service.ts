@@ -65,10 +65,7 @@ export class ProcessadorService {
       params.precoMax = filtro.precoMax.toString();
     }
     if (filtro.sockets && filtro.sockets.length > 0) {
-      // Lista convertida para múltiplos parâmetros: ?sockets=AM4&sockets=LGA1200
-      filtro.sockets.forEach((s, index) => {
-        params[`sockets[${index}]`] = s;
-      });
+      params['sockets'] = filtro.sockets;
     }
     if (filtro.graficosIntegrados) {
       params.graficosIntegrados = filtro.graficosIntegrados;

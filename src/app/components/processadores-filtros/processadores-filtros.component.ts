@@ -101,7 +101,6 @@ export class ProcessadoresFiltrosComponent implements OnInit {
     { value: 'am4', label: 'AM4' },
     { value: 'am5', label: 'AM5' },
     { value: 'lga1200', label: 'LGA 1200' },
-    { value: 'tr4', label: 'TR4' },
   ];
 
   ngOnInit(): void {
@@ -116,7 +115,6 @@ export class ProcessadoresFiltrosComponent implements OnInit {
         am4: [false],
         am5: [false],
         lga1200: [false],
-        tr4: [false],
       }),
       graficosIntegrados: ['todos'],
       sortBy: ['preco-asc']
@@ -180,15 +178,14 @@ export class ProcessadoresFiltrosComponent implements OnInit {
 
   clearFilters(): void {
     this.filtroForm.reset({
-      fabricante: 'todos', // Updated for radio button
+      fabricante: 'todos', 
       precoMin: 0,
       precoMax: 5000,
       sockets: {
         lga1700: false,
         am4: false,
         am5: false,
-        lga1200: false,
-        tr4: false,
+        lga1200: false
       },
       graficosIntegrados: 'todos',
     });
@@ -269,6 +266,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
       .filter(([_, ativo]) => ativo)
       .map(([socket]) => socket.toUpperCase());
 
+
     return {
       fabricante: fabricante,
       precoMin: formValue.precoMin,
@@ -277,5 +275,18 @@ export class ProcessadoresFiltrosComponent implements OnInit {
       graficosIntegrados: formValue.graficosIntegrados,
       sortBy: formValue.sortBy,
     };
+  }
+
+  getSelectedSockets(): string[] {
+    const socketsGroup = this.filtroForm.get('sockets');
+    if (!socketsGroup) return [];
+    return Object.keys(socketsGroup.value).filter(key => socketsGroup.value[key]);
+  }
+
+  removeSocket(socket: string) {
+    const socketsGroup = this.filtroForm.get('sockets');
+    if (socketsGroup) {
+      socketsGroup.get(socket)?.setValue(false);
+    }
   }
 }
