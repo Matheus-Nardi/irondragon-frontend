@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadUserInfo();
+    this.getCartLength();
   }
 
   async loadUserInfo() {

@@ -10,7 +10,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       
-      <div class="brand">
+      <div class="brand" routerLink="/">
         <div class="logo">
           <mat-icon class="logo-icon">memory</mat-icon>
         </div>
@@ -72,6 +72,15 @@
       </ng-container>
 
       <ng-container *ngIf="!isAuthenticated">
+        <button 
+          mat-icon-button 
+          class="cart-button" 
+          matTooltip="Meu Carrinho"
+          routerLink="/carrinho" 
+          aria-label="Meu Carrinho de Compras"
+        >
+          <mat-icon matBadge="{{ cartLength }}" matBadgeColor="warn">shopping_cart</mat-icon> 
+          </button>
         <button (click)="login()" mat-button>Entrar</button>
         <button routerLink="/cadastrar" mat-button>Cadastrar</button>
       </ng-container>

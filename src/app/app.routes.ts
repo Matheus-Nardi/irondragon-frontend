@@ -214,7 +214,7 @@ export const routes: Routes = [
       {
         path: 'processadores',
         component: ProcessadoresFiltrosComponent,
-        title: 'Todos os processadores'
+        title: 'Processadores'
       }
     ],
   },

@@ -14,7 +14,7 @@
   >
     @for (card of cardsLastLotes(); track card.id) {
     <swiper-slide>
-      <div class="card" [routerLink]="['/processadores', card.id]">
+      <div class="card" (click)="navegarParaDetalhes(card)">
        
         <button
           class="wishlist-button"
@@ -37,7 +37,7 @@
             <span>{{ card.specs.threads }} Threads</span>
           </div>
           <p class="price">R$ {{ card.preco }}</p>
-          <button class="buy-button">
+          <button class="buy-button" (click)="addToCart(card, $event)">
             <mat-icon>shopping_cart</mat-icon> COMPRAR
           </button>
         </div>
@@ -64,7 +64,7 @@
   >
     @for (card of cardsMaisVendidos(); track card.id) {
     <swiper-slide>
-      <div class="card" [routerLink]="['/processadores', card.id]">
+      <div class="card" (click)="navegarParaDetalhes(card)">
        
         <button
           class="wishlist-button"
@@ -87,7 +87,7 @@
             <span>{{ card.specs.threads }} Threads</span>
           </div>
           <p class="price">R$ {{ card.preco }}</p>
-          <button class="buy-button">
+          <button class="buy-button" (click)="addToCart(card, $event)">
             <mat-icon>shopping_cart</mat-icon> COMPRAR
           </button>
         </div>

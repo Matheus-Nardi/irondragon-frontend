@@ -10,7 +10,7 @@
     </div>
 
     <!-- Controles do header -->
-    <div class="header-controls">
+    <div class="header-controls" [formGroup]="filtroForm">
       <div class="results-info">
         <span class="results-count">{{ totalRecords }} produtos encontrados</span>
       </div>
@@ -27,13 +27,15 @@
         </button>
 
         <!-- Ordenação -->
+        
         <mat-form-field appearance="outline" class="sort-field">
           <mat-label>Ordenar por</mat-label>
-          <mat-select [(value)]="sortBy">
+          <mat-select formControlName="sortBy">
             <mat-option value="preco-asc">Menor preço</mat-option>
             <mat-option value="preco-desc">Maior preço</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> 
+       
       </div>
     </div>
   </div>
@@ -265,7 +267,7 @@
       <!-- Grid de produtos -->
       <div class="products-grid" *ngIf="cards().length > 0; else noProducts">
         @for (card of cards(); track $index) {
-        <div class="card" [routerLink]="['/processadores', card.id]">
+        <div class="card" (click)="navegarParaDetalhes(card)">
           <button
             class="wishlist-button"
             aria-label="Adicionar à lista de desejos"
@@ -290,7 +292,7 @@
             <p class="price">R$ {{ card.preco }}</p>
             <button
               class="buy-button"
-              (click)="addToCart(card); $event.stopPropagation()"
+              (click)="addToCart(card, $event)"
             >
               <mat-icon>shopping_cart</mat-icon> COMPRAR
             </button>

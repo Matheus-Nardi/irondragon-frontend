@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Cliente } from '../../../models/cliente.model';
 import { Processador } from '../../../models/processador/processador.model';
 import { ClienteService } from '../../../services/cliente.service';
@@ -19,6 +19,8 @@ import { Lote } from '../../../models/lote.model';
 import { PedidoService } from '../../../services/pedido.service';
 import { EMPTY, forkJoin, from, of } from 'rxjs'; // Importar EMPTY e forkJoin
 import { switchMap, tap, catchError, finalize } from 'rxjs/operators'; // Importar operadores
+import { SnackbarService } from '../../../services/snackbar.service';
+import { CarrinhoService } from '../../../services/carrinho.service';
 
 type Card = {
   id: number;
@@ -66,7 +68,10 @@ export class ProcessadorCardListComponent implements OnInit {
     private clienteService: ClienteService,
     private keycloakService: KeycloakOperationService,
     private loteService: LoteService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private router: Router,
+    private snackbarService: SnackbarService,
+    private carrinhoService: CarrinhoService
   ) {}
 
   ngOnInit(): void {
@@ -82,56 +87,69 @@ export class ProcessadorCardListComponent implements OnInit {
     this.isLoadingProfileAndClient.set(true);
 
     // Converter a Promise para Observable usando 'from'
-    from(this.keycloakService.getUserProfile()).pipe(
-      tap(profile => {
-        // Atribuir o perfil aqui, garantindo que keycloakProfile tenha o tipo correto
-        this.keycloakProfile = profile;
-        console.log('Keycloak profile:', profile);
-      }),
-      switchMap(profile => {
-        // Agora 'profile' deve ter o tipo Keycloak.KeycloakProfile | undefined
-        if (profile && profile.email) { // Checar se profile e profile.email existem
-          return this.clienteService.findByUsername(profile.email).pipe(
-            tap(cliente => {
-              if (cliente) { // Verificar se cliente foi encontrado
-                this.cliente = cliente;
-                console.log('Cliente:', cliente);
-              } else {
-                console.warn(`Cliente não encontrado para o email: ${profile.email}`);
-                // Tratar o caso de cliente não encontrado, talvez limpando this.cliente
-                // this.cliente = undefined; // ou algum valor padrão
-              }
-            }),
-            switchMap(cliente => {
-              if (cliente) { // Só busca lista de desejos se o cliente existe
-                return this.clienteService.getListaDesejos();
-              }
-              // Se o cliente não foi encontrado ou não tem email, retorna uma lista de desejos vazia
-              return of([]);
-            }),
-            catchError(err => {
-              console.error('Erro ao buscar cliente ou lista de desejos:', err);
-              return of([]); // Retorna lista de desejos vazia em caso de erro no fluxo do cliente
-            })
+    from(this.keycloakService.getUserProfile())
+      .pipe(
+        tap((profile) => {
+          // Atribuir o perfil aqui, garantindo que keycloakProfile tenha o tipo correto
+          this.keycloakProfile = profile;
+          console.log('Keycloak profile:', profile);
+        }),
+        switchMap((profile) => {
+          // Agora 'profile' deve ter o tipo Keycloak.KeycloakProfile | undefined
+          if (profile && profile.email) {
+            // Checar se profile e profile.email existem
+            return this.clienteService.findByUsername(profile.email).pipe(
+              tap((cliente) => {
+                if (cliente) {
+                  // Verificar se cliente foi encontrado
+                  this.cliente = cliente;
+                  console.log('Cliente:', cliente);
+                } else {
+                  console.warn(
+                    `Cliente não encontrado para o email: ${profile.email}`
+                  );
+                  // Tratar o caso de cliente não encontrado, talvez limpando this.cliente
+                  // this.cliente = undefined; // ou algum valor padrão
+                }
+              }),
+              switchMap((cliente) => {
+                if (cliente) {
+                  // Só busca lista de desejos se o cliente existe
+                  return this.clienteService.getListaDesejos();
+                }
+                // Se o cliente não foi encontrado ou não tem email, retorna uma lista de desejos vazia
+                return of([]);
+              }),
+              catchError((err) => {
+                console.error(
+                  'Erro ao buscar cliente ou lista de desejos:',
+                  err
+                );
+                return of([]); // Retorna lista de desejos vazia em caso de erro no fluxo do cliente
+              })
+            );
+          }
+          // Se não há perfil ou email, retorna um Observable com uma lista de desejos vazia
+          console.log('Perfil Keycloak não encontrado ou sem email.');
+          return of([]);
+        }),
+        finalize(() => this.isLoadingProfileAndClient.set(false))
+      )
+      .subscribe({
+        next: (listaDesejos) => {
+          this.listaDesejos = listaDesejos;
+          console.log('Lista de desejos carregada final:', this.listaDesejos);
+          this.updateAllCardLists();
+        },
+        error: (error) => {
+          console.error(
+            'Erro no fluxo de carregamento do perfil/cliente:',
+            error
           );
-        }
-        // Se não há perfil ou email, retorna um Observable com uma lista de desejos vazia
-        console.log('Perfil Keycloak não encontrado ou sem email.');
-        return of([]);
-      }),
-      finalize(() => this.isLoadingProfileAndClient.set(false))
-    ).subscribe({
-      next: (listaDesejos) => {
-        this.listaDesejos = listaDesejos;
-        console.log('Lista de desejos carregada final:', this.listaDesejos);
-        this.updateAllCardLists();
-      },
-      error: (error) => {
-        console.error('Erro no fluxo de carregamento do perfil/cliente:', error);
-        this.listaDesejos = [];
-        this.updateAllCardLists();
-      }
-    });
+          this.listaDesejos = [];
+          this.updateAllCardLists();
+        },
+      });
   }
 
   private loadInitialData(): void {
@@ -245,5 +263,31 @@ export class ProcessadorCardListComponent implements OnInit {
           // Poderia tentar reverter a UI ou mostrar uma mensagem de erro.
         },
       });
+  }
+
+  navegarParaDetalhes(card: any) {
+    this.router.navigate(['/processadores', card.id]);
+  }
+
+  addToCart(card: Card, event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.processadorService.findById(card.id.toString()).subscribe({
+      next: (proc) => {
+        this.carrinhoService.adicionar({
+          id: proc.id,
+          nome: proc.nome,
+          quantidade: 1,
+          preco: proc.preco,
+          imagem: proc.imagens[0],
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao buscar processador:', err);
+        this.snackbarService.showError(
+          'Não foi possível adicionar ao carrinho.'
+        );
+      },
+    });
   }
 }

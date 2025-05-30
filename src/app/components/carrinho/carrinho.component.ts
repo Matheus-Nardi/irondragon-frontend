@@ -27,7 +27,7 @@ export class CarrinhoComponent {
   }
 
   adicionarUnidade(item: ItemCarrinho): void {
-    this.carrinhoService.adicionar(item);
+      this.carrinhoService.adicionar({ ...item, quantidade: 1 });
   }
 
   removerUnidade(item: ItemCarrinho): void {
