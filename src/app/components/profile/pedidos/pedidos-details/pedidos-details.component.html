@@ -1,0 +1,136 @@
+<app-header></app-header>
+<div class="pedido-details-container" *ngIf="pedido">
+  <!-- Header -->
+  <div class="page-header">
+    <button mat-icon-button (click)="voltarParaPedidos()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">Pedido #{{ pedido.id }}</h1>
+  </div>
+
+  <div class="content-wrapper">
+    <!-- Informações Gerais -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Informações Gerais</h2>
+      </div>
+      <div class="card-content">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Data do Pedido</span>
+            <span class="info-value">{{ pedido.data | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label">Status</span>
+            <span class="status-badge">
+              {{ pedido.statusPedido.label }}
+            </span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-label">Valor Total</span>
+            <span class="info-value total-value">{{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações de Pagamento -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Pagamento</h2>
+      </div>
+      <div class="card-content">
+        <div class="payment-grid">
+          <div class="payment-item">
+            <span class="payment-label">Valor</span>
+            <span class="payment-value">{{ pedido.pagamento.valor | currency:'BRL':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="payment-item">
+            <span class="payment-label">Status</span>
+            <span class="payment-status" [ngClass]="getPagamentoClass(pedido.pagamento.pago)">
+              {{ getPagamentoStatus(pedido.pagamento.pago) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Endereços do Cliente -->
+    <div class="card" *ngIf="enderecosCliente.length > 0">
+      <div class="card-header">
+        <h2 class="card-title">Endereços</h2>
+      </div>
+      <div class="card-content">
+        <div class="address-list">
+          <div class="address-item" *ngFor="let endereco of enderecosCliente; let first = first">
+            <div class="address-content">
+              <div class="address-main">
+                <strong>{{ endereco.logradouro }}, {{ endereco.numero }}</strong>
+                <span class="primary-badge" *ngIf="first">Principal</span>
+              </div>
+              <div class="address-details">
+                <span *ngIf="endereco.complemento">{{ endereco.complemento }}</span>
+                <span>{{ endereco.bairro }}</span>
+                <span>{{ endereco.cidade?.nome || 'N/A' }} - {{ endereco.cidade?.estado?.nome || endereco.cidade?.estado || 'N/A' }}</span>
+                <span>CEP: {{ endereco.cep }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Itens do Pedido -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Itens do Pedido</h2>
+      </div>
+      <div class="card-content">
+        <div class="items-list">
+          <div class="item" *ngFor="let item of pedido.listaItemPedido">
+            <div class="item-image">
+              <img [src]="getImagemProcessador(item.idProcessador)" 
+                   [alt]="item.nome"
+                   class="product-image"
+                >
+            </div>
+            <div class="item-details">
+              <h3 class="item-name">{{ item.nome }}</h3>
+              <p class="item-quantity">Quantidade: {{ item.quantidade }}</p>
+            </div>
+            <div class="item-price">
+              <span class="price-value">{{ item.valor | currency:'BRL':'symbol':'1.2-2' }}</span>
+              <span class="price-label">por unidade</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="total-section">
+          <div class="total-row">
+            <span class="total-label">Total do Pedido</span>
+            <span class="total-amount">{{ pedido.valorTotal | currency:'BRL':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="actions-section">
+      <button mat-stroked-button (click)="voltarParaPedidos()" class="back-action">
+        <mat-icon>arrow_back</mat-icon>
+        Voltar aos Pedidos
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading state -->
+<div class="loading-container" *ngIf="!pedido">
+  <div class="loading-content">
+    <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+    <p>Carregando detalhes do pedido...</p>
+  </div>
+</div>
+<app-footer></app-footer>

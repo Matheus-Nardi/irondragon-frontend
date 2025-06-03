@@ -34,6 +34,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { ProcessadoresFiltrosComponent } from './components/processadores-filtros/processadores-filtros.component';
+import { PedidosDetailsComponent } from './components/profile/pedidos/pedidos-details/pedidos-details.component';
 
 export const routes: Routes = [
   {
@@ -200,16 +201,11 @@ export const routes: Routes = [
         path: 'cadastrar',
         component: CadastroComponent,
         title: 'Cadastrar',
-      },
+      },    
       {
         path: 'carrinho',
         component: CarrinhoComponent,
         title: 'Carrinho de Compras',
-      },
-      {
-        path: 'perfil',
-        component: ProfileComponent,
-        canActivate: [AuthGuard],
       },
       {
         path: 'processadores',
@@ -218,4 +214,19 @@ export const routes: Routes = [
       }
     ],
   },
+
+  {
+        path: 'perfil',
+        title: 'Perfil',
+        component: ProfileComponent,
+        canActivate: [AuthGuard],
+         data: { roles: ['User'] }
+      },
+      {
+        path: 'perfil/pedidos/:id',
+        title: 'Detalhes do Pedido',
+        component: PedidosDetailsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['User'] }
+      },
 ];
