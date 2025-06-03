@@ -37,10 +37,13 @@ import { EnderecosUsuarioComponent } from './enderecos-usuario/enderecos-usuario
 import { MatMenuModule } from '@angular/material/menu';
 import { ListaDesejosComponent } from './lista-desejos/lista-desejos.component';
 import { Processador } from '../../models/processador/processador.model';
-import { PagamentosComponent } from "./pagamentos/pagamentos.component";
+import { PagamentosComponent } from './pagamentos/pagamentos.component';
 import { Cartao } from '../../models/cartao.model';
 import { CartaoFormModalComponent } from '../cartao-form-modal/cartao-form-modal.component';
 import { CartaoService } from '../../services/cartao.service';
+import { PedidoService } from '../../services/pedido.service';
+import { Pedido } from '../../models/pedido.model';
+import { PedidosComponent } from "./pedidos/pedidos.component";
 
 @Component({
   selector: 'app-profile',
@@ -68,7 +71,8 @@ import { CartaoService } from '../../services/cartao.service';
     EnderecosUsuarioComponent,
     MatMenuModule,
     ListaDesejosComponent,
-    PagamentosComponent
+    PagamentosComponent,
+    PedidosComponent
 ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -77,6 +81,7 @@ export class ProfileComponent implements OnInit {
   cartoes: Cartao[] = [];
   enderecos: Endereco[] = [];
   listaDesejos: Processador[] = [];
+  pedidos: Pedido[] = [];
   editandoInfoPessoais = false;
   formInfoPessoais!: FormGroup;
   keycloakProfile?: Keycloak.KeycloakProfile;
@@ -85,6 +90,10 @@ export class ProfileComponent implements OnInit {
   fileName: string = '';
   selectedFile: File | null = null;
   imagemUrl: string = '';
+
+  page = 0;
+  pageSize = 10;
+  totalRecords = 0;
 
   ngOnInit(): void {
     this.keycloakService.getUserProfile().then((profile) => {
@@ -100,7 +109,7 @@ export class ProfileComponent implements OnInit {
             this.cliente.usuario.id.toString(),
             this.cliente.usuario.nomeImagem
           );
-        } 
+        }
       }
     });
   }
@@ -113,7 +122,8 @@ export class ProfileComponent implements OnInit {
     private matDialog: MatDialog,
     private matDialogConfirmService: DialogService,
     private enderecoService: EnderecoService,
-    private cartaoService: CartaoService
+    private cartaoService: CartaoService,
+    private pedidoService: PedidoService
   ) {}
 
   private loadCliente(profile: any) {
@@ -123,6 +133,7 @@ export class ProfileComponent implements OnInit {
         console.log('Cliente: ', cliente);
         this.loadListaDesejos();
         this.loadCartoes();
+        this.loadPedidos();
       },
       error: (error) => {
         console.log('Erro na requisição', error);
@@ -159,13 +170,25 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  loadCartoes(){
+  loadCartoes() {
     this.cartaoService.getByUsuario().subscribe((cartoes) => {
       this.cartoes = cartoes;
       this.cliente.listaDeCartoes = this.cartoes;
       console.log(this.cartoes);
-      
+    });
+  }
+
+  loadPedidos(page = 0, pageSize = 10) {
+    this.pedidoService.getByUsername(page, pageSize).subscribe((pedidos) => {
+      this.pedidos = pedidos.results;
+      this.totalRecords = pedidos.count;
+      console.log('Pedidos', pedidos);
+
     })
+  }
+
+  onPaginar(event: { pageIndex: number, pageSize: number }) {
+    this.loadPedidos(event.pageIndex, event.pageSize);
   }
 
   atualizarInfoBasicas(update: {
@@ -212,33 +235,33 @@ export class ProfileComponent implements OnInit {
       });
   }
 
- abrirModalCartao(cartao: Cartao | null) {
-  const cartaoParaModal = cartao ? { ...cartao } : ({} as Cartao);
+  abrirModalCartao(cartao: Cartao | null) {
+    const cartaoParaModal = cartao ? { ...cartao } : ({} as Cartao);
 
-  this.matDialog
-    .open(CartaoFormModalComponent, {
-      width: 'auto',
-      data: cartaoParaModal,
-    })
-    .afterClosed()
-    .subscribe((cartaoAtualizado: Cartao) => {
-      if (!cartaoAtualizado) return;
+    this.matDialog
+      .open(CartaoFormModalComponent, {
+        width: 'auto',
+        data: cartaoParaModal,
+      })
+      .afterClosed()
+      .subscribe((cartaoAtualizado: Cartao) => {
+        if (!cartaoAtualizado) return;
 
-      const operacao$ = cartaoAtualizado.id
-        ? this.cartaoService.update(cartaoAtualizado)
-        : this.cartaoService.create(cartaoAtualizado);
+        const operacao$ = cartaoAtualizado.id
+          ? this.cartaoService.update(cartaoAtualizado)
+          : this.cartaoService.create(cartaoAtualizado);
 
-      operacao$.subscribe({
-        next: () => {
-          this.snackbarService.showSuccess('Cartão salvo com sucesso');
-          this.loadCartoes();
-        },
-        error: () => {
-          this.snackbarService.showError('Erro ao salvar o cartão');
-        },
+        operacao$.subscribe({
+          next: () => {
+            this.snackbarService.showSuccess('Cartão salvo com sucesso');
+            this.loadCartoes();
+          },
+          error: () => {
+            this.snackbarService.showError('Erro ao salvar o cartão');
+          },
+        });
       });
-    });
-}
+  }
 
   deletarEndereco(endereco: Endereco) {
     this.matDialogConfirmService
@@ -336,15 +359,17 @@ export class ProfileComponent implements OnInit {
     this.snackbarService.showSuccess('Imagem removida com sucesso');
   }
 
-  removerDesejo(processador: Processador){
-     this.clienteService.removeFromListaDeDesejos(processador.id).subscribe({
-        next: () => {
-          this.snackbarService.showSuccess('Processador removido da lista de desejos');
-          this.loadListaDesejos(); 
-        },
-        error: () => {
-          this.snackbarService.showError('Erro ao remover o processador');
-        }
-      });
+  removerDesejo(processador: Processador) {
+    this.clienteService.removeFromListaDeDesejos(processador.id).subscribe({
+      next: () => {
+        this.snackbarService.showSuccess(
+          'Processador removido da lista de desejos'
+        );
+        this.loadListaDesejos();
+      },
+      error: () => {
+        this.snackbarService.showError('Erro ao remover o processador');
+      },
+    });
   }
 }
