@@ -35,6 +35,7 @@ import { ProcessadorDetailsComponent } from './components/processador/processado
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { ProcessadoresFiltrosComponent } from './components/processadores-filtros/processadores-filtros.component';
 import { PedidosDetailsComponent } from './components/profile/pedidos/pedidos-details/pedidos-details.component';
+import { PedidosListComponent } from './components/pedidos-list/pedidos-list.component';
 
 export const routes: Routes = [
   {
@@ -176,6 +177,11 @@ export const routes: Routes = [
         component: FuncionarioFormComponent,
         title: 'Edicar Funcionario',
         resolve: { funcionario: funcionarioResolver },
+      },
+      {
+        path: 'pedidos',
+        component: PedidosListComponent,
+        title: 'Pedidos'
       },
 
       { path: '**', component: PageNotFoundComponent },

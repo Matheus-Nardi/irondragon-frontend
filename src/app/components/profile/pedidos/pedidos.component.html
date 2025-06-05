@@ -52,7 +52,7 @@
     <ng-container matColumnDef="statusPedido">
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let pedido">
-        <span [ngClass]="'status-' + pedido.statusPedido.label.toLowerCase()">
+        <span [ngClass]="getStatusClass(pedido.statusPedido.id)">
           {{ pedido.statusPedido.label }}
         </span>
       </td>

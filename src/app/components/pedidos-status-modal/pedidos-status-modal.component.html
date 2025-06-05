@@ -1,0 +1,63 @@
+<div class="status-modal-container">
+  <!-- Header -->
+  <div class="modal-header">
+    <h2 class="modal-title">Alterar Status do Pedido</h2>
+    <button mat-icon-button class="close-button" (click)="onCancelar()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="modal-content">
+    <!-- Current Status -->
+    <div class="current-status-section">
+      <span class="section-label">Status Atual</span>
+      <div class="status-display current">
+        <mat-icon class="status-icon">radio_button_checked</mat-icon>
+        <span class="status-text">{{ data.pedido.statusPedido.label }}</span>
+      </div>
+    </div>
+
+    <!-- Arrow Indicator -->
+    <div class="status-arrow">
+      <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
+    </div>
+
+    <!-- New Status Selection -->
+    <div class="new-status-section">
+      <span class="section-label">Novo Status</span>
+      <mat-form-field appearance="outline" class="status-select">
+        <mat-label>Selecione o novo status</mat-label>
+        <mat-select placeholder="Escolha um status" [(ngModel)]="novoStatusPedido">
+          <mat-option *ngFor="let status of data.statusOptions" [value]="status">
+            {{ statusDisplayMap[status.label]}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Preview New Status -->
+    <div class="preview-status-section" *ngIf="novoStatusPedido">
+      <span class="section-label">Novo Status Selecionado</span>
+      <div class="status-display preview">
+        <mat-icon class="status-icon">{{ getStatusIcon(novoStatusPedido.label) }}</mat-icon>
+        <span class="status-text">{{ statusDisplayMap[novoStatusPedido.label] || novoStatusPedido.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="modal-actions">
+    <button mat-stroked-button class="cancel-button" (click)="onCancelar()">
+      <mat-icon>close</mat-icon>
+      <span>Cancelar</span>
+    </button>
+    
+    <button mat-raised-button color="primary" class="confirm-button" 
+            (click)="onConfirmar()" 
+            [disabled]="!novoStatusPedido">
+      <mat-icon>check</mat-icon>
+      <span>Confirmar Alteração</span>
+    </button>
+  </div>
+</div>

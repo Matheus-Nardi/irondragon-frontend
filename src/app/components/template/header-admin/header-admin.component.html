@@ -1,0 +1,65 @@
+<header class="admin-header">
+  <div class="header-container">
+    <div class="header-left">
+      <button 
+        mat-icon-button 
+        class="menu-button" 
+        (click)="clickMenu()" 
+        matTooltip="Abrir/Fechar Menu"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <div class="brand" routerLink="/admin">
+        <div class="logo">
+          <mat-icon class="logo-icon">memory</mat-icon>
+        </div>
+        <span class="brand-name">IRONDRAGON ADM</span>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <ng-container *ngIf="isAuthenticated">
+        <button 
+          mat-button 
+          class="user-button" 
+          [matMenuTriggerFor]="userMenu"
+        >
+          <div class="user-info">
+            <span class="user-name">{{ userProfile?.firstName }}</span>
+          </div>
+          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+        </button>
+      
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <div class="user-menu-header">
+            <div class="user-menu-info">
+              <span class="user-menu-name">{{ userProfile?.firstName }} {{ userProfile?.lastName }}</span>
+              <span class="user-menu-email">{{ userProfile?.email }}</span>
+            </div>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item routerLink="/perfil" class="profile-button">
+            <mat-icon>person</mat-icon>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Meu Perfil</span>
+              <span class="menu-item-subtitle">Gerenciar conta e preferências</span>
+            </div>
+          </button>
+    
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item class="logout-button" (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Sair</span>
+              <span class="menu-item-subtitle">Encerrar sessão</span>
+            </div>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </div>
+  </div>
+</header>

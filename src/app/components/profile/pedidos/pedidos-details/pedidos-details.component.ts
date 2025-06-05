@@ -1,22 +1,29 @@
-import { Component,  OnInit } from "@angular/core"
-import  { ActivatedRoute, Router } from "@angular/router"
-import { CommonModule, CurrencyPipe, DatePipe, Location } from "@angular/common"
-import { MatCardModule } from "@angular/material/card"
-import { MatButtonModule } from "@angular/material/button"
-import { MatIconModule } from "@angular/material/icon"
-import { MatChipsModule } from "@angular/material/chips"
-import { MatDividerModule } from "@angular/material/divider"
-import { MatListModule } from "@angular/material/list"
-import { MatToolbarModule } from "@angular/material/toolbar"
-import  { PedidoService } from "../../../../services/pedido.service"
-import  { Pedido } from "../../../../models/pedido.model"
-import { HeaderComponent } from "../../../template/header/header.component";
-import { FooterComponent } from "../../../template/footer/footer.component"
-import { ProcessadorService } from "../../../../services/processador.service"
-import { Endereco } from "../../../../models/endereco/endereco.model"
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  CommonModule,
+  CurrencyPipe,
+  DatePipe,
+  Location,
+} from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { PedidoService } from '../../../../services/pedido.service';
+import { Pedido } from '../../../../models/pedido.model';
+import { HeaderComponent } from '../../../template/header/header.component';
+import { FooterComponent } from '../../../template/footer/footer.component';
+import { ProcessadorService } from '../../../../services/processador.service';
+import { Endereco } from '../../../../models/endereco/endereco.model';
+import { DialogService } from '../../../../services/dialog.service';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
-  selector: "app-pedidos-details",
+  selector: 'app-pedidos-details',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,30 +37,34 @@ import { Endereco } from "../../../../models/endereco/endereco.model"
     CurrencyPipe,
     DatePipe,
     HeaderComponent,
-    FooterComponent
-],
-  templateUrl: "./pedidos-details.component.html",
-  styleUrl: "./pedidos-details.component.css",
+    FooterComponent,
+    MatTooltipModule
+  ],
+  templateUrl: './pedidos-details.component.html',
+  styleUrl: './pedidos-details.component.css',
 })
 export class PedidosDetailsComponent implements OnInit {
+
   constructor(
     private route: ActivatedRoute,
     private pedidoService: PedidoService,
     private router: Router,
     private location: Location,
-    private processadorService: ProcessadorService
-  ) {}
+    private processadorService: ProcessadorService,
+    private dialogService: DialogService
+  ) { }
 
   pedido!: Pedido;
   endereco!: Endereco;
   processadorImagens: { [id: number]: string } = {};
+  tipoPagamento: 'Pix' | 'Boleto' | 'Cartão' | '' = '';
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get("id")
+    const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.carregarPedido(+id)
+      this.carregarPedido(+id);
     } else {
-      this.router.navigate(["/perfil/pedidos"])
+      this.router.navigate(['/perfil/pedidos']);
     }
   }
 
@@ -61,24 +72,35 @@ export class PedidosDetailsComponent implements OnInit {
     this.pedidoService.findById(id.toString()).subscribe({
       next: (pedido) => {
         this.pedido = pedido;
+        const tipo = pedido.pagamento.tipoPagamento;
+        if (tipo === 'Pix' || tipo === 'Boleto' || tipo === 'Cartão') {
+          this.tipoPagamento = tipo;
+        } else {
+          this.tipoPagamento = '';
+        }
         console.log(pedido);
         // Para cada item, busque a imagem
-        pedido.listaItemPedido.forEach(item => {
-          this.processadorService.findById(item.idProcessador.toString()).subscribe({
-            next: (processadorData) => {
-              this.processadorImagens[item.idProcessador] =
-                this.processadorService.getUrlImage(processadorData.id.toString(), processadorData.imagens[0]);
-            },
-            
-            error: (error) => {
-              console.error("Erro ao carregar processador:", error);
-            }
-          });
+        pedido.listaItemPedido.forEach((item) => {
+          this.processadorService
+            .findById(item.idProcessador.toString())
+            .subscribe({
+              next: (processadorData) => {
+                this.processadorImagens[item.idProcessador] =
+                  this.processadorService.getUrlImage(
+                    processadorData.id.toString(),
+                    processadorData.imagens[0]
+                  );
+              },
+
+              error: (error) => {
+                console.error('Erro ao carregar processador:', error);
+              },
+            });
         });
       },
       error: (error) => {
-        console.error("Erro ao carregar pedido:", error);
-        this.router.navigate(["/perfil/pedidos"]);
+        console.error('Erro ao carregar pedido:', error);
+        this.router.navigate(['/perfil/pedidos']);
       },
     });
   }
@@ -88,32 +110,63 @@ export class PedidosDetailsComponent implements OnInit {
   }
 
   get enderecosCliente(): any[] {
-  return this.pedido?.cliente?.usuario?.enderecos ?? [];
-}
-
-  voltarParaPedidos(): void {
-   this.location.back();
+    return this.pedido?.cliente?.usuario?.enderecos ?? [];
   }
 
+  voltarParaPedidos(): void {
+    this.location.back();
+  }
 
-  getStatusColor(status: string): string {
-    switch (status.toLowerCase()) {
-      case "produto entregue":
-        return "primary"
-      case "em andamento":
-        return "accent"
-      case "cancelado":
-        return "warn"
-      default:
-        return ""
-    }
+  getStatusClass(id: number) {
+    return {
+      'status-expirado': id === 1,
+      'status-cancelado': id === 2,
+      'status-pendente': id === 3,
+      'status-preparando': id === 4,
+      'status-enviado': id === 5,
+      'status-entregue': id === 6,
+      'status-devolvido': id === 7,
+    };
   }
 
   getPagamentoStatus(pago: boolean): string {
-    return pago ? "Pago" : "Pendente"
+    return pago ? 'Pago' : 'Pendente';
   }
 
   getPagamentoClass(pago: boolean): string {
-    return pago ? "payment-paid" : "payment-pending"
+    return pago ? 'payment-paid' : 'payment-pending';
   }
+
+
+  private cancelarPedido(id: number, callback?: () => void): void {
+    this.pedidoService.cancel(id).subscribe({
+      next: () => {
+        console.log('Pedido #', id, 'cancelado');
+        if (callback) {
+          callback();
+        }
+      },
+      error: () => {
+        console.error('Erro ao cancelar o pedido!');
+      }
+    });
+  }
+
+
+  onCancelarPedido(id: number): void {
+    this.dialogService.openConfirmDialog(
+      'Deletar pedido ?',
+      'Ao clicar em confirmar, você estará cancelando o seu pedido. Essa ação é irreversível',
+      'delete'
+    ).subscribe((result) => {
+      if (result) {
+        this.cancelarPedido(id, () => {
+          this.carregarPedido(id); // só recarrega após cancelamento ser concluído
+        });
+      }
+    });
+  }
+
+
+
 }

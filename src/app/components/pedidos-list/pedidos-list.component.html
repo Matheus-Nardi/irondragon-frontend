@@ -1,0 +1,125 @@
+@if (pedidos.length > 0) {
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-container">
+      <h1 class="page-title">Pedidos</h1>
+      <!-- Botão para criar novo pedido, se necessário -->
+      <!-- <button class="add-button" routerLink="create">
+          <mat-icon>add</mat-icon>
+        </button> -->
+    </div>
+
+    <div class="search-container">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          (keyup)="onSearch(search)"
+          placeholder="Pesquise por um pedido"
+          [(ngModel)]="search"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="table-container mat-elevation-z2">
+    <table mat-table [dataSource]="pedidosFiltrados" class="pedidos-table">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let pedido">#{{ pedido.id }}</td>
+      </ng-container>
+
+      <!-- Cliente Column -->
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <td mat-cell *matCellDef="let pedido">{{ pedido.cliente.nome }}</td>
+      </ng-container>
+
+      <!-- Data Column -->
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef>Data</th>
+        <td mat-cell *matCellDef="let pedido">
+          {{ pedido.data | date : "dd/MM/yyyy HH:mm" }}
+        </td>
+      </ng-container>
+
+      <!-- Valor Total Column -->
+      <ng-container matColumnDef="valorTotal">
+        <th mat-header-cell *matHeaderCellDef>Valor Total</th>
+        <td mat-cell *matCellDef="let pedido">
+          {{ pedido.valorTotal | currency : "BRL" : "symbol" : "1.2-2" }}
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let pedido">
+          <span [ngClass]="getStatusClass(pedido.statusPedido.id)">
+            {{ pedido.statusPedido.label }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>Itens</th>
+        <td mat-cell *matCellDef="let pedido">
+          <div>
+            <span class="items-text">
+              <ng-container
+                *ngFor="let item of pedido.listaItemPedido; let last = last"
+              >
+                {{ item.nome }} ({{ item.quantidade }}x)<span *ngIf="!last"
+                  >,
+                </span>
+              </ng-container>
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Ações Column -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef class="actions-column">Ações</th>
+        <td mat-cell *matCellDef="let pedido" class="actions-column">
+          <div class="action-buttons">
+            <button
+              mat-icon-button
+              class="change-button"
+              matTooltip="Alterar Status"
+              (click)="onChangeStatusPedido(pedido)"
+            >
+              <mat-icon>cached</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Empty state row -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell empty-state" colspan="6">
+          Nenhum pedido encontrado
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [pageSize]="pageSize"
+    [length]="totalRecords"
+    (page)="paginar($event)"
+    aria-label="Selecione a página"
+  >
+  </mat-paginator>
+</div>
+} @else {
+<div class="empty-container">
+  <mat-icon class="empty-icon">info</mat-icon>
+  <h1 class="empty-title">Nenhum pedido encontrado</h1>
+</div>
+}

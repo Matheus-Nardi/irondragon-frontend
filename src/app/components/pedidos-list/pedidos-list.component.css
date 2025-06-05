@@ -1,3 +1,72 @@
+/* Container principal */
+.page-container {
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  margin: 0;
+  color: var(--mat-sys-primary);
+}
+
+.add-button {
+  background-color: var(--mat-sys-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.add-button:hover {
+  background-color: var(--mat-sys-primary-container);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.search-container mat-form-field {
+  width: 100%;
+  max-width: 500px;
+}
+
+.table-container {
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface-container-lowest);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: auto;
+  max-height: calc(100vh - 200px);
+  margin-bottom: 16px;
+}
+
 /* Estilos para o card principal */
 .orders-card {
   border-radius: 12px;
@@ -29,29 +98,20 @@
   color: white;
 }
 
-/* Container da tabela */
-.table-container {
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 16px;
-  background-color: white;
-}
-
 /* Estilos da tabela */
 .pedidos-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  font-family: 'Poppins', sans-serif;
+  color: var(--mat-sys-on-surface);
+  font-size: 14px;
+  animation: fadeIn 0.5s ease;
 }
 
-.mat-column-id  {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-/* Cabeçalho da tabela */
-.pedidos-table th {
-  background-color: var(--mat-sys-surface-container-low);
+.pedidos-table th,
+.pedidos-table .mat-mdc-header-cell {
+  background-color: var(--mat-sys-surface-container-high);
   color: var(--mat-sys-on-surface);
   font-weight: 600;
   font-size: 14px;
@@ -63,40 +123,93 @@
   z-index: 10;
 }
 
-/* Células da tabela */
-.pedidos-table td {
+.pedidos-table td,
+.pedidos-table .mat-mdc-cell {
   padding: 16px;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
   color: var(--mat-sys-on-surface);
   font-size: 14px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Linhas da tabela */
-.pedidos-table tr.mat-row {
+.pedidos-table tr.mat-row,
+.pedidos-table .mat-mdc-row {
   transition: background-color 0.2s ease;
   height: 64px;
+  animation: slideFadeIn 0.4s ease forwards;
 }
 
-.pedidos-table tr.mat-row:hover {
-  background-color: var(--mat-sys-surface-container-lowest);
+.pedidos-table tr.mat-row:hover,
+.pedidos-table .mat-mdc-row:hover {
+  background-color: var(--mat-sys-surface-container-highest);
+  cursor: pointer;
+  transform: scale(1.005);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 1;
+  position: relative;
 }
 
-/* Coluna ID */
-.pedidos-table td:first-child {
-  font-weight: 600;
+/* Colunas específicas */
+.mat-column-id,
+.pedidos-table .mat-column-id {
+  width: 80px;
+  text-align: center;
+  font-weight: 500;
   color: var(--mat-sys-primary);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-/* Coluna de Valor */
+
 .pedidos-table td:nth-child(4) {
   font-weight: 700;
   color: var(--mat-sys-primary);
 }
 
+.actions-column {
+  width: 120px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: c;
+  gap: 8px;
+}
+
+.edit-button,
+.delete-button,
+.view-button,
+.cancel-button {
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  color: var(--mat-sys-primary);
+}
+
+.delete-button,
+.cancel-button {
+  color: var(--mat-sys-error);
+}
+
+.change-button {
+  color: var(--mat-sys-primary);
+}
+
+.edit-button:hover,
+.delete-button:hover,
+.view-button:hover,
+.cancel-button:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
+
 /* Status Badges */
-
-
 .status-expirado {
   color: #bdbdbd;
   background-color: rgba(189, 189, 189, 0.1);
@@ -108,7 +221,6 @@
   align-items: center;
   border: 1px solid rgba(189, 189, 189, 0.3);
 }
-
 .status-cancelado {
   color: #f44336;
   background-color: rgba(244, 67, 54, 0.1);
@@ -120,7 +232,6 @@
   align-items: center;
   border: 1px solid rgba(244, 67, 54, 0.3);
 }
-
 .status-pendente {
   color: #ff9800;
   background-color: rgba(255, 152, 0, 0.1);
@@ -132,7 +243,6 @@
   align-items: center;
   border: 1px solid rgba(255, 152, 0, 0.3);
 }
-
 .status-preparando {
   color: #2196f3;
   background-color: rgba(33, 150, 243, 0.1);
@@ -144,7 +254,6 @@
   align-items: center;
   border: 1px solid rgba(33, 150, 243, 0.3);
 }
-
 .status-enviado {
   color: #ffc107;
   background-color: rgba(255, 193, 7, 0.1);
@@ -156,7 +265,6 @@
   align-items: center;
   border: 1px solid rgba(255, 193, 7, 0.3);
 }
-
 .status-entregue {
   color: #4caf50;
   background-color: rgba(76, 175, 80, 0.1);
@@ -168,7 +276,6 @@
   align-items: center;
   border: 1px solid rgba(76, 175, 80, 0.3);
 }
-
 .status-devolvido {
   color: #607d8b;
   background-color: rgba(96, 125, 139, 0.1);
@@ -180,8 +287,6 @@
   align-items: center;
   border: 1px solid rgba(96, 125, 139, 0.3);
 }
-
-
 .status-expirado::before,
 .status-cancelado::before,
 .status-pendente::before,
@@ -193,33 +298,13 @@
   font-size: 14px;
   margin-right: 6px;
 }
-
-.status-expirado::before {
-  content: "schedule";
-}
-.status-cancelado::before {
-  content: "cancel";
-}
-.status-pendente::before {
-  content: "hourglass_empty"
-}
-.status-enviado::before {
- content: "local_shipping";
-}
-.status-entregue::before {
-  content: "done_all";
-}
-.status-cancelado::before {
-  content: "cancel";
-}
-.status-devolvido::before {
-  content: "keyboard_return";
-}
-.status-preparando::before {
-  content: "autorenew";
-}
-
-
+.status-expirado::before { content: "schedule"; }
+.status-cancelado::before { content: "cancel"; }
+.status-pendente::before { content: "hourglass_empty"; }
+.status-enviado::before { content: "local_shipping"; }
+.status-entregue::before { content: "done_all"; }
+.status-devolvido::before { content: "keyboard_return"; }
+.status-preparando::before { content: "autorenew"; }
 
 /* Coluna de Itens */
 .pedidos-table td:nth-child(3) {
@@ -236,7 +321,6 @@
   color: var(--mat-sys-on-surface-variant);
   font-size: 16px;
 }
-
 .empty-state::before {
   content: "shopping_cart";
   font-family: "Material Icons";
@@ -244,6 +328,28 @@
   font-size: 48px;
   margin-bottom: 16px;
   opacity: 0.7;
+}
+
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+.empty-container .empty-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 16px;
+  color: var(--mat-sys-outline);
+}
+.empty-container .empty-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+  margin-bottom: 24px;
 }
 
 /* Paginador */
@@ -255,24 +361,24 @@ mat-paginator {
 
 /* Responsividade */
 @media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
   .pedidos-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
-
   .pedidos-table th,
   .pedidos-table td {
     padding: 12px;
   }
-
-  .orders-card mat-card-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .mat-column-id,
+  .pedidos-table .mat-column-id {
+    width: 60px;
   }
-
-  .orders-card mat-card-avatar {
-    margin-bottom: 12px;
+  .actions-column {
+    width: 100px;
   }
 }
 
@@ -282,46 +388,47 @@ mat-paginator {
     padding: 8px;
     font-size: 12px;
   }
-
   .status-pendente,
-  .status-confirmado,
-  .status-processando,
+  .status-preparando,
   .status-enviado,
   .status-entregue,
   .status-cancelado,
-  .status-devolvido {
+  .status-devolvido,
+  .status-expirado {
     padding: 4px 8px;
     font-size: 10px;
   }
-
   .status-pendente::before,
-  .status-confirmado::before,
-  .status-processando::before,
+  .status-preparando::before,
   .status-enviado::before,
   .status-entregue::before,
   .status-cancelado::before,
-  .status-devolvido::before {
+  .status-devolvido::before,
+  .status-expirado::before {
     font-size: 12px;
     margin-right: 4px;
   }
 }
 
-/* Animações */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+@media (min-width: 1200px) {
+  .page-container {
+    padding: 24px 32px;
   }
 }
 
-.pedidos-table {
-  animation: fadeIn 0.5s ease;
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideFadeIn {
+  from { opacity: 0; transform: translateY(8px);}
+  to { opacity: 1; transform: translateY(0);}
 }
 
 /* Estilo para linhas alternadas */
-.pedidos-table tr.mat-row:nth-child(even) {
+.pedidos-table tr.mat-row:nth-child(even),
+.pedidos-table .mat-mdc-row:nth-child(even) {
   background-color: var(--mat-sys-surface-container-lowest);
 }
 
@@ -359,7 +466,6 @@ mat-paginator {
   position: relative;
   cursor: help;
 }
-
 .items-tooltip:hover::after {
   content: attr(data-tooltip);
   position: absolute;

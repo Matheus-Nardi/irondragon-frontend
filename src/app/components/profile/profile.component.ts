@@ -44,6 +44,8 @@ import { CartaoService } from '../../services/cartao.service';
 import { PedidoService } from '../../services/pedido.service';
 import { Pedido } from '../../models/pedido.model';
 import { PedidosComponent } from "./pedidos/pedidos.component";
+import { RouterOutlet } from '@angular/router';
+import { HeaderAdminComponent } from "../template/header-admin/header-admin.component";
 
 @Component({
   selector: 'app-profile',
@@ -72,7 +74,9 @@ import { PedidosComponent } from "./pedidos/pedidos.component";
     MatMenuModule,
     ListaDesejosComponent,
     PagamentosComponent,
-    PedidosComponent
+    PedidosComponent,
+    RouterOutlet,
+    HeaderAdminComponent
 ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -90,6 +94,8 @@ export class ProfileComponent implements OnInit {
   fileName: string = '';
   selectedFile: File | null = null;
   imagemUrl: string = '';
+  
+  roles: any = [];
 
   page = 0;
   pageSize = 10;
@@ -99,7 +105,7 @@ export class ProfileComponent implements OnInit {
     this.keycloakService.getUserProfile().then((profile) => {
       this.keycloakProfile = profile;
       console.log('Keycloak profile:', profile);
-
+      this.roles = this.keycloakService.getUserRoles()
       if (profile?.email) {
         this.loadCliente(profile);
         this.loadUsuario(profile);
@@ -126,6 +132,11 @@ export class ProfileComponent implements OnInit {
     private pedidoService: PedidoService
   ) {}
 
+
+  isAdminOrSuperAdmin(): boolean {
+    return this.roles.includes('Admin') || this.roles.includes('Super');
+  }
+
   private loadCliente(profile: any) {
     this.clienteService.findByUsername(profile.email).subscribe({
       next: (cliente) => {
@@ -139,6 +150,7 @@ export class ProfileComponent implements OnInit {
         console.log('Erro na requisição', error);
       },
     });
+   
   }
 
   private loadUsuario(profile: any) {

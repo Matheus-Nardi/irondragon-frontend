@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private keycloak: KeycloakService,
     private router: Router
-  ) {}
+  ) { }
 
   async canActivate(
     route: ActivatedRouteSnapshot,
@@ -25,9 +25,8 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    
-    const requiredRoles: string[] = route.data['roles'];
 
+    const requiredRoles: string[] = route.data['roles'];
     if (requiredRoles && requiredRoles.length > 0) {
       const userRoles = this.keycloak.getUserRoles(); // default resource access
 

@@ -1,0 +1,177 @@
+.admin-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, var(--mat-sys-primary) 0%, var(--mat-sys-primary-container) 100%);
+    color: var(--mat-sys-on-primary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 24px;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-button {
+    margin-right: 16px;
+    color: var(--mat-sys-on-primary);
+  }
+  
+  .brand {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    
+    .logo-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  .brand-name {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .action-button {
+    color: var(--mat-sys-on-primary);
+    margin: 0 4px;
+  }
+  
+  .user-button {
+    display: flex;
+    align-items: center;
+    padding: 4px 12px 4px 4px;
+    border-radius: 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+ .user-menu-header {
+  padding: 16px;
+}
+
+.user-menu-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-menu-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: black;
+}
+
+.user-menu-email {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.user-menu-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #4caf50;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+
+/* Menu Items - Melhorias */
+.menu-item-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.menu-item-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.menu-item-subtitle {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Botões específicos */
+.profile-button mat-icon {
+  color: #0077c0;
+}
+
+.logout-button {
+  color: #f44336;
+}
+
+.logout-button mat-icon {
+  color: #f44336;
+}
+
+  @media (max-width: 960px) {
+    .header-center {
+      display: none;
+    }
+    
+    .user-name {
+      display: none;
+    }
+    
+    .user-button {
+      padding: 4px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .brand-name {
+      display: none;
+    }
+    
+    .header-container {
+      padding: 0 16px;
+    }
+    
+    .header-right {
+      gap: 8px;
+    }
+    
+    .menu-button {
+      margin-right: 8px;
+    }
+  }
+  

@@ -1,10 +1,5 @@
 export const navbarData = [
   {
-    routeLink: '/admin/home',
-    label: 'Home',
-    icon: 'home' // Ícone do Angular Material
-  },
-  {
     routeLink: 'estados',
     label: 'Estados',
     icon: 'map' // Ícone do Angular Material
@@ -43,5 +38,10 @@ export const navbarData = [
     routeLink: 'funcionarios',
     label: 'Funcionarios',
     icon: 'people' // Ícone do Angular Material
+  }, 
+  {
+    routeLink: 'pedidos',
+    label: 'Pedidos',
+    icon: 'receipt_long'
   }
 ];
