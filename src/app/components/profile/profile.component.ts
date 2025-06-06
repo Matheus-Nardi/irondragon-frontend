@@ -44,8 +44,9 @@ import { CartaoService } from '../../services/cartao.service';
 import { PedidoService } from '../../services/pedido.service';
 import { Pedido } from '../../models/pedido.model';
 import { PedidosComponent } from "./pedidos/pedidos.component";
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, ActivatedRoute, Router } from '@angular/router';
 import { HeaderAdminComponent } from "../template/header-admin/header-admin.component";
+import { FooterClienteComponent } from "../template/footer-cliente/footer-cliente.component";
 
 @Component({
   selector: 'app-profile',
@@ -76,7 +77,8 @@ import { HeaderAdminComponent } from "../template/header-admin/header-admin.comp
     PagamentosComponent,
     PedidosComponent,
     RouterOutlet,
-    HeaderAdminComponent
+    HeaderAdminComponent,
+    FooterClienteComponent
 ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -94,12 +96,14 @@ export class ProfileComponent implements OnInit {
   fileName: string = '';
   selectedFile: File | null = null;
   imagemUrl: string = '';
-  
+
   roles: any = [];
 
   page = 0;
   pageSize = 10;
   totalRecords = 0;
+
+  selectedTabIndex = 0;
 
   ngOnInit(): void {
     this.keycloakService.getUserProfile().then((profile) => {
@@ -118,6 +122,27 @@ export class ProfileComponent implements OnInit {
         }
       }
     });
+
+    this.route.firstChild?.url.subscribe(url => {
+      const path = url[0]?.path;
+      switch (path) {
+        case 'dados':
+          this.selectedTabIndex = 0;
+          break;
+        case 'pagamentos':
+        case 'carteira':
+          this.selectedTabIndex = 1;
+          break;
+        case 'desejos':
+          this.selectedTabIndex = 2;
+          break;
+        case 'pedidos':
+          this.selectedTabIndex = 3;
+          break;
+        default:
+          this.selectedTabIndex = 0;
+      }
+    });
   }
 
   constructor(
@@ -129,8 +154,10 @@ export class ProfileComponent implements OnInit {
     private matDialogConfirmService: DialogService,
     private enderecoService: EnderecoService,
     private cartaoService: CartaoService,
-    private pedidoService: PedidoService
-  ) {}
+    private pedidoService: PedidoService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
 
   isAdminOrSuperAdmin(): boolean {
@@ -150,7 +177,7 @@ export class ProfileComponent implements OnInit {
         console.log('Erro na requisição', error);
       },
     });
-   
+
   }
 
   private loadUsuario(profile: any) {
@@ -383,5 +410,12 @@ export class ProfileComponent implements OnInit {
         this.snackbarService.showError('Erro ao remover o processador');
       },
     });
+  }
+
+  onTabChange(event: any) {
+    const tabRoutes = ['dados', 'carteira', 'desejos', 'pedidos'];
+    if (event.index >= 0 && event.index < tabRoutes.length) {
+      this.router.navigate([tabRoutes[event.index]], { relativeTo: this.route });
+    }
   }
 }

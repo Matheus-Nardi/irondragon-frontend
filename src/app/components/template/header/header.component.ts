@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit{
   isAuthenticated = false;
   userProfile?: KeycloakProfile;
   cartLength: number = 0;
+  roles: string[] = [];
   
   constructor(
     private sidebarService: SidebarService,
@@ -49,8 +50,13 @@ export class HeaderComponent implements OnInit{
     this.getCartLength();
   }
 
+  isAdminOrSuperUser(): boolean {
+    return this.roles.includes('Admin') || this.roles.includes('Super');
+  }
+
   async loadUserInfo() {
     this.isAuthenticated = this.keycloakService.isLoggedIn();
+    this.roles = this.keycloakService.getUserRoles();
 
     if (this.isAuthenticated) {
       this.userProfile = await this.keycloakService.getUserProfile();

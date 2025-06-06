@@ -1,20 +1,42 @@
 <mat-drawer-container class="container">
-    <mat-drawer #drawer mode="over">
-      <mat-toolbar class="menu-toolbar">
-        <span>Menu</span>
-      </mat-toolbar>
-      <mat-nav-list class="menu-list">
-        @for (item of navData; track $index) {
-          <mat-list-item routerLink="{{item.routeLink}}" (click)="drawer.close()" class="menu-item">
-            <mat-icon class="menu-icon">{{item.icon}}</mat-icon> 
-            <span>{{item.label}}</span>
-          </mat-list-item>
-        }
-      </mat-nav-list>
-    </mat-drawer>
-  
-    <mat-drawer-content>
-      <router-outlet></router-outlet>
-    </mat-drawer-content>
-  </mat-drawer-container>
-  
+  <mat-drawer #drawer mode="over" class="client-sidenav">
+    <!-- Header -->
+    <div class="sidenav-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <span class="app-name">IRONDRAGON</span>
+        </div>
+        <button mat-icon-button class="close-button" (click)="drawer.close()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidenav-nav">
+      <div class="nav-section">
+        <span class="section-title">Navegação</span>
+        <div class="nav-items">
+          @for (item of navData; track $index) {
+            <a 
+              routerLink="{{item.routeLink}}" 
+              routerLinkActive="active"
+              class="nav-item"
+              (click)="drawer.close()"
+            >
+              <div class="nav-item-content">
+                <mat-icon class="nav-icon">{{item.icon}}</mat-icon>
+                <span class="nav-label">{{item.label}}</span>
+              </div>
+              <mat-icon class="nav-arrow">chevron_right</mat-icon>
+            </a>
+          }
+        </div>
+      </div>
+    </nav>
+  </mat-drawer>
+
+  <mat-drawer-content class="sidenav-content">
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

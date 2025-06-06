@@ -75,6 +75,8 @@
     </div>
 
     <mat-tab-group
+      [selectedIndex]="selectedTabIndex"
+      (selectedIndexChange)="onTabChange($event)"
       mat-stretch-tabs="false"
       mat-align-tabs="start"
       animationDuration="300ms"
@@ -150,4 +152,4 @@
     </mat-tab-group>
   </div>
 }
-<app-footer/>
+<app-footer-cliente/>

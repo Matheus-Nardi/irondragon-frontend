@@ -88,7 +88,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
   // Product data
   processadores: Processador[] = [];
   page = 0;
-  pageSize = 25;
+  pageSize = 12;
   totalRecords = 0;
   cards = signal<Card[]>([]);
   sortBy = 'preco-asc';

@@ -67,13 +67,13 @@
     margin: 0 4px;
   }
   
+  
   .user-button {
     display: flex;
     align-items: center;
     padding: 4px 12px 4px 4px;
     border-radius: 24px;
     background-color: rgba(255, 255, 255, 0.1);
-    color: var(--mat-sys-on-primary);
     transition: background-color 0.2s;
     
     &:hover {
@@ -81,56 +81,69 @@
     }
   }
   
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .user-name {
-    color: var(--mat-sys-on-surface);
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .dropdown-icon {
-    margin-left: 4px;
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
-  
-  ::ng-deep .user-menu {
-    .user-menu-header {
-      display: flex;
-      align-items: center;
-      padding: 16px;
-      gap: 12px;
-    }
-    .user-menu-info {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .user-menu-name {
-      font-weight: 500;
-      font-size: 14px;
-      color: var(--mat-sys-error);
-    }
-    
-    .user-menu-email {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-    
-    .logout-button {
-      color: var(--mat-sys-error);
-      
-      mat-icon {
-        color: var(--mat-sys-error);
-      }
-    }
-  }
+ .user-menu-header {
+  padding: 16px;
+}
+
+.user-menu-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-menu-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: black;
+}
+
+.user-menu-email {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.user-menu-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #4caf50;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+
+/* Menu Items - Melhorias */
+.menu-item-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.menu-item-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.menu-item-subtitle {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Botões específicos */
+.profile-button mat-icon {
+  color: #0077c0;
+}
+
+.logout-button {
+  color: #f44336;
+}
+
+.logout-button mat-icon {
+  color: #f44336;
+}
+
   @media (max-width: 960px) {
     .header-center {
       display: none;

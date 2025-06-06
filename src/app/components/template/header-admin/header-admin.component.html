@@ -19,6 +19,7 @@
     </div>
     
     <div class="header-right">
+     
       <ng-container *ngIf="isAuthenticated">
         <button 
           mat-button 
@@ -41,7 +42,7 @@
           
           <mat-divider></mat-divider>
           
-          <button mat-menu-item routerLink="/perfil" class="profile-button">
+          <button mat-menu-item routerLink="/perfil" class="profile-button" *ngIf="!isAdminOrSuperUser()">
             <mat-icon>person</mat-icon>
             <div class="menu-item-content">
               <span class="menu-item-title">Meu Perfil</span>
@@ -49,7 +50,7 @@
             </div>
           </button>
     
-          <mat-divider></mat-divider>
+          <mat-divider *ngIf="!isAdminOrSuperUser()"></mat-divider >
           
           <button mat-menu-item class="logout-button" (click)="logout()">
             <mat-icon>exit_to_app</mat-icon>

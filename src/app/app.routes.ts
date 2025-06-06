@@ -30,6 +30,8 @@ import { AdminTemplateComponent } from './components/template/admin-template/adm
 import { ClienteHomeComponent } from './components/template/cliente/cliente-home/cliente-home.component';
 import { ClienteTemplateComponent } from './components/template/cliente/cliente-template/cliente-template.component';
 import { AuthGuard } from './guard/auth.guard';
+import { AdminGuard } from './guard/admin.guard';
+import { UserOnlyGuard } from './guard/user-only.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
@@ -42,7 +44,7 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminTemplateComponent,
     title: 'Administração',
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, AdminGuard],
     data: { roles: ['Super', 'Admin'] },
     children: [
       { path: '', component: AdminHomeComponent, title: 'Home' },
@@ -222,17 +224,25 @@ export const routes: Routes = [
   },
 
   {
-        path: 'perfil',
-        title: 'Perfil',
-        component: ProfileComponent,
-        canActivate: [AuthGuard],
-         data: { roles: ['User'] }
-      },
-      {
-        path: 'perfil/pedidos/:id',
-        title: 'Detalhes do Pedido',
-        component: PedidosDetailsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['User'] }
-      },
+    path: 'perfil',
+    title: 'Perfil',
+    component: ProfileComponent,
+    canActivate: [AuthGuard, UserOnlyGuard],
+    data: { roles: ['User'] },
+    children: [
+      { path: '', redirectTo: 'dados', pathMatch: 'full' },
+      { path: 'dados', title: 'Meus Dados', component: ProfileComponent },
+      { path: 'pedidos', title: 'Meus Pedidos', component: ProfileComponent },
+      { path: 'carteira', title: 'Carteira', component: ProfileComponent },
+      { path: 'desejos', title: 'Desejos', component: ProfileComponent },
+      // ...outras rotas filhas se quiser
+    ]
+  },
+  {
+    path: 'perfil/pedidos/:id',
+    title: 'Detalhes do Pedido',
+    component: PedidosDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['User'] }
+  },
 ];

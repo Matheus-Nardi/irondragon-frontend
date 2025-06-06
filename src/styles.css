@@ -16,4 +16,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background: transparent !important;
     box-shadow: none !important;
   }
+
+
+mat-drawer-content {
+  overflow-x: hidden !important;
+  /* previne scroll horizontal / overflow */
+  width: 100%;
+  /* limita a largura ao container pai */
+  box-sizing: border-box;
+  /* pra incluir padding/borda no cálculo */
+}
+
+
+mat-drawer-container {
+  height: auto !important;
+  min-height: 100vh;
+  /* para ocupar tela toda, mas crescer se precisar */
+}
   

@@ -22,6 +22,7 @@
      
       <ng-container *ngIf="isAuthenticated">
         <button 
+        *ngIf="!isAdminOrSuperUser()"
           mat-icon-button 
           class="cart-button" 
           matTooltip="Meu Carrinho"
@@ -45,28 +46,29 @@
         <mat-menu #userMenu="matMenu" class="user-menu">
           <div class="user-menu-header">
             <div class="user-menu-info">
-              <span class="user-menu-name">{{ userProfile?.firstName }} {{userProfile?.lastName}}</span>
-              <span class="user-menu-email">{{userProfile?.email}}</span>
+              <span class="user-menu-name">{{ userProfile?.firstName }} {{ userProfile?.lastName }}</span>
+              <span class="user-menu-email">{{ userProfile?.email }}</span>
             </div>
           </div>
           
           <mat-divider></mat-divider>
           
-          <button mat-menu-item routerLink="/perfil">
+          <button mat-menu-item routerLink="/perfil" class="profile-button" *ngIf="!isAdminOrSuperUser()">
             <mat-icon>person</mat-icon>
-            <span>Meu Perfil</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Meu Perfil</span>
+              <span class="menu-item-subtitle">Gerenciar conta e preferências</span>
+            </div>
           </button>
-          
-          <button mat-menu-item>
-            <mat-icon>settings</mat-icon>
-            <span>Configurações</span>
-          </button>
-          
-          <mat-divider></mat-divider>
+    
+          <mat-divider *ngIf="!isAdminOrSuperUser()"></mat-divider >
           
           <button mat-menu-item class="logout-button" (click)="logout()">
             <mat-icon>exit_to_app</mat-icon>
-            <span>Sair</span>
+            <div class="menu-item-content">
+              <span class="menu-item-title">Sair</span>
+              <span class="menu-item-subtitle">Encerrar sessão</span>
+            </div>
           </button>
         </mat-menu>
       </ng-container>
