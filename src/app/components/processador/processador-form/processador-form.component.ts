@@ -59,8 +59,12 @@ export class ProcessadorFormComponent implements OnInit {
   isUploading = false;
   isDragOver = false;
   fileName: string = '';
-  selectedFile: File | null = null;
-  imagePreview: any = null;
+  selectedFile: File[] = [];
+  imagePreview: string[] = [];
+  selectedFiles: File[] = [];
+  imagePreviews: string[] = [];
+  existingImages: string[] = [];
+  imagensRemovidas: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -141,12 +145,8 @@ export class ProcessadorFormComponent implements OnInit {
       (p) => p.id === (processador?.placaIntegrada?.id ?? null)
     );
 
-    if (processador && processador.imagens) {
-      this.imagePreview = this.processadorService.getUrlImage(
-        processador.id.toString(),
-        processador.imagens[0]
-      );
-      this.fileName = processador.imagens[0];
+    if (processador && processador.imagens && processador.imagens.length > 0) {
+      this.existingImages = [...processador.imagens];
     }
 
     this.formGroupInfosBasicas = this.formBuilder.group({
@@ -228,7 +228,13 @@ export class ProcessadorFormComponent implements OnInit {
       operacao.subscribe({
         next: (processadorSalvo: Processador) => {
           console.log('Processador salvo com sucesso');
-          this.uploadImage(processadorSalvo.id);
+          // Se for update, processadorSalvo será null (204 No Content)
+          const id = processadorSalvo?.id ?? this.formGroupInfosBasicas.get('id')?.value;
+          if (id) {
+            this.uploadImages(id);
+          } else {
+            this.snackbarService.showError('Erro: ID do processador não encontrado.');
+          }
           this.router.navigateByUrl('/admin/processadores');
           this.snackbarService.showSuccess('Processador salvo com sucesso');
         },
@@ -301,104 +307,78 @@ export class ProcessadorFormComponent implements OnInit {
   }
 
 
-  voltarPagina(){
+  voltarPagina() {
     this.location.back();
   }
 
   // Método para remover a imagem selecionada
-  removerImagem(event: Event) {
-    event.stopPropagation(); // Impede que o clique propague para o container
-    this.imagePreview = null;
-    this.fileName = '';
-    this.selectedFile = null;
+  removerImagem(index: number) {
+    this.imagePreviews.splice(index, 1);
+    this.selectedFiles.splice(index, 1);
   }
 
-  // Métodos para suporte a drag and drop
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragOver = true;
-    const element = event.currentTarget as HTMLElement;
-    element.classList.add('dragover');
-  }
-
-  onDragLeave(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragOver = false;
-    const element = event.currentTarget as HTMLElement;
-    element.classList.remove('dragover');
-  }
-
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragOver = false;
-    const element = event.currentTarget as HTMLElement;
-    element.classList.remove('dragover');
-
-    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
-      const file = event.dataTransfer.files[0];
-      if (file.type.startsWith('image/')) {
-        this.processarArquivo(file);
-      } else {
-        // Mostrar mensagem de erro - formato inválido
-        this.snackbarService.showError(
-          'Formato de arquivo inválido. Por favor, selecione uma imagem.'
-        );
-      }
+  removerImagemExistente(index: number) {
+    const removida = this.existingImages.splice(index, 1)[0];
+    if (removida) {
+      this.imagensRemovidas.push(removida);
     }
   }
+
+  limparImagens(){
+    this.selectedFiles = [];
+    this.imagePreviews = [];
+  }
+
+  getExistingImageUrl(img: string): string {
+  return this.processadorService.getUrlImage(
+    this.formGroupInfosBasicas.get('id')?.value,
+    img
+  );
+}
+
 
   // Método para processar o arquivo selecionado
-  processarArquivo(file: File) {
-    if (file.size > 10 * 1024 * 1024) {
-      // Mostrar mensagem de erro - arquivo muito grande
-      this.snackbarService.showError(
-        'Arquivo muito grande. O tamanho máximo é 10MB.'
-      );
-      return;
-    }
-
-    this.fileName = file.name;
-    this.selectedFile = file;
-    this.isUploading = true;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.imagePreview = e.target?.result;
-      this.isUploading = false;
-    };
-    reader.readAsDataURL(file);
+  processarArquivos(files: FileList) {
+    Array.from(files).forEach((file) => {
+      if (file.size > 10 * 1024 * 1024) {
+        this.snackbarService.showError('Arquivo muito grande. O tamanho máximo é 10MB.');
+        return;
+      }
+      this.selectedFiles.push(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagePreviews.push(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   // Substituição do método existente
-  carregarImagemSelecionada(event: any) {
+  carregarImagensSelecionadas(event: any) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.processarArquivo(file);
+      this.processarArquivos(input.files);
     }
   }
 
-  
-  private uploadImage(processadorId: number) {
-    if (this.selectedFile) {
+
+  private uploadImages(processadorId: number) {
+    if (this.selectedFiles.length > 0) {
       this.isUploading = true;
-      this.processadorService
-        .uploadImage(processadorId, this.selectedFile.name, this.selectedFile)
-        .subscribe({
-          next: () => {
-            this.isUploading = false;
-            this.snackbarService.showSuccess('Imagem enviada com sucesso');
-            this.voltarPagina();
-          },
-          error: (err) => {
-            this.isUploading = false;
-            console.log('Erro ao fazer o upload da imagem');
-            this.snackbarService.showError('Erro ao enviar a imagem');
-          },
-        });
+      const uploads = this.selectedFiles.map(file =>
+        this.processadorService.uploadImage(processadorId, file.name, file)
+      );
+      forkJoin(uploads).subscribe({
+        next: () => {
+          this.isUploading = false;
+          this.snackbarService.showSuccess('Imagens enviadas com sucesso');
+          this.router.navigateByUrl('/admin/processadores');
+        },
+        error: (err) => {
+          this.isUploading = false;
+          this.snackbarService.showError('Erro ao enviar as imagens');
+        },
+      });
     } else {
       this.voltarPagina();
     }
@@ -465,4 +445,5 @@ export class ProcessadorFormComponent implements OnInit {
       pattern: 'Informe um número inteiro positivo para canais de memória.',
     },
   };
+
 }

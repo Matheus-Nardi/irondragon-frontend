@@ -505,118 +505,309 @@
       </mat-step>
 
       <mat-step>
-        <ng-template matStepLabel>Imagens</ng-template>
-        
-        <div class="image-upload-container">
-          <div class="upload-instructions">
-            <h3>Imagens do Processador</h3>
-            <p>Adicione imagens do produto para exibição na loja</p>
-          </div>
-          
-          <!-- Área de Upload -->
-          <div 
-            class="upload-area" 
-            [class.has-files]="imagePreview"
-            (click)="fileInput.click()" 
-            (dragover)="onDragOver($event)" 
-            (dragleave)="onDragLeave($event)" 
-            (drop)="onDrop($event)"
+        <ng-template matStepLabel>Imagens do Produto</ng-template>
+
+        <div
+          class="add-more-images-btn"
+          *ngIf="imagePreviews.length > 0 || existingImages.length > 0"
+        >
+          <input
+            type="file"
+            #fileInputMore
+            (change)="carregarImagensSelecionadas($event)"
+            multiple
+            accept="image/*"
+            hidden
+          />
+          <button
+            mat-stroked-button
+            color="primary"
+            type="button"
+            (click)="fileInputMore.click()"
           >
+            <mat-icon>add_photo_alternate</mat-icon>
+            Adicionar Mais Imagens
+          </button>
+        </div>
+        <div class="step-content">
+          <div class="step-header">
+            <div class="step-icon">
+              <mat-icon>photo_library</mat-icon>
+            </div>
+            <div class="step-title">
+              <h2>Galeria de Imagens</h2>
+              <p>Adicione imagens atrativas para destacar seu produto</p>
+            </div>
+          </div>
+
+          <!-- Image Management Section -->
+          <div
+            class="image-management"
+            *ngIf="existingImages.length > 0 || imagePreviews.length > 0"
+          >
+            <!-- Existing Images -->
+            <div
+              class="image-gallery existing-gallery"
+              *ngIf="existingImages.length > 0"
+            >
+              <div class="gallery-header">
+                <h4>
+                  <mat-icon>inventory</mat-icon>
+                  Imagens Atuais ({{ existingImages.length }})
+                </h4>
+                <span class="gallery-subtitle"
+                  >Imagens já salvas no produto</span
+                >
+              </div>
+
+              <div class="image-grid">
+                <div
+                  class="image-card existing-image"
+                  *ngFor="let img of existingImages; let i = index"
+                >
+                  <div class="image-container">
+                    <img
+                      [src]="getExistingImageUrl(img)"
+                      [alt]="'Imagem ' + (i + 1)"
+                    />
+                    <div class="image-overlay">
+                      <button
+                        mat-icon-button
+                        class="overlay-btn delete-btn"
+                        matTooltip="Remover"
+                        color="warn"
+                        (click)="removerImagemExistente(i)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="image-info">
+                    <span class="image-status saved">Salva</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Selected Images -->
+            <div
+              class="image-gallery new-gallery"
+              *ngIf="imagePreviews.length > 0"
+            >
+              <div class="gallery-header">
+                <h4>
+                  <mat-icon>add_photo_alternate</mat-icon>
+                  Novas Imagens ({{ imagePreviews.length }})
+                </h4>
+                <span class="gallery-subtitle"
+                  >Imagens que serão adicionadas</span
+                >
+                <button
+                  mat-button
+                  color="primary"
+                  class="clear-all-btn"
+                  (click)="limparImagens()"
+                >
+                  <mat-icon>clear_all</mat-icon>
+                  Limpar Todas
+                </button>
+              </div>
+
+              <div class="image-grid">
+                <div
+                  class="image-card new-image"
+                  *ngFor="let preview of imagePreviews; let i = index"
+                >
+                  <div class="image-container">
+                    <img [src]="preview" [alt]="'Nova imagem ' + (i + 1)" />
+                    <div class="image-overlay">
+                      <button
+                        mat-icon-button
+                        class="overlay-btn delete-btn"
+                        matTooltip="Remover"
+                        (click)="removerImagem(i)"
+                      >
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="image-info">
+                    <span class="image-status new">Nova</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Product Preview -->
+          <div
+            class="product-preview-section"
+            *ngIf="imagePreviews.length > 0 || existingImages.length > 0"
+          >
+            <div class="preview-header">
+              <h3>
+                <mat-icon>preview</mat-icon>
+                Visualização na Loja
+              </h3>
+              <p>Veja como seu produto aparecerá para os clientes</p>
+            </div>
+
+            <div class="preview-container">
+              <div class="product-card-preview">
+                <div class="card-image-section">
+                  <div class="main-image">
+                    <img
+                      [src]="
+                        imagePreviews[0] ||
+                        (existingImages.length > 0
+                          ? getExistingImageUrl(existingImages[0])
+                          : null)
+                      "
+                      alt="Imagem principal do produto"
+                    />
+                  </div>
+                  <div
+                    class="image-indicators"
+                    *ngIf="imagePreviews.length + existingImages.length > 1"
+                  >
+                    <span class="indicator active"></span>
+                  </div>
+                </div>
+
+                <div class="card-content">
+                  <p class="product-brand">
+                    {{
+                      formGroupInfosBasicas.get("fabricante")?.value?.nome ||
+                        "Fabricante"
+                    }}
+                  </p>
+                  <h4 class="product-name">
+                    {{
+                      formGroupInfosBasicas.get("nome")?.value ||
+                        "Nome do Processador"
+                    }}
+                  </h4>
+                  <div class="product-specs">
+                    <span class="spec-chip">
+                      {{ formGroupInfosBasicas.get("nucleos")?.value || "0" }}
+                      Núcleos
+                    </span>
+                    <span class="spec-chip">
+                      {{ formGroupInfosBasicas.get("threads")?.value || "0" }}
+                      Threads
+                    </span>
+                  </div>
+                  <p class="product-price">
+                    R$ {{ formGroupInfosBasicas.get("preco")?.value || "0,00" }}
+                  </p>
+                  <button class="preview-buy-button">
+                    <mat-icon>shopping_cart</mat-icon>
+                    COMPRAR
+                  </button>
+                </div>
+              </div>
+
+              <div class="preview-stats">
+                <div class="stat-item">
+                  <mat-icon>photo</mat-icon>
+                  <span
+                    >{{
+                      imagePreviews.length + existingImages.length
+                    }}
+                    imagens</span
+                  >
+                </div>
+                <div class="stat-item">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Pronto para publicação</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div
+            class="empty-state"
+            *ngIf="imagePreviews.length === 0 && existingImages.length === 0"
+          >
+            <div class="empty-icon">
+              <mat-icon>photo_library</mat-icon>
+            </div>
+            <h3>Nenhuma imagem adicionada</h3>
+            <p>
+              Adicione pelo menos uma imagem para que os clientes possam
+              visualizar seu produto
+            </p>
             <input
               type="file"
-              (change)="carregarImagemSelecionada($event)"
-              hidden
               #fileInput
+              (change)="carregarImagensSelecionadas($event)"
+              multiple
               accept="image/*"
+              hidden
             />
-            
-            <div class="upload-placeholder" *ngIf="!imagePreview">
-              <mat-icon class="upload-icon">cloud_upload</mat-icon>
-              <p>Arraste e solte uma imagem aqui ou clique para selecionar</p>
-              <span class="file-types">Formatos aceitos: JPG, PNG (máx. 10MB)</span>
-            </div>
-            
-            <div class="upload-preview" *ngIf="imagePreview">
-              <div class="preview-container">
-                <img [src]="imagePreview" alt="Preview da imagem" class="preview-image">
-                <button mat-mini-fab color="warn" class="remove-button" (click)="removerImagem($event)">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Preview do Card do Produto -->
-          <div class="product-preview-container" *ngIf="imagePreview">
-            <h3>Visualização na Loja</h3>
-            
-            <div class="product-card">
-              <div class="product-image">
-                <img [src]="imagePreview" alt="Imagem do produto">
-              </div>
-              <div class="product-info">
-                <p class="product-brand">{{ formGroupInfosBasicas.get('fabricante')?.value?.nome || 'Fabricante' }}</p>
-                <h4 class="product-name">{{ formGroupInfosBasicas.get('nome')?.value || 'Nome do Processador' }}</h4>
-                <div class="product-specs">
-                  <span>{{ formGroupInfosBasicas.get('nucleos')?.value || '0' }} Núcleos</span>
-                  <span>{{ formGroupInfosBasicas.get('threads')?.value || '0' }} Threads</span>
-                </div>
-                <p class="product-price">R$ {{ formGroupInfosBasicas.get('preco')?.value || '0.00' }}</p>
-                <button class="buy-button">
-                  <mat-icon>shopping_cart</mat-icon> COMPRAR
-                </button>
-              </div>
-            </div>
-            
-            <div class="preview-note">
-              <mat-icon>info</mat-icon>
-              <p>Esta é uma prévia de como o produto será exibido na loja</p>
-            </div>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="fileInput.click()"
+            >
+              <mat-icon>add_photo_alternate</mat-icon>
+              Adicionar Primeira Imagem
+            </button>
           </div>
         </div>
-        
-        <div class="upload-status" *ngIf="isUploading">
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-          <p>Enviando imagem...</p>
-        </div>
-        
+
+        <!-- Enhanced Step Actions -->
         <div class="step-actions">
-          <button mat-stroked-button matStepperPrevious>
+          <button
+            mat-stroked-button
+            matStepperPrevious
+            class="action-btn secondary"
+          >
             <mat-icon>arrow_back</mat-icon>
             Voltar
           </button>
-      
+
           <div class="action-spacer"></div>
-      
+
           <button
             mat-stroked-button
             type="button"
             routerLink="/admin/processadores"
-            class="cancel-button"
+            class="action-btn cancel"
           >
             <mat-icon>close</mat-icon>
-            <span>Cancelar</span>
+            Cancelar
           </button>
-      
+
           <button
             mat-raised-button
             color="warn"
             type="button"
             [disabled]="!formGroupInfosBasicas.get('id')?.value"
             (click)="onDelete()"
-            class="delete-button"
+            class="action-btn delete"
           >
             <mat-icon>delete</mat-icon>
-            <span>Excluir</span>
+            Excluir
           </button>
-      
-          <button mat-raised-button color="primary" (click)="onSubmit()">
-            <mat-icon>save</mat-icon>
-            Salvar
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onSubmit()"
+            class="action-btn primary"
+            [disabled]="isUploading"
+          >
+            <mat-icon>{{ isUploading ? "hourglass_empty" : "save" }}</mat-icon>
+            {{ isUploading ? "Salvando..." : "Salvar Produto" }}
           </button>
         </div>
       </mat-step>
-      
     </mat-horizontal-stepper>
   </div>
+
+  <!-- ...após as galerias de imagens... -->
 </div>
