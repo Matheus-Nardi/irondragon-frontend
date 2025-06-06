@@ -39,7 +39,7 @@ export class ProcessadorListComponent {
 
   totalRecords: number = 0;
   page: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 12;
 
   constructor(
     private processadorService: ProcessadorService,

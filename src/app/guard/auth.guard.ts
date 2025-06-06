@@ -25,11 +25,17 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
+    // Redireciona admin para tela de admin
+    const userRoles = this.keycloak.getUserRoles();
+    if (userRoles.includes('Admin') || userRoles.includes('Super')) {
+      if (!state.url.startsWith('/admin')) {
+        this.router.navigate(['/admin']);
+        return false;
+      }
+    }
 
     const requiredRoles: string[] = route.data['roles'];
     if (requiredRoles && requiredRoles.length > 0) {
-      const userRoles = this.keycloak.getUserRoles(); // default resource access
-
       // Verifica se o usuário tem pelo menos uma das roles necessárias
       const hasAccess = requiredRoles.some(role => userRoles.includes(role));
 

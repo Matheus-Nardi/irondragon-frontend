@@ -145,8 +145,8 @@
     font-weight: 500;
   }
   
-  .mat-column-username {
-    width: auto;
+  .mat-column-nome {
+    width: 50%;
   }
   
   .mat-column-email {

@@ -9,10 +9,12 @@
       <p class="page-subtitle">Encontre o processador ideal para seu setup</p>
     </div>
 
-    <!-- Controles do header -->
+   
     <div class="header-controls" [formGroup]="filtroForm">
       <div class="results-info">
-        <span class="results-count">{{ totalRecords }} produtos encontrados</span>
+        <span class="results-count"
+          >{{ totalRecords }} produtos encontrados</span
+        >
       </div>
 
       <div class="view-controls">
@@ -27,15 +29,13 @@
         </button>
 
         <!-- Ordenação -->
-        
         <mat-form-field appearance="outline" class="sort-field">
           <mat-label>Ordenar por</mat-label>
           <mat-select formControlName="sortBy">
             <mat-option value="preco-asc">Menor preço</mat-option>
             <mat-option value="preco-desc">Maior preço</mat-option>
           </mat-select>
-        </mat-form-field> 
-       
+        </mat-form-field>
       </div>
     </div>
   </div>
@@ -60,7 +60,29 @@
           </button>
         </div>
 
+          <mat-form-field class="example-form-field search-nome" appearance="outline">
+            <mat-label>Pesquisar por nome</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="nome"
+              placeholder="Digite o nome do processador"
+            />
+            <mat-icon matPrefix>search</mat-icon>
+            <button
+              *ngIf="filtroForm.get('nome')?.value"
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              (click)="filtroForm.get('nome')?.setValue('')"
+              type="button"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        
         <div class="filters-content">
+          
           <!-- Filtro por Fabricante -->
           <mat-expansion-panel class="filter-panel" [expanded]="true">
             <mat-expansion-panel-header>
@@ -71,7 +93,10 @@
             </mat-expansion-panel-header>
 
             <div class="filter-options">
-              <mat-radio-group formControlName="fabricante" class="manufacturer-radio-group">
+              <mat-radio-group
+                formControlName="fabricante"
+                class="manufacturer-radio-group"
+              >
                 <mat-radio-button value="todos" class="filter-radio">
                   Todos
                 </mat-radio-button>
@@ -127,15 +152,38 @@
 
               <!-- Slider de preço -->
               <div class="price-slider">
-                <mat-slider min="0" max="5000" step="100" class="price-range-slider">
-                  <input [value]="filtroForm.get('precoMin')?.value" matSliderStartThumb (valueChange)="filtroForm.get('precoMin')?.setValue($event)" />
-                  <input [value]="filtroForm.get('precoMax')?.value" matSliderEndThumb (valueChange)="filtroForm.get('precoMax')?.setValue($event)" />
+                <mat-slider
+                  min="0"
+                  max="5000"
+                  step="100"
+                  class="price-range-slider"
+                >
+                  <input
+                    [value]="filtroForm.get('precoMin')?.value"
+                    matSliderStartThumb
+                    (valueChange)="filtroForm.get('precoMin')?.setValue($event)"
+                  />
+                  <input
+                    [value]="filtroForm.get('precoMax')?.value"
+                    matSliderEndThumb
+                    (valueChange)="filtroForm.get('precoMax')?.setValue($event)"
+                  />
                 </mat-slider>
               </div>
 
               <div class="price-display">
-                <span>R$ {{ filtroForm.get("precoMin")?.value | number : "1.0-0" }}</span>
-                <span>R$ {{ filtroForm.get("precoMax")?.value | number : "1.0-0" }}</span>
+                <span
+                  >R$
+                  {{
+                    filtroForm.get("precoMin")?.value | number : "1.0-0"
+                  }}</span
+                >
+                <span
+                  >R$
+                  {{
+                    filtroForm.get("precoMax")?.value | number : "1.0-0"
+                  }}</span
+                >
               </div>
             </div>
           </mat-expansion-panel>
@@ -211,17 +259,6 @@
         </div>
 
         <!-- Botão aplicar filtros (mobile) -->
-        <div class="filters-footer">
-          <button
-            mat-flat-button
-            color="primary"
-            class="apply-filters"
-            type="submit"
-          >
-            <mat-icon>search</mat-icon>
-            Aplicar Filtros
-          </button>
-        </div>
       </form>
     </aside>
 
@@ -238,10 +275,21 @@
         <div class="filter-chips">
           <mat-chip-set>
             <mat-chip
+              *ngIf="filtroForm.get('nome')?.value"
+              (removed)="filtroForm.get('nome')?.setValue('')"
+            >
+              "{{ filtroForm.get('nome')?.value }}"
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <mat-chip
               *ngIf="filtroForm.get('fabricante')?.value !== 'todos'"
               (removed)="filtroForm.get('fabricante')?.setValue('todos')"
             >
-              {{ filtroForm.get('fabricante')?.value === 'intel' ? 'Intel' : 'AMD' }}
+              {{
+                filtroForm.get("fabricante")?.value === "intel"
+                  ? "Intel"
+                  : "AMD"
+              }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
             <mat-chip
@@ -252,7 +300,9 @@
             >
               R$ {{ filtroForm.get("precoMin")?.value }} - R$
               {{ filtroForm.get("precoMax")?.value }}
-              <mat-icon matChipRemove (click)="clearPriceFilter()">cancel</mat-icon>
+              <mat-icon matChipRemove (click)="clearPriceFilter()"
+                >cancel</mat-icon
+              >
             </mat-chip>
             <!-- Chips para sockets -->
             <ng-container *ngFor="let socket of getSelectedSockets()">
@@ -291,10 +341,7 @@
             </div>
 
             <p class="price">R$ {{ card.preco }}</p>
-            <button
-              class="buy-button"
-              (click)="addToCart(card, $event)"
-            >
+            <button class="buy-button" (click)="addToCart(card, $event)">
               <mat-icon>shopping_cart</mat-icon> COMPRAR
             </button>
           </div>

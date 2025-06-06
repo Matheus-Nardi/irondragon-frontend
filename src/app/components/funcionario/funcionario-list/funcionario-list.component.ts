@@ -37,7 +37,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 export class FuncionarioListComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
-    'username',
+    'nome',
     'email',
     'cargo',
     'salario',

@@ -527,6 +527,26 @@
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
+/* Estilos de busca */
+.search-nome {
+
+  width: 100%;
+  background: var(--mat-sys-surface-container-lowest, #f5f7fa);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.06);
+  margin-bottom: 20px;
+  transition: box-shadow 0.2s;
+}
+
+.search-nome.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--mat-sys-primary, #1976d2);
+}
+
+.search-nome input {
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
 /* Responsividade */
 @media (max-width: 1024px) {
   .content-wrapper {

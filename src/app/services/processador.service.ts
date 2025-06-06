@@ -8,6 +8,7 @@ import { ProcessadorFiltroResponse } from '../interfaces/processador-filtro-resp
 
 
 type Filtro = {
+  nome: string;
   fabricante: string;
   precoMin: number;
   precoMax: number;
@@ -55,6 +56,9 @@ export class ProcessadorService {
 
   // Filtros (se existirem)
   if (filtro) {
+    if( filtro.nome) {
+      params.nome = filtro.nome;
+    }
     if (filtro.fabricante) {
       params.fabricante = filtro.fabricante;
     }

@@ -26,6 +26,7 @@ import { ProcessadorService } from '../../services/processador.service';
 import { CarrinhoService } from '../../services/carrinho.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarService } from '../../services/snackbar.service';
+import { debounceTime } from 'rxjs';
 
 type Card = {
   id: number;
@@ -41,6 +42,7 @@ type Card = {
 };
 
 type Filtro = {
+  nome: string;
   fabricante: string;
   precoMin: number;
   precoMax: number;
@@ -107,6 +109,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
     window.scrollTo(0, 0);
     const fab = this.route.snapshot.queryParamMap.get('fabricante')?.toLowerCase() || 'todos';
     this.filtroForm = this.fb.group({
+      nome: [''],
       fabricante: [fab],
       precoMin: [0],
       precoMax: [5000],
@@ -119,7 +122,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
       graficosIntegrados: ['todos'],
       sortBy: ['preco-asc']
     });
-    this.filtroForm.valueChanges.subscribe(() => this.loadAllProcessadores());
+    this.filtroForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.loadAllProcessadores());
     this.loadAllProcessadores();
   }
 
@@ -268,6 +271,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
 
 
     return {
+      nome: formValue.nome.toLowerCase(),
       fabricante: fabricante,
       precoMin: formValue.precoMin,
       precoMax: formValue.precoMax,
