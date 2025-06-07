@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
 import { MatRadioModule, MatRadioChange } from "@angular/material/radio";
 import { MatStepper, MatStepperModule, StepState } from "@angular/material/stepper";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { ItemCarrinho } from "../../../interfaces/item-carrinho.interface";
 import { Cartao } from "../../../models/cartao.model";
 import { CarrinhoService } from "../../../services/carrinho.service";
@@ -20,6 +20,7 @@ import { CartaoFormModalComponent } from "../../cartao-form-modal/cartao-form-mo
 import { PedidoService } from "../../../services/pedido.service";
 import { Pedido } from "../../../models/pedido.model";
 import { ItemPedido } from "../../../models/item-pedido.model";
+import { PagamentoService } from "../../../services/pagamento.service";
 
 @Component({
   selector: 'app-pagamento',
@@ -49,13 +50,18 @@ export class PagamentoComponent implements OnInit {
   cartoes: Cartao[] = [];
   enderecos: Endereco[] = [];
 
+  savePedidoId: number = 0;
+  savePagamentoId: number = 0;
+
   constructor(
     private carrinhoService: CarrinhoService,
     private cartaoService: CartaoService,
     private enderecoService: EnderecoService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private router: Router,
+    private pagamentoService: PagamentoService
   ) {
 
   }
@@ -78,7 +84,7 @@ export class PagamentoComponent implements OnInit {
     });
   }
 
-    loadCartoes() {
+  loadCartoes() {
     this.cartaoService.getByUsuario().subscribe((cartoes) => {
       this.cartoes = cartoes;
     });
@@ -175,20 +181,20 @@ export class PagamentoComponent implements OnInit {
 
   adicionarCartao() {
     this.dialog.open(CartaoFormModalComponent, {
-       width: '500px',
+      width: '500px',
       data: {} as Partial<Cartao>
     }).afterClosed()
-    .subscribe((novoCartao: Cartao) => {
-      this.cartaoService.create(novoCartao).subscribe({
-         next: () => {
+      .subscribe((novoCartao: Cartao) => {
+        this.cartaoService.create(novoCartao).subscribe({
+          next: () => {
             this.snackbarService.showSuccess('Cartao salvo com sucesso');
             this.loadCartoes();
           },
           error: () => {
             this.snackbarService.showError('Erro ao salvar o cartao');
           },
+        })
       })
-    })
   }
 
   selectEndereco(event: MatRadioChange) {
@@ -196,22 +202,57 @@ export class PagamentoComponent implements OnInit {
   }
 
   finalizarPedido(event: MatStepper): void {
+    if (this.carrinhoItens && this.carrinhoItens.length === 0) {
+      this.snackbarService.showError('É necessário ter itens no carrinho');
+      return;
+    }
+
+    if (this.selectedEndereco <= 0) {
+      this.snackbarService.showError('É necessário selecionar um endereço');
+      return;
+    }
+
     const pedido = new Pedido();
     pedido.idCartao = this.selectedCard;
     pedido.idEndereco = this.selectedEndereco;
     pedido.tipoPagamento = this.formaPagamento;
     pedido.listaItemPedido = this.carrinhoItens.map(this.converterParaItemPedido);
 
-    if(this.formaPagamento == "cartao") {
-      this.pedidoService.create(pedido).subscribe(data => {
-        next: () => {
-          this.snackbarService.showSuccess('Pagamento concluido');
+    // Pagamento diferente de cartão
+    if (this.formaPagamento !== "cartao") {
+      this.pedidoService.create(pedido).subscribe({
+        next: (data: any) => {
+          this.snackbarService.showSuccess('Pedido realizado!');
+          this.carrinhoService.removerTudo();
+          this.savePedidoId = parseInt(data.id);
+          this.savePagamentoId = parseInt(data.pagamento.id);
+        },
+        error: (error) => {
+          this.snackbarService.showError('Erro ao processar pedido');
+          console.error('Erro ao criar pedido:', error);
         }
       });
+      event.next();
       return;
     }
 
-    event.next();
+    // Validação específica para pagamento com cartão
+    if (this.selectedCard <= 0) {
+      this.snackbarService.showError('É necessário selecionar um cartão');
+      return;
+    }
+    // Pagamento com cartão
+    this.pedidoService.create(pedido).subscribe({
+      next: (data) => {
+        this.snackbarService.showSuccess('Pagamento concluído');
+        this.carrinhoService.removerTudo();
+        this.router.navigateByUrl('/');
+      },
+      error: (error) => {
+        this.snackbarService.showError('Erro ao processar pagamento');
+        console.error('Erro ao processar pagamento:', error);
+      }
+    });
   }
 
   converterParaItemPedido(item: ItemCarrinho): ItemPedido {
@@ -220,5 +261,27 @@ export class PagamentoComponent implements OnInit {
     itemPedido.idProcessador = item.id;
 
     return itemPedido;
+  }
+
+  confirmarPagamento() {
+    if(this.formaPagamento === "boleto") {
+      this.pagamentoService.boletoPayment(this.savePedidoId, this.savePagamentoId).subscribe({
+      next: () => {
+        this.snackbarService.showSuccess('Pagamento concluído');
+        this.carrinhoService.removerTudo();
+        this.router.navigateByUrl('/');
+      }
+    })
+    }
+
+    if(this.formaPagamento === "pix") {
+      this.pagamentoService.pixPayment(this.savePedidoId, this.savePagamentoId).subscribe({
+      next: () => {
+        this.snackbarService.showSuccess('Pagamento concluído');
+        this.carrinhoService.removerTudo();
+        this.router.navigateByUrl('/');
+      }
+    })
+    }
   }
 }

@@ -45,11 +45,12 @@
 
                             <div class="acoes-finalizar">
                                 <button mat-raised-button color="primary" class="btn-principal btn-finalizar"
-                                    (click)="stepper.next()">
+                                    [disabled]="carrinhoItens.length === 0" (click)="stepper.next()">
                                     <mat-icon>shopping_cart_checkout</mat-icon>
-                                    <span>Finalizar Compra</span>
+                                    <span>Prosseguir com a Compra</span>
                                 </button>
-                                <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/carrinho']">
+                                <button mat-stroked-button class="btn-principal btn-continuar"
+                                    [routerLink]="['/carrinho']">
                                     <mat-icon>arrow_back</mat-icon>
                                     <span>Voltar para o carrinho</span>
                                 </button>
@@ -125,7 +126,7 @@
             <mat-radio-group class="cards-grid" (change)="selectCard($event)">
                 @for (cartao of cartoes; track $index) {
 
-                <mat-radio-button class="card-item" value={{cartao.id}}>
+                <mat-radio-button class="card-item" value={{cartao.id}} required>
                     <div class="mini-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
                         <div class="card-top">
                             <div class="brand-logo">
@@ -155,18 +156,18 @@
             </mat-radio-group>
 
             <div class="container-botao">
-            <button class="botao-centralizado-medio" (click)="adicionarCartao()">
-                Adicionar Cartao
-            </button>
-        </div>
+                <button class="botao-centralizado-medio" (click)="adicionarCartao()">
+                    Adicionar Cartao
+                </button>
+            </div>
             }
             <div class="forma-pagamento-acoes">
-                <button mat-raised-button color="primary" class="btn-principal btn-finalizar"
+                <button type="button" mat-raised-button color="primary" class="btn-principal btn-finalizar"
                     (click)="stepper.previous()">
                     <mat-icon>arrow_back</mat-icon>
                     <span>Voltar</span>
                 </button>
-                <button mat-stroked-button class="btn-principal btn-continuar"
+                <button type="button" mat-stroked-button class="btn-principal btn-continuar" 
                 (click)="finalizarPedido(stepper)">
                     <mat-icon>arrow_forward</mat-icon>
                     <span>Finalizar compra</span>
@@ -177,9 +178,22 @@
 
     <mat-step label="Simular Pagamento">
         @if(formaPagamento == "pix") {
-
+        <div class="imagem-container">
+            <img src="https://pngimg.com/uploads/qr_code/qr_code_PNG6.png" alt="Imagem bonita"
+                class="imagem-centralizada">
+        </div>
         } @else if (formaPagamento == "boleto") {
-
+        <div class="imagem-container">
+            <img src="https://imagepng.org/wp-content/uploads/2019/09/boleto-simbolo.png" alt="Imagem bonita"
+                class="imagem-centralizada">
+        </div>
         }
+
+        <div class="container-botao">
+            <button class="botao-centralizado-medio"
+            (click)="confirmarPagamento()">
+                Marcar como concluído
+            </button>
+        </div>
     </mat-step>
 </mat-stepper>

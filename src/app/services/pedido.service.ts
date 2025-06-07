@@ -17,7 +17,7 @@ export class PedidoService {
     return this.httpClient.get<Processador[]>(`${this.configService.getApiBaseUrl()}/pedido-adm/mais-vendidos`);
   }
 
-  create(pedido: Pedido): Observable<Pedido> {
+  create(pedido: Pedido): Observable<any> {
     return this.httpClient.post<Pedido>(`${this.configService.getApiBaseUrl()}/pedidos`, pedido);
   }
 }
