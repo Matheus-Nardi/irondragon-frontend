@@ -509,7 +509,7 @@
 
         <div
           class="add-more-images-btn"
-          *ngIf="imagePreviews.length > 0 || existingImages.length > 0"
+          *ngIf="imagensNovas.length > 0 || existingImages.length > 0"
         >
           <input
             type="file"
@@ -524,6 +524,7 @@
             color="primary"
             type="button"
             (click)="fileInputMore.click()"
+            [disabled]="imagensNovas.length + existingImages.length >= 5"
           >
             <mat-icon>add_photo_alternate</mat-icon>
             Adicionar Mais Imagens
@@ -543,7 +544,7 @@
           <!-- Image Management Section -->
           <div
             class="image-management"
-            *ngIf="existingImages.length > 0 || imagePreviews.length > 0"
+            *ngIf="existingImages.length > 0 || imagensNovas.length > 0"
           >
             <!-- Existing Images -->
             <div
@@ -592,12 +593,12 @@
             <!-- New Selected Images -->
             <div
               class="image-gallery new-gallery"
-              *ngIf="imagePreviews.length > 0"
+              *ngIf="imagensNovas.length > 0"
             >
               <div class="gallery-header">
                 <h4>
                   <mat-icon>add_photo_alternate</mat-icon>
-                  Novas Imagens ({{ imagePreviews.length }})
+                  Novas Imagens ({{ imagensNovas.length }})
                 </h4>
                 <span class="gallery-subtitle"
                   >Imagens que serão adicionadas</span
@@ -616,10 +617,10 @@
               <div class="image-grid">
                 <div
                   class="image-card new-image"
-                  *ngFor="let preview of imagePreviews; let i = index"
+                  *ngFor="let img of imagensNovas; let i = index"
                 >
                   <div class="image-container">
-                    <img [src]="preview" [alt]="'Nova imagem ' + (i + 1)" />
+                    <img [src]="img.preview" [alt]="'Nova imagem ' + (i + 1)" />
                     <div class="image-overlay">
                       <button
                         mat-icon-button
@@ -629,10 +630,42 @@
                       >
                         <mat-icon>close</mat-icon>
                       </button>
+                      <button
+                        mat-icon-button
+                        class="overlay-btn left-btn"
+                        matTooltip="Mover para a esquerda"
+                        (click)="moveImageLeft(i)"
+                        [disabled]="i === 0"
+                      >
+                        <mat-icon>arrow_back</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        class="overlay-btn right-btn"
+                        matTooltip="Mover para a direita"
+                        (click)="moveImageRight(i)"
+                        [disabled]="i === imagensNovas.length - 1"
+                      >
+                        <mat-icon>arrow_forward</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        class="overlay-btn main-btn"
+                        matTooltip="Definir como principal"
+                        (click)="setAsMainImage(i)"
+                        [disabled]="i === 0"
+                      >
+                        <mat-icon>star</mat-icon>
+                      </button>
                     </div>
                   </div>
                   <div class="image-info">
-                    <span class="image-status new">Nova</span>
+                    <span class="image-status new" *ngIf="img.principal"
+                      >Principal</span
+                    >
+                    <span class="image-status new" *ngIf="!img.principal"
+                      >Nova</span
+                    >
                   </div>
                 </div>
               </div>
@@ -642,7 +675,7 @@
           <!-- Enhanced Product Preview -->
           <div
             class="product-preview-section"
-            *ngIf="imagePreviews.length > 0 || existingImages.length > 0"
+            *ngIf="imagensNovas.length > 0 || existingImages.length > 0"
           >
             <div class="preview-header">
               <h3>
@@ -658,17 +691,18 @@
                   <div class="main-image">
                     <img
                       [src]="
-                        imagePreviews[0] ||
-                        (existingImages.length > 0
+                        imagensNovas.length > 0
+                          ? imagensNovas[0].preview
+                          : existingImages.length > 0
                           ? getExistingImageUrl(existingImages[0])
-                          : null)
+                          : null
                       "
                       alt="Imagem principal do produto"
                     />
                   </div>
                   <div
                     class="image-indicators"
-                    *ngIf="imagePreviews.length + existingImages.length > 1"
+                    *ngIf="imagensNovas.length + existingImages.length > 1"
                   >
                     <span class="indicator active"></span>
                   </div>
@@ -709,15 +743,6 @@
 
               <div class="preview-stats">
                 <div class="stat-item">
-                  <mat-icon>photo</mat-icon>
-                  <span
-                    >{{
-                      imagePreviews.length + existingImages.length
-                    }}
-                    imagens</span
-                  >
-                </div>
-                <div class="stat-item">
                   <mat-icon>visibility</mat-icon>
                   <span>Pronto para publicação</span>
                 </div>
@@ -728,7 +753,7 @@
           <!-- Empty State -->
           <div
             class="empty-state"
-            *ngIf="imagePreviews.length === 0 && existingImages.length === 0"
+            *ngIf="imagensNovas.length === 0 && existingImages.length === 0"
           >
             <div class="empty-icon">
               <mat-icon>photo_library</mat-icon>
@@ -809,5 +834,4 @@
     </mat-horizontal-stepper>
   </div>
 
-  <!-- ...após as galerias de imagens... -->
 </div>

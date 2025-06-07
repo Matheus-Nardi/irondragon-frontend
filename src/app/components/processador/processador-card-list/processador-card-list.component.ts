@@ -194,7 +194,7 @@ export class ProcessadorCardListComponent implements OnInit {
       processador.imagens && processador.imagens.length > 0
         ? this.processadorService.getUrlImage(
             processador.id.toString(),
-            processador.imagens[0]
+            processador.imagens.find((img) => img.principal)?.imagem || ''
           )
         : 'assets/images/placeholder.png';
 
@@ -279,7 +279,7 @@ export class ProcessadorCardListComponent implements OnInit {
           nome: proc.nome,
           quantidade: 1,
           preco: proc.preco,
-          imagem: proc.imagens[0],
+          imagem: proc.imagens.find((img) => img.principal)?.nomeImagem || '',
         });
       },
       error: (err) => {

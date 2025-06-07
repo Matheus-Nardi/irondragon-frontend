@@ -20,7 +20,7 @@ import { FooterComponent } from '../../../template/footer/footer.component';
 import { ProcessadorService } from '../../../../services/processador.service';
 import { Endereco } from '../../../../models/endereco/endereco.model';
 import { DialogService } from '../../../../services/dialog.service';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-pedidos-details',
@@ -88,7 +88,9 @@ export class PedidosDetailsComponent implements OnInit {
                 this.processadorImagens[item.idProcessador] =
                   this.processadorService.getUrlImage(
                     processadorData.id.toString(),
-                    processadorData.imagens[0]
+                    processadorData.imagens.find(
+                      (img) => img.principal
+                    )?.imagem || ''
                   );
               },
 

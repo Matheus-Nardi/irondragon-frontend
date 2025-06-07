@@ -85,8 +85,8 @@ export class ProcessadorDetailsComponent implements OnInit {
         next: (processador) => {
           this.processador = processador;
           console.log(processador);
-          this.imageUrls = processador.imagens.map((nome) =>
-            this.processadorService.getUrlImage(processador.id.toString(), nome)
+          this.imageUrls = processador.imagens.map((img) =>
+            this.processadorService.getUrlImage(processador.id.toString(), img.imagem)
           );
           this.loading = false;
           this.organizarEspecificacoes();
@@ -178,7 +178,7 @@ export class ProcessadorDetailsComponent implements OnInit {
   getImagemUrl(processador: Processador): string {
     return this.processadorService.getUrlImage(
       processador.id.toString(),
-      processador.imagens[0]
+      processador.imagens.find((img) => img.principal)?.imagem || ''
     );
   }
 
@@ -221,7 +221,7 @@ toggleFavorite() {
       nome: processador.nome,
       quantidade: this.quantity,
       preco: processador.preco,
-      imagem: processador.imagens[0]
+      imagem: processador.imagens.find((img) => img.principal)?.nomeImagem || '',
     });
   }
 

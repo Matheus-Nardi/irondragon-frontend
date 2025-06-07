@@ -1,4 +1,5 @@
 import { Fabricante } from "../fabricante.model";
+import { ImagemProcessador } from "../imagem-processador.model";
 import { Conectividade } from "./conectividade.model";
 import { ConsumoEnergetico } from "./consumoenergetico.model";
 import { Frequencia } from "./frequencia.model";
@@ -19,6 +20,6 @@ export class Processador {
     consumoEnergetico!: ConsumoEnergetico;
     conectividade!: Conectividade;
     fabricante!: Fabricante;
-    imagens!: string[];
+    imagens!: ImagemProcessador[];
     isFavorite?: boolean = false;
 }

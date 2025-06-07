@@ -145,7 +145,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
       processador.imagens && processador.imagens.length > 0
         ? this.processadorService.getUrlImage(
             processador.id.toString(),
-            processador.imagens[0]
+            processador.imagens.find((img) => img.principal)?.imagem || ''
           )
         : 'assets/images/placeholder.png';
 
@@ -181,6 +181,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
 
   clearFilters(): void {
     this.filtroForm.reset({
+      nome:'',
       fabricante: 'todos', 
       precoMin: 0,
       precoMax: 5000,
@@ -237,7 +238,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
         nome: proc.nome,
         quantidade: 1,
         preco: proc.preco,
-        imagem: proc.imagens[0]
+        imagem: proc.imagens.find((img) => img.principal)?.imagem || '',
       });
     },
     error: (err) => {
@@ -246,8 +247,6 @@ export class ProcessadoresFiltrosComponent implements OnInit {
     }
   });
 }
-
-
 
   paginar(event: PageEvent): void {
     this.page = event.pageIndex;

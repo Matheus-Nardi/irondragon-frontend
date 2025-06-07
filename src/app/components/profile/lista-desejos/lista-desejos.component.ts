@@ -35,7 +35,7 @@ export class ListaDesejosComponent {
   getImagemUrl(processador: Processador): string {
     return this.processadorService.getUrlImage(
       processador.id.toString(),
-      processador.imagens[0]
+      processador.imagens.find(img => img.principal)?.imagem || ''
     );
   }
 

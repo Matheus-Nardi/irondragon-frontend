@@ -27,6 +27,15 @@ import { FabricanteService } from '../../../services/fabricante.service';
 import { PlacaintegradaService } from '../../../services/placaintegrada.service';
 import { ProcessadorService } from '../../../services/processador.service';
 import { SnackbarService } from '../../../services/snackbar.service';
+import { ImagemProcessador } from '../../../models/imagem-processador.model';
+
+interface ImagemNova {
+  nomeImagem: string;
+  imagem: File;
+  principal: boolean;
+  index: number;
+  preview: string; 
+}
 
 @Component({
   selector: 'app-processador-form',
@@ -49,6 +58,8 @@ import { SnackbarService } from '../../../services/snackbar.service';
   ],
   styleUrls: ['./processador-form.component.css'],
 })
+
+
 export class ProcessadorFormComponent implements OnInit {
   formGroup!: FormGroup;
   formGroupInfosBasicas!: FormGroup;
@@ -59,12 +70,9 @@ export class ProcessadorFormComponent implements OnInit {
   isUploading = false;
   isDragOver = false;
   fileName: string = '';
-  selectedFile: File[] = [];
-  imagePreview: string[] = [];
-  selectedFiles: File[] = [];
-  imagePreviews: string[] = [];
   existingImages: string[] = [];
   imagensRemovidas: string[] = [];
+  imagensNovas: ImagemNova[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -146,7 +154,9 @@ export class ProcessadorFormComponent implements OnInit {
     );
 
     if (processador && processador.imagens && processador.imagens.length > 0) {
-      this.existingImages = [...processador.imagens];
+      processador.imagens.forEach(img => {
+        this.existingImages.push(img.imagem)
+      });
     }
 
     this.formGroupInfosBasicas = this.formBuilder.group({
@@ -311,10 +321,21 @@ export class ProcessadorFormComponent implements OnInit {
     this.location.back();
   }
 
+  getExistingImageUrl(img: string): string {
+  return this.processadorService.getUrlImage(
+    this.formGroupInfosBasicas.get('id')?.value,
+    img
+  );
+}
+
   // Método para remover a imagem selecionada
   removerImagem(index: number) {
-    this.imagePreviews.splice(index, 1);
-    this.selectedFiles.splice(index, 1);
+    this.imagensNovas.splice(index, 1);
+    // Atualize os índices e principal
+    this.imagensNovas.forEach((img, i) => {
+      img.index = i;
+      img.principal = i === 0;
+    });
   }
 
   removerImagemExistente(index: number) {
@@ -324,34 +345,91 @@ export class ProcessadorFormComponent implements OnInit {
     }
   }
 
-  limparImagens(){
-    this.selectedFiles = [];
-    this.imagePreviews = [];
+
+  limparImagens() {
+    this.imagensNovas = [];
   }
 
-  getExistingImageUrl(img: string): string {
-  return this.processadorService.getUrlImage(
-    this.formGroupInfosBasicas.get('id')?.value,
-    img
-  );
-}
+  // Move imagem para a esquerda
+  moveImageLeft(index: number) {
+    if (index > 0) {
+      [this.imagensNovas[index - 1], this.imagensNovas[index]] = [this.imagensNovas[index], this.imagensNovas[index - 1]];
+      this.updateImageOrder();
+    }
+  }
 
+  // Move imagem para a direita
+  moveImageRight(index: number) {
+    if (index < this.imagensNovas.length - 1) {
+      [this.imagensNovas[index + 1], this.imagensNovas[index]] = [this.imagensNovas[index], this.imagensNovas[index + 1]];
+      this.updateImageOrder();
+    }
+  }
 
-  // Método para processar o arquivo selecionado
-  processarArquivos(files: FileList) {
-    Array.from(files).forEach((file) => {
-      if (file.size > 10 * 1024 * 1024) {
-        this.snackbarService.showError('Arquivo muito grande. O tamanho máximo é 10MB.');
-        return;
-      }
-      this.selectedFiles.push(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreviews.push(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+  // Define imagem como principal (vai para o início)
+  setAsMainImage(index: number) {
+    if (index > 0 && index < this.imagensNovas.length) {
+      const [img] = this.imagensNovas.splice(index, 1);
+      this.imagensNovas.unshift(img);
+      this.updateImageOrder();
+    }
+  }
+
+  // Atualiza índices e principal
+  private updateImageOrder() {
+    this.imagensNovas.forEach((img, i) => {
+      img.index = i;
+      // A primeira imagem nova será principal apenas se não houver imagens existentes
+      img.principal = i === 0 && this.existingImages.length === 0;
     });
   }
+
+  // Método para processar o arquivo selecionado
+processarArquivos(files: FileList) {
+  const totalImagens = this.imagensNovas.length + this.existingImages.length;
+  const maxImagens = 5;
+  const espacoDisponivel = maxImagens - totalImagens;
+  
+  if (espacoDisponivel <= 0) {
+    this.snackbarService.showError('Limite de 5 imagens atingido.');
+    return;
+  }
+
+  const arquivosParaAdicionar = Math.min(files.length, espacoDisponivel);
+  let arquivosProcessados = 0;
+
+  Array.from(files)
+    .slice(0, arquivosParaAdicionar)
+    .forEach((file, fileIndex) => {
+      if (file.size > 10 * 1024 * 1024) {
+        this.snackbarService.showError(`Arquivo ${file.name} muito grande. O tamanho máximo é 10MB.`);
+        arquivosProcessados++;
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const indexAtual = this.imagensNovas.length;
+        this.imagensNovas.push({
+          nomeImagem: file.name,
+          imagem: file,
+          principal: indexAtual === 0 && this.existingImages.length === 0, // Principal apenas se for a primeira de todas
+          index: indexAtual,
+          preview: e.target?.result as string
+        });
+        
+        arquivosProcessados++;
+        console.log(`Arquivo ${file.name} processado. Preview:`, e.target?.result as string);
+      };
+      
+      reader.onerror = () => {
+        this.snackbarService.showError(`Erro ao processar o arquivo ${file.name}`);
+        arquivosProcessados++;
+      };
+      
+      reader.readAsDataURL(file);
+    });
+}
 
   // Substituição do método existente
   carregarImagensSelecionadas(event: any) {
@@ -363,10 +441,16 @@ export class ProcessadorFormComponent implements OnInit {
 
 
   private uploadImages(processadorId: number) {
-    if (this.selectedFiles.length > 0) {
+    if (this.imagensNovas.length > 0) {
       this.isUploading = true;
-      const uploads = this.selectedFiles.map(file =>
-        this.processadorService.uploadImage(processadorId, file.name, file)
+      const uploads = this.imagensNovas.map(img =>
+        this.processadorService.uploadImage(
+          processadorId,
+          img.nomeImagem,
+          img.imagem,
+          img.principal,
+          img.index
+        )
       );
       forkJoin(uploads).subscribe({
         next: () => {
