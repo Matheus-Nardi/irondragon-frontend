@@ -69,15 +69,19 @@ export class PagamentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carrinhoService.carrinho$.subscribe((data) => {
-      this.carrinhoItens = data;
-    });
+    this.loadCarrinho();
 
     this.cartaoService.getByUsuario().subscribe((data) => {
       this.cartoes = data;
     });
 
     this.loadEnderecos();
+  }
+
+  loadCarrinho(): void {
+    this.carrinhoService.carrinho$.subscribe((data) => {
+      this.carrinhoItens = data;
+    });
   }
 
   loadEnderecos() {
@@ -232,6 +236,8 @@ export class PagamentoComponent implements OnInit {
           this.carrinhoService.removerTudo();
           this.savePedidoId = parseInt(data.id);
           this.savePagamentoId = parseInt(data.pagamento.id);
+          this.carrinhoService.removerTudo();
+          this.carrinhoItens = [];
         },
         error: (error) => {
           this.snackbarService.showError('Erro ao processar pedido');
@@ -251,7 +257,7 @@ export class PagamentoComponent implements OnInit {
     this.pedidoService.create(pedido).subscribe({
       next: (data) => {
         this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
+        this.carrinhoService.removerTudo(); 
         this.router.navigateByUrl('/');
       },
       error: (error) => {
@@ -274,7 +280,6 @@ export class PagamentoComponent implements OnInit {
       this.pagamentoService.boletoPayment(this.savePedidoId, this.savePagamentoId).subscribe({
       next: () => {
         this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
         this.router.navigateByUrl('/');
       }
     })
@@ -284,7 +289,6 @@ export class PagamentoComponent implements OnInit {
       this.pagamentoService.pixPayment(this.savePedidoId, this.savePagamentoId).subscribe({
       next: () => {
         this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
         this.router.navigateByUrl('/');
       }
     })
