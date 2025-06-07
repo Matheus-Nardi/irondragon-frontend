@@ -37,9 +37,9 @@
         </div>
 
         <div class="acoes-finalizar">
-            <button mat-raised-button color="primary" class="btn-principal btn-finalizar" (click)="finalizarCompra()">
+            <button mat-raised-button color="primary" class="btn-principal btn-finalizar" [routerLink]="['/pagamento']">
                 <mat-icon>shopping_cart_checkout</mat-icon>
-                <span>Finalizar Compra</span>
+                <span>Realizar pagamento</span>
             </button>
             <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/']">
                 <mat-icon>arrow_back</mat-icon>

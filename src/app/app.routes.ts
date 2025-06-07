@@ -34,6 +34,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProcessadorDetailsComponent } from './components/processador/processador-details/processador-details.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { ProcessadoresFiltrosComponent } from './components/processadores-filtros/processadores-filtros.component';
+import { PagamentosComponent } from './components/profile/pagamentos/pagamentos.component';
+import { PagamentoComponent } from './components/pagamento/pagamento-form/pagamento-form.component';
 
 export const routes: Routes = [
   {
@@ -205,6 +207,11 @@ export const routes: Routes = [
         path: 'carrinho',
         component: CarrinhoComponent,
         title: 'Carrinho de Compras',
+      },
+      {
+        path: 'pagamento',
+        component: PagamentoComponent,
+        title: 'Tela de Pagamento'
       },
       {
         path: 'perfil',

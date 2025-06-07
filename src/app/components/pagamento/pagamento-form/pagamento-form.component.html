@@ -1,0 +1,185 @@
+<mat-stepper #stepper>
+    <mat-step label="Resumo do Pedido">
+        <h2 class="pagamento-titulo">Seu pedido</h2>
+        <div class="carrinho-container" role="region" aria-label="Carrinho de compras">
+            <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+                <div class="carrinho-layout">
+                    <!-- Lista de itens no lado esquerdo -->
+                    <div class="itens-lista">
+                        <div *ngFor="let item of carrinhoItens; let i = index" class="item-carrinho"
+                            [attr.data-item-id]="item.id">
+                            <div class="item-info">
+                                <img [src]="item.imagem" [alt]="'Imagem de ' + item.nome" class="item-imagem">
+                                <div class="item-detalhes">
+                                    <h3 class="item-nome">{{ item.nome }}</h3>
+                                    <p class="item-quantidade">Quantidade: {{ item.quantidade }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Preços no lado direito do item -->
+                            <div class="item-precos">
+                                <p class="item-preco">R$ {{ item.preco }}</p>
+                                <p class="item-subtotal">R$ {{ item.preco * item.quantidade }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar com resumo do carrinho no lado direito -->
+                    <div class="carrinho-sidebar">
+                        <div class="sidebar-content">
+                            <h2 class="sidebar-titulo">
+                                <mat-icon>shopping_cart</mat-icon>
+                                Resumo do Pedido
+                            </h2>
+
+                            <div class="resumo-compra">
+                                <div class="resumo-item">
+                                    <span class="resumo-label">Total de itens:</span>
+                                    <span class="resumo-valor">{{ getTotalItens() }}</span>
+                                </div>
+                                <div class="resumo-item valor-total-item">
+                                    <span class="resumo-label">Valor total:</span>
+                                    <span class="valor-total">R$ {{ calcularTotal() }}</span>
+                                </div>
+                            </div>
+
+                            <div class="acoes-finalizar">
+                                <button mat-raised-button color="primary" class="btn-principal btn-finalizar"
+                                    (click)="stepper.next()">
+                                    <mat-icon>shopping_cart_checkout</mat-icon>
+                                    <span>Finalizar Compra</span>
+                                </button>
+                                <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/carrinho']">
+                                    <mat-icon>arrow_back</mat-icon>
+                                    <span>Voltar para o carrinho</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #carrinhoVazio>
+                <div class="carrinho-vazio-box" role="alert">
+                    <span class="material-icons carrinho-vazio-icon">payments</span>
+                    <p class="carrinho-vazio-text">Você não selecionou nada para comprar!</p>
+                    <button mat-raised-button color="primary" [routerLink]="['/carrinho']"
+                        aria-label="Ver produtos disponíveis" class="btn-principal btn-ver-produtos">
+                        <mat-icon>shopping_bag_speed</mat-icon>
+                        <span>Voltar ao carrinho</span>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </mat-step>
+
+    <mat-step label="Endereço de Entrega">
+        <h2 class="pagamento-titulo">Selecione o Endereço de Entrega</h2>
+        <mat-radio-group class="endereco-list" (change)="selectEndereco($event)">
+            @for(endereco of enderecos; track $index) {
+            <mat-radio-button [value]="endereco.id" class="endereco-radio-button">
+                <div class="endereco-detalhes">
+                    <p><strong>Logradouro:</strong> {{endereco.logradouro}}, {{endereco.numero}}</p>
+                    <p><strong>Bairro:</strong> {{endereco.bairro}}</p>
+                    <p><strong>CEP:</strong> {{endereco.cep}}</p>
+                    <p><strong>Cidade:</strong> {{endereco.cidade.nome}}</p>
+                    @if (endereco.complemento) {
+                    <p><strong>Complemento:</strong> {{endereco.complemento}}</p>
+                    }
+                </div>
+            </mat-radio-button>
+            }
+        </mat-radio-group>
+
+        <div class="container-botao">
+            <button class="botao-centralizado-medio" (click)="adicionarEndereco()">
+                Adicionar Endereço
+            </button>
+        </div>
+
+        <div class="forma-pagamento-acoes">
+            <button mat-raised-button color="primary" class="btn-principal btn-finalizar" (click)="stepper.previous()">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Voltar</span>
+            </button>
+            <button mat-stroked-button class="btn-principal btn-continuar" (click)="stepper.next()">
+                <mat-icon>arrow_forward</mat-icon>
+                <span>Avançar</span>
+            </button>
+        </div>
+    </mat-step>
+
+    <mat-step label="Forma de Pagamento">
+        <div class="forma-pagamento-container" role="region" aria-label="Seleção da forma de pagamento">
+            <h2 class="pagamento-titulo">Selecione a Forma de Pagamento</h2>
+
+            <div class="opcoes-pagamento">
+                <mat-radio-group aria-label="Selecione a forma de pagamento" (change)="onFormaPagamentoChange($event)">
+                    <mat-radio-button value="cartao">Cartão de Crédito/Débito</mat-radio-button>
+                    <mat-radio-button value="boleto">Boleto Bancário</mat-radio-button>
+                    <mat-radio-button value="pix">PIX</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            @if (formaPagamento === "cartao") {
+            <mat-radio-group class="cards-grid" (change)="selectCard($event)">
+                @for (cartao of cartoes; track $index) {
+
+                <mat-radio-button class="card-item" value={{cartao.id}}>
+                    <div class="mini-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
+                        <div class="card-top">
+                            <div class="brand-logo">
+                                <mat-icon>{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
+                            </div>
+                            <div class="card-number">
+                                {{ formatCardNumber(cartao.numero) }}
+                            </div>
+                        </div>
+
+                        <!-- Informações do cartão -->
+                        <div class="card-info">
+                            <div class="card-holder">
+                                <span class="label">TITULAR</span>
+                                <span class="value">{{ cartao.nomeTitular | titlecase }}</span>
+                            </div>
+                            <div class="card-expiry">
+                                <span class="label">VÁLIDO ATÉ</span>
+                                <span class="value">{{ formatDate(cartao.validade) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </mat-radio-button>
+                }
+
+            </mat-radio-group>
+
+            <div class="container-botao">
+            <button class="botao-centralizado-medio" (click)="adicionarCartao()">
+                Adicionar Cartao
+            </button>
+        </div>
+            }
+            <div class="forma-pagamento-acoes">
+                <button mat-raised-button color="primary" class="btn-principal btn-finalizar"
+                    (click)="stepper.previous()">
+                    <mat-icon>arrow_back</mat-icon>
+                    <span>Voltar</span>
+                </button>
+                <button mat-stroked-button class="btn-principal btn-continuar"
+                (click)="finalizarPedido(stepper)">
+                    <mat-icon>arrow_forward</mat-icon>
+                    <span>Finalizar compra</span>
+                </button>
+            </div>
+        </div>
+    </mat-step>
+
+    <mat-step label="Simular Pagamento">
+        @if(formaPagamento == "pix") {
+
+        } @else if (formaPagamento == "boleto") {
+
+        }
+    </mat-step>
+</mat-stepper>
