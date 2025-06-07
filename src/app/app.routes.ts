@@ -221,12 +221,7 @@ export const routes: Routes = [
         path: 'pagamento',
         component: PagamentoComponent,
         title: 'Tela de Pagamento'
-      },
-      {
-        path: 'perfil',
-        component: ProfileComponent,
-        canActivate: [AuthGuard],
-      },
+      },  
       {
         path: 'processadores',
         component: ProcessadoresFiltrosComponent,

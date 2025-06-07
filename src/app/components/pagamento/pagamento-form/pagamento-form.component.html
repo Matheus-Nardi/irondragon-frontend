@@ -9,7 +9,7 @@
                         <div *ngFor="let item of carrinhoItens; let i = index" class="item-carrinho"
                             [attr.data-item-id]="item.id">
                             <div class="item-info">
-                                <img [src]="item.imagem" [alt]="'Imagem de ' + item.nome" class="item-imagem">
+                                <img [src]="getImagemUrl(item)" [alt]="'Imagem de ' + item.nome" class="item-imagem">
                                 <div class="item-detalhes">
                                     <h3 class="item-nome">{{ item.nome }}</h3>
                                     <p class="item-quantidade">Quantidade: {{ item.quantidade }}</p>

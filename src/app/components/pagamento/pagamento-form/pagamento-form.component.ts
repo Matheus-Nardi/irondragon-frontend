@@ -18,9 +18,10 @@ import { SnackbarService } from "../../../services/snackbar.service";
 import { BandeiraCartao } from "../../../models/bandeira-cartao.model";
 import { CartaoFormModalComponent } from "../../cartao-form-modal/cartao-form-modal.component";
 import { PedidoService } from "../../../services/pedido.service";
-import { Pedido } from "../../../models/pedido.model";
-import { ItemPedido } from "../../../models/item-pedido.model";
+import { PedidoPagamento } from "../../../models/pedido-pagamento";
 import { PagamentoService } from "../../../services/pagamento.service";
+import { ItemPedidoPagamento } from "../../../models/item-pedido-pagamento";
+import { ProcessadorService } from "../../../services/processador.service";
 
 @Component({
   selector: 'app-pagamento',
@@ -61,7 +62,8 @@ export class PagamentoComponent implements OnInit {
     private snackbarService: SnackbarService,
     private pedidoService: PedidoService,
     private router: Router,
-    private pagamentoService: PagamentoService
+    private pagamentoService: PagamentoService,
+    private processadorService: ProcessadorService,
   ) {
 
   }
@@ -82,6 +84,10 @@ export class PagamentoComponent implements OnInit {
     this.enderecoService.getByUsuario().subscribe((enderecos) => {
       this.enderecos = enderecos;
     });
+  }
+
+   getImagemUrl(item: ItemCarrinho): string {
+    return this.processadorService.getUrlImage(item.id.toString(), item.imagem);
   }
 
   loadCartoes() {
@@ -212,7 +218,7 @@ export class PagamentoComponent implements OnInit {
       return;
     }
 
-    const pedido = new Pedido();
+    const pedido = new PedidoPagamento();
     pedido.idCartao = this.selectedCard;
     pedido.idEndereco = this.selectedEndereco;
     pedido.tipoPagamento = this.formaPagamento;
@@ -255,8 +261,8 @@ export class PagamentoComponent implements OnInit {
     });
   }
 
-  converterParaItemPedido(item: ItemCarrinho): ItemPedido {
-    const itemPedido = new ItemPedido();
+  converterParaItemPedido(item: ItemCarrinho): ItemPedidoPagamento {
+    const itemPedido = new ItemPedidoPagamento();
     itemPedido.quantidade = item.quantidade;
     itemPedido.idProcessador = item.id;
 
