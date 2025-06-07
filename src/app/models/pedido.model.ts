@@ -1,4 +1,3 @@
-import { ItemCarrinho } from "../interfaces/item-carrinho.interface";
 import { Cliente } from "./cliente.model";
 import { Endereco } from "./endereco/endereco.model";
 import { ItemPedido } from "./item-pedido.model";

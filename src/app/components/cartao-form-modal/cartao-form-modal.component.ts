@@ -94,13 +94,17 @@ export class CartaoFormModalComponent implements OnInit {
     this.formCartao.markAllAsTouched();
     if (this.formCartao.valid) {
       console.log(this.formCartao.value);
+      const cartaoForm = this.formCartao.value;
 
-      const cartaoAtualizado = {
-        ...this.cartao,
-        ...this.formCartao.value,
-        idCartao: this.formCartao.value.tipoCartao.id,
-      };
-      this.dialogRef.close(cartaoAtualizado);
+      const cartao = new Cartao();
+      cartao.nomeTitular = cartaoForm.nomeTitular;
+      cartao.cpf = cartaoForm.cpf;
+      cartao.cvc = cartaoForm.cvc;
+      cartao.validade = cartaoForm.validade;
+      cartao.tipo = cartaoForm.tipoCartao;
+      cartao.numero = cartaoForm.numero;
+
+      this.dialogRef.close(cartao);
     }
   }
 

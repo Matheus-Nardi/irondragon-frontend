@@ -31,12 +31,13 @@ export class CartaoService {
   
     create(cartao: Cartao): Observable<Cartao> {
      const data = {
+        id: null,
         nomeTitular: cartao.nomeTitular,
         numero: cartao.numero,
         cpf: cartao.cpf,
         validade: cartao.validade,
         cvc: cartao.cvc,
-        tipoCartao: cartao.tipo.id
+        tipoCartao: cartao.tipo
       };
 
       console.log(data);

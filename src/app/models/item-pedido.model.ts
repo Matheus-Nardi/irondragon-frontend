@@ -1,4 +1,3 @@
-import { Lote } from "./lote.model";
 
 export class ItemPedido {
     idProcessador!: number;

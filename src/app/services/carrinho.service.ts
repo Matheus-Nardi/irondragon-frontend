@@ -55,8 +55,7 @@ export class CarrinhoService {
   }
 
   removerTudo(): void {
-    this.localStorageService.removeItem('carrinho');
-    window.location.reload(); 
+    this.localStorageService.removeItem('carrinho'); 
   }
 
   obter(): ItemCarrinho[] {
