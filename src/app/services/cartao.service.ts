@@ -31,7 +31,6 @@ export class CartaoService {
   
     create(cartao: Cartao): Observable<Cartao> {
      const data = {
-        id: null,
         nomeTitular: cartao.nomeTitular,
         numero: cartao.numero,
         cpf: cartao.cpf,
@@ -40,8 +39,6 @@ export class CartaoService {
         tipoCartao: cartao.tipo
       };
 
-      console.log(data);
-      
       return this.httpClient.post<Cartao>(
         `${this.configService.getApiBaseUrl()}/cartoes`,
         data

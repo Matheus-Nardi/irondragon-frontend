@@ -49,7 +49,7 @@
   <!-- Espaçamento adicional entre as seções -->
   <div class="section-divider"></div>
 
-   <h2 class="section-title">
+   <h2 class="section-title" *ngIf="cardsMaisVendidos().length > 5">
     <mat-icon class="section-icon">bolt</mat-icon>
    Mais vendidos
   </h2>

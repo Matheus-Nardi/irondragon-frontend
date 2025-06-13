@@ -1,199 +1,291 @@
-<mat-stepper #stepper>
+<div class="checkout-container">
+  @if(checkoutForm){
+  <mat-stepper #stepper [linear]="true" [formGroup]="checkoutForm" class="checkout-stepper">
+    
+    <!-- Step 1: Order Summary -->
     <mat-step label="Resumo do Pedido">
-        <h2 class="pagamento-titulo">Seu pedido</h2>
-        <div class="carrinho-container" role="region" aria-label="Carrinho de compras">
-            <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
-                <div class="carrinho-layout">
-                    <!-- Lista de itens no lado esquerdo -->
-                    <div class="itens-lista">
-                        <div *ngFor="let item of carrinhoItens; let i = index" class="item-carrinho"
-                            [attr.data-item-id]="item.id">
-                            <div class="item-info">
-                                <img [src]="getImagemUrl(item)" [alt]="'Imagem de ' + item.nome" class="item-imagem">
-                                <div class="item-detalhes">
-                                    <h3 class="item-nome">{{ item.nome }}</h3>
-                                    <p class="item-quantidade">Quantidade: {{ item.quantidade }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Preços no lado direito do item -->
-                            <div class="item-precos">
-                                <p class="item-preco">R$ {{ item.preco }}</p>
-                                <p class="item-subtotal">R$ {{ item.preco * item.quantidade }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sidebar com resumo do carrinho no lado direito -->
-                    <div class="carrinho-sidebar">
-                        <div class="sidebar-content">
-                            <h2 class="sidebar-titulo">
-                                <mat-icon>shopping_cart</mat-icon>
-                                Resumo do Pedido
-                            </h2>
-
-                            <div class="resumo-compra">
-                                <div class="resumo-item">
-                                    <span class="resumo-label">Total de itens:</span>
-                                    <span class="resumo-valor">{{ getTotalItens() }}</span>
-                                </div>
-                                <div class="resumo-item valor-total-item">
-                                    <span class="resumo-label">Valor total:</span>
-                                    <span class="valor-total">R$ {{ calcularTotal() }}</span>
-                                </div>
-                            </div>
-
-                            <div class="acoes-finalizar">
-                                <button mat-raised-button color="primary" class="btn-principal btn-finalizar"
-                                    [disabled]="carrinhoItens.length === 0" (click)="stepper.next()">
-                                    <mat-icon>shopping_cart_checkout</mat-icon>
-                                    <span>Prosseguir com a Compra</span>
-                                </button>
-                                <button mat-stroked-button class="btn-principal btn-continuar"
-                                    [routerLink]="['/carrinho']">
-                                    <mat-icon>arrow_back</mat-icon>
-                                    <span>Voltar para o carrinho</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-
-            <ng-template #carrinhoVazio>
-                <div class="carrinho-vazio-box" role="alert">
-                    <span class="material-icons carrinho-vazio-icon">payments</span>
-                    <p class="carrinho-vazio-text">Você não selecionou nada para comprar!</p>
-                    <button mat-raised-button color="primary" [routerLink]="['/carrinho']"
-                        aria-label="Ver produtos disponíveis" class="btn-principal btn-ver-produtos">
-                        <mat-icon>shopping_bag_speed</mat-icon>
-                        <span>Voltar ao carrinho</span>
-                    </button>
-                </div>
-            </ng-template>
+      <div class="step-content">
+        <div class="step-header">
+          <mat-icon class="step-icon">shopping_cart</mat-icon>
+          <div class="step-title-section">
+            <h2 class="step-title">Revise seu Pedido</h2>
+            <p class="step-subtitle">Confirme os itens antes de prosseguir</p>
+          </div>
         </div>
+
+        <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+          <div class="checkout-layout">
+            <!-- Items List -->
+            <div class="items-section">
+              <div class="section-header">
+                <h3 class="section-title">Itens do Pedido</h3>
+                <div class="items-badge">{{ carrinhoItens.length }} {{ carrinhoItens.length === 1 ? 'item' : 'itens' }}</div>
+              </div>
+              
+              <div class="items-list">
+                <div *ngFor="let item of carrinhoItens; let i = index" class="checkout-item">
+                  <div class="item-image-wrapper">
+                    <img [src]="getImagemUrl(item)" [alt]="'Imagem de ' + item.nome" class="item-image" />
+                  </div>
+                  
+                  <div class="item-details">
+                    <h4 class="item-name">{{ item.nome }}</h4>
+                    <div class="item-specs">
+                      <span class="spec-chip">Qtd: {{ item.quantidade }}</span>
+                      <span class="spec-chip">Unitário: R$ {{ item.preco | number:'1.2-2' }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="item-total">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">R$ {{ (item.preco * item.quantidade) | number:'1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="summary-sidebar">
+              <div class="summary-card">
+                <div class="summary-header">
+                  <mat-icon>receipt_long</mat-icon>
+                  <h3>Resumo do Pedido</h3>
+                </div>
+                
+                <div class="summary-details">
+                  <div class="summary-row">
+                    <span class="label">Subtotal ({{ getTotalItens() }} itens)</span>
+                    <span class="value">R$ {{ calcularTotal() }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="label">Frete</span>
+                    <span class="value free">Grátis</span>
+                  </div>
+                  <div class="summary-divider"></div>
+                  <div class="summary-row total-row">
+                    <span class="label">Total</span>
+                    <span class="value">R$ {{ calcularTotal() }}</span>
+                  </div>
+                </div>
+                
+                <div class="summary-actions">
+                  <button mat-raised-button color="primary" class="primary-btn" matStepperNext>
+                    <mat-icon>arrow_forward</mat-icon>
+                    Continuar
+                  </button>
+                  <button mat-stroked-button class="secondary-btn" [routerLink]="['/carrinho']">
+                    <mat-icon>edit</mat-icon>
+                    Editar Carrinho
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #carrinhoVazio>
+          <div class="empty-state">
+            <div class="empty-icon">
+              <mat-icon>shopping_cart</mat-icon>
+            </div>
+            <h3>Carrinho Vazio</h3>
+            <p>Adicione produtos ao seu carrinho para continuar</p>
+            <button mat-raised-button color="primary" [routerLink]="['/']">
+              <mat-icon>storefront</mat-icon>
+              Continuar Comprando
+            </button>
+          </div>
+        </ng-template>
+      </div>
     </mat-step>
 
-    <mat-step label="Endereço de Entrega">
-        <h2 class="pagamento-titulo">Selecione o Endereço de Entrega</h2>
-        <mat-radio-group class="endereco-list" (change)="selectEndereco($event)">
+    <!-- Step 2: Shipping Address -->
+    <mat-step label="Endereço de Entrega" [stepControl]="checkoutForm.get('enderecoForm')!" errorMessage="O endereço precisa ser selecionado">
+      <div class="step-content" formGroupName="enderecoForm">
+        <div class="step-header">
+          <mat-icon class="step-icon">local_shipping</mat-icon>
+          <div class="step-title-section">
+            <h2 class="step-title">Endereço de Entrega</h2>
+            <p class="step-subtitle">Selecione onde deseja receber seu pedido</p>
+          </div>
+        </div>
+
+        <div class="address-section">
+          <mat-radio-group class="address-grid" formControlName="endereco">
             @for(endereco of enderecos; track $index) {
-            <mat-radio-button [value]="endereco.id" class="endereco-radio-button">
-                <div class="endereco-detalhes">
-                    <p><strong>Logradouro:</strong> {{endereco.logradouro}}, {{endereco.numero}}</p>
-                    <p><strong>Bairro:</strong> {{endereco.bairro}}</p>
-                    <p><strong>CEP:</strong> {{endereco.cep}}</p>
-                    <p><strong>Cidade:</strong> {{endereco.cidade.nome}}</p>
-                    @if (endereco.complemento) {
-                    <p><strong>Complemento:</strong> {{endereco.complemento}}</p>
-                    }
+            <mat-radio-button [value]="endereco" class="address-card">
+              <div class="address-content">
+                <div class="address-header">
+                  <mat-icon>home</mat-icon>
+                  <span class="address-type">Endereço {{ $index + 1 }}</span>
                 </div>
+                
+                <div class="address-details">
+                  <div class="address-line primary">
+                    <strong>{{ endereco.logradouro }}, {{ endereco.numero }}</strong>
+                  </div>
+                  <div class="address-line">{{ endereco.bairro }}</div>
+                  <div class="address-line">{{ endereco.cidade.nome }} - CEP {{ endereco.cep }}</div>
+                  @if (endereco.complemento) {
+                  <div class="address-line complement">{{ endereco.complemento }}</div>
+                  }
+                </div>
+              </div>
             </mat-radio-button>
             }
-        </mat-radio-group>
+          </mat-radio-group>
 
-        <div class="container-botao">
-            <button class="botao-centralizado-medio" (click)="adicionarEndereco()">
-                Adicionar Endereço
+          <mat-error *ngIf="checkoutForm.get('enderecoForm.endereco')?.hasError('required') && checkoutForm.get('enderecoForm.endereco')?.touched" class="form-error">
+            <mat-icon>error</mat-icon>
+            Por favor, selecione um endereço para continuar.
+          </mat-error>
+
+          <div class="add-address-section">
+            <button mat-stroked-button class="add-address-btn" (click)="adicionarEndereco()">
+              <mat-icon>add_location</mat-icon>
+              Adicionar Novo Endereço
             </button>
+          </div>
         </div>
 
-        <div class="forma-pagamento-acoes">
-            <button mat-raised-button color="primary" class="btn-principal btn-finalizar" (click)="stepper.previous()">
-                <mat-icon>arrow_back</mat-icon>
-                <span>Voltar</span>
-            </button>
-            <button mat-stroked-button class="btn-principal btn-continuar" (click)="stepper.next()">
-                <mat-icon>arrow_forward</mat-icon>
-                <span>Avançar</span>
-            </button>
+        <div class="step-actions">
+          <button mat-stroked-button class="secondary-btn" matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+          <button mat-raised-button color="primary" class="primary-btn" matStepperNext (click)="checkoutForm.get('enderecoForm')?.markAllAsTouched()">
+            <mat-icon>arrow_forward</mat-icon>
+            Continuar
+          </button>
         </div>
+      </div>
     </mat-step>
 
-    <mat-step label="Forma de Pagamento">
-        <div class="forma-pagamento-container" role="region" aria-label="Seleção da forma de pagamento">
-            <h2 class="pagamento-titulo">Selecione a Forma de Pagamento</h2>
+    <!-- Step 3: Payment Method -->
+    <mat-step label="Forma de Pagamento" [stepControl]="checkoutForm.get('pagamentoForm')!" errorMessage="A forma de pagamento precisa ser selecionada">
+      <div class="step-content" formGroupName="pagamentoForm">
+        <div class="step-header">
+          <mat-icon class="step-icon">payment</mat-icon>
+          <div class="step-title-section">
+            <h2 class="step-title">Forma de Pagamento</h2>
+            <p class="step-subtitle">Escolha como deseja pagar seu pedido</p>
+          </div>
+        </div>
 
-            <div class="opcoes-pagamento">
-                <mat-radio-group aria-label="Selecione a forma de pagamento" (change)="onFormaPagamentoChange($event)">
-                    <mat-radio-button value="cartao">Cartão de Crédito/Débito</mat-radio-button>
-                    <mat-radio-button value="boleto">Boleto Bancário</mat-radio-button>
-                    <mat-radio-button value="pix">PIX</mat-radio-button>
-                </mat-radio-group>
-            </div>
+        <div class="payment-section">
+          <!-- Payment Method Selection -->
+          <div class="payment-methods">
+            <h3 class="section-title">Método de Pagamento</h3>
+            <mat-radio-group formControlName="formaPagamento" class="payment-options">
+              <mat-radio-button value="cartao" class="payment-option">
+                <div class="payment-option-content">
+                  <div class="payment-icon">
+                    <mat-icon>credit_card</mat-icon>
+                  </div>
+                  <div class="payment-info">
+                    <span class="payment-title">Cartão de Crédito/Débito</span>
+                    <span class="payment-subtitle">Visa, Mastercard, Elo e outros</span>
+                  </div>
+                  
+                </div>
+              </mat-radio-button>
 
-            @if (formaPagamento === "cartao") {
-            <mat-radio-group class="cards-grid" (change)="selectCard($event)">
-                @for (cartao of cartoes; track $index) {
+              <mat-radio-button value="pix" class="payment-option">
+                <div class="payment-option-content">
+                  <div class="payment-icon pix">
+                    <mat-icon>qr_code</mat-icon>
+                  </div>
+                  <div class="payment-info">
+                    <span class="payment-title">PIX</span>
+                    <span class="payment-subtitle">Pagamento instantâneo</span>
+                  </div>
+            
+                </div>
+              </mat-radio-button>
 
-                <mat-radio-button class="card-item" value={{cartao.id}} required>
-                    <div class="mini-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
-                        <div class="card-top">
-                            <div class="brand-logo">
-                                <mat-icon>{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
-                            </div>
-                            <div class="card-number">
-                                {{ formatCardNumber(cartao.numero) }}
-                            </div>
-                        </div>
-
-                        <!-- Informações do cartão -->
-                        <div class="card-info">
-                            <div class="card-holder">
-                                <span class="label">TITULAR</span>
-                                <span class="value">{{ cartao.nomeTitular | titlecase }}</span>
-                            </div>
-                            <div class="card-expiry">
-                                <span class="label">VÁLIDO ATÉ</span>
-                                <span class="value">{{ formatDate(cartao.validade) }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </mat-radio-button>
-                }
-
+              <mat-radio-button value="boleto" class="payment-option">
+                <div class="payment-option-content">
+                  <div class="payment-icon">
+                    <mat-icon>receipt</mat-icon>
+                  </div>
+                  <div class="payment-info">
+                    <span class="payment-title">Boleto Bancário</span>
+                    <span class="payment-subtitle">Vencimento em 3 dias úteis</span>
+                  </div>
+                 
+                </div>
+              </mat-radio-button>
             </mat-radio-group>
 
-            <div class="container-botao">
-                <button class="botao-centralizado-medio" (click)="adicionarCartao()">
-                    Adicionar Cartao
-                </button>
-            </div>
-            }
-            <div class="forma-pagamento-acoes">
-                <button type="button" mat-raised-button color="primary" class="btn-principal btn-finalizar"
-                    (click)="stepper.previous()">
-                    <mat-icon>arrow_back</mat-icon>
-                    <span>Voltar</span>
-                </button>
-                <button type="button" mat-stroked-button class="btn-principal btn-continuar" 
-                (click)="finalizarPedido(stepper)">
-                    <mat-icon>arrow_forward</mat-icon>
-                    <span>Finalizar compra</span>
-                </button>
-            </div>
-        </div>
-    </mat-step>
+            <mat-error *ngIf="checkoutForm.get('pagamentoForm.formaPagamento')?.hasError('required') && checkoutForm.get('pagamentoForm.formaPagamento')?.touched" class="form-error">
+              <mat-icon>error</mat-icon>
+              Por favor, selecione uma forma de pagamento para continuar.
+            </mat-error>
+          </div>
 
-    <mat-step label="Simular Pagamento">
-        @if(formaPagamento == "pix") {
-        <div class="imagem-container">
-            <img src="https://pngimg.com/uploads/qr_code/qr_code_PNG6.png" alt="Imagem bonita"
-                class="imagem-centralizada">
-        </div>
-        } @else if (formaPagamento == "boleto") {
-        <div class="imagem-container">
-            <img src="https://imagepng.org/wp-content/uploads/2019/09/boleto-simbolo.png" alt="Imagem bonita"
-                class="imagem-centralizada">
-        </div>
-        }
+          <!-- Card Selection (when credit card is selected) -->
+          @if (checkoutForm.get('pagamentoForm.formaPagamento')?.value === "cartao") {
+          <div class="cards-section">
+            <h3 class="section-title">Selecione um Cartão</h3>
+            
+            <mat-radio-group class="cards-grid" formControlName="cartao">
+              @for (cartao of cartoes; track $index) {
+              <mat-radio-button class="card-option" [value]="cartao">
+                <div class="credit-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
+                  <div class="card-background"></div>
+                  <div class="card-content">
+                    <div class="card-top">
+                      <span class="card-brand">{{ getBandeiraLabel(cartao.bandeira) }}</span>
+                      <mat-icon class="card-brand-icon">{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
+                    </div>
+                    
+                    <div class="card-number">
+                      {{ formatCardNumber(cartao.numero) }}
+                    </div>
+                    
+                    <div class="card-bottom">
+                      <div class="card-holder">
+                        <span class="label">Titular</span>
+                        <span class="value">{{ cartao.nomeTitular }}</span>
+                      </div>
+                      <div class="card-expiry">
+                        <span class="label">Validade</span>
+                        <span class="value">{{ formatDate(cartao.validade) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-radio-button>
+              }
+            </mat-radio-group>
 
-        <div class="container-botao">
-            <button class="botao-centralizado-medio"
-            (click)="confirmarPagamento()">
-                Marcar como concluído
-            </button>
+            <mat-error *ngIf="checkoutForm.get('pagamentoForm.cartao')?.hasError('required') && checkoutForm.get('pagamentoForm.cartao')?.touched" class="form-error">
+              <mat-icon>error</mat-icon>
+              Por favor, selecione um cartão para continuar.
+            </mat-error>
+
+            <div class="add-card-section">
+              <button mat-stroked-button class="add-card-btn" (click)="adicionarCartao()">
+                <mat-icon>add_card</mat-icon>
+                Adicionar Novo Cartão
+              </button>
+            </div>
+          </div>
+          }
         </div>
+
+        <div class="step-actions">
+          <button mat-stroked-button class="secondary-btn" matStepperPrevious>
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+          <button mat-raised-button class="finish-btn" (click)="onSubmitPedido()">
+            <mat-icon>check_circle</mat-icon>
+            Finalizar Compra
+          </button>
+        </div>
+      </div>
     </mat-step>
-</mat-stepper>
+  </mat-stepper>
+  }
+</div>

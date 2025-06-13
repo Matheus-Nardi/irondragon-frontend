@@ -48,7 +48,7 @@
       <div class="card-header">
         <h2 class="card-title">Pagamento</h2>
         <div class="payment-status-badge">
-          <!-- <span
+          <span
             class="payment-status"
             [ngClass]="getPagamentoClass(pedido.pagamento.pago)"
           >
@@ -56,7 +56,7 @@
               pedido.pagamento.pago ? "check_circle" : "schedule"
             }}</mat-icon>
             {{ getPagamentoStatus(pedido.pagamento.pago) }}
-          </span> -->
+          </span>
         </div>
       </div>
       <div class="card-content">
@@ -92,9 +92,19 @@
               <span class="payment-method">{{
                 pedido.pagamento.tipoPagamento
               }}</span>
+              <span class="payment-method">{{
+                pedido.pagamento.dataValidade | date : "dd/MM/yyyy"
+              }}</span>
               <span class="payment-amount">{{
                 pedido.pagamento.valor | currency : "BRL" : "symbol" : "1.2-2"
               }}</span>
+            </div>
+         
+            <div class="payment-actions" (click)="onPagarPedido(pedido)">
+              <button class="pay-button" [disabled]="pedido.pagamento.pago">
+                <mat-icon>price_check</mat-icon>
+                <span>{{pedido.pagamento.pago ? 'Pago' : 'Pagar'}}</span>
+              </button>
             </div>
           </div>
         </div>

@@ -7,6 +7,9 @@ import { Pedido } from '../models/pedido.model';
 import { PageResponse } from '../interfaces/pageresponse.interface';
 import { StatusPedido } from '../models/status-pedido.model';
 import { PedidoPagamento } from '../models/pedido-pagamento';
+import { Endereco } from '../models/endereco/endereco.model';
+import { ItemPedido } from '../models/item-pedido.model';
+import { PedidoRequest } from '../interfaces/pedidorequest';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +64,13 @@ export class PedidoService {
     null 
   );
 }
-  create(pedido: PedidoPagamento): Observable<any> {
-    return this.httpClient.post<PedidoPagamento >(`${this.configService.getApiBaseUrl()}/pedidos`, pedido);
+  create(pedido: PedidoRequest): Observable<any> {
+    const data = {
+      idEndereco: pedido.idEndereco,
+      listaItemPedido: pedido.listaItemPedido,
+      tipoPagamento: pedido.tipoPagamento,
+      idCartao: pedido.idCartao || null
+    };
+    return this.httpClient.post<Pedido>(`${this.configService.getApiBaseUrl()}/pedidos`, data);
   }
 }

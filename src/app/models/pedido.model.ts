@@ -13,5 +13,5 @@ export class Pedido {
     listaItemPedido!: ItemPedido[];
     valorTotal!: number;
     statusPedido!: StatusPedido;
-    
+    tipoPagamento!: string;
 }

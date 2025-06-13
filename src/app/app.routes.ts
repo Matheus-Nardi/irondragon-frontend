@@ -220,7 +220,9 @@ export const routes: Routes = [
       {
         path: 'pagamento',
         component: PagamentoComponent,
-        title: 'Tela de Pagamento'
+        canActivate: [AuthGuard, UserOnlyGuard],
+        data: { roles: ['User'] },
+        title: 'Pagamento'
       },  
       {
         path: 'processadores',
@@ -242,7 +244,6 @@ export const routes: Routes = [
       { path: 'pedidos', title: 'Meus Pedidos', component: ProfileComponent },
       { path: 'carteira', title: 'Carteira', component: ProfileComponent },
       { path: 'desejos', title: 'Desejos', component: ProfileComponent },
-      // ...outras rotas filhas se quiser
     ]
   },
   {

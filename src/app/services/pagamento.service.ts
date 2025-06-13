@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Observable } from 'rxjs';
+import { Pedido } from '../models/pedido.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,10 @@ export class PagamentoService {
 
   
   boletoPayment(idBoleto: number, idPedido:number): Observable<any>{
-
-    return this.httpClient.patch<any>(`${this.configService.getApiBaseUrl()}/pagamentos/${idPedido}/boleto/${idBoleto}`, {});
+    return this.httpClient.patch<Pedido>(`${this.configService.getApiBaseUrl()}/pagamentos/${idPedido}/boleto/${idBoleto}`, null);
   }
 
    pixPayment(idPix: number, idPedido:number): Observable<any>{
-    return this.httpClient.patch<any>(`${this.configService.getApiBaseUrl()}/pagamentos/${idPedido}/pix/${idPix}`, {});
+    return this.httpClient.patch<Pedido>(`${this.configService.getApiBaseUrl()}/pagamentos/${idPedido}/pix/${idPix}`, null);
   }
 }

@@ -1,4 +1,10 @@
 <div class="snackbar-container" [ngClass]="type">
   <mat-icon>{{icon }}</mat-icon>
   <span>{{ message}}</span>
+
+  @if(action) {
+    <button mat-button  (click)="onAction()" class="snackbar-action-btn">
+      {{ action.label }}
+    </button>
+  }
 </div>

@@ -1,27 +1,41 @@
-import { NgIf, NgFor, TitleCasePipe, NgClass } from "@angular/common";
-import { Component, Inject, OnInit } from "@angular/core";
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { MatIconModule } from "@angular/material/icon";
-import { MatRadioModule, MatRadioChange } from "@angular/material/radio";
-import { MatStepper, MatStepperModule, StepState } from "@angular/material/stepper";
-import { Router, RouterLink } from "@angular/router";
-import { ItemCarrinho } from "../../../interfaces/item-carrinho.interface";
-import { Cartao } from "../../../models/cartao.model";
-import { CarrinhoService } from "../../../services/carrinho.service";
-import { CartaoService } from "../../../services/cartao.service";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { Endereco } from "../../../models/endereco/endereco.model";
-import { EnderecoService } from "../../../services/endereco.service";
-import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
-import { EnderecoFormModalComponent } from "../../endereco-form-modal/endereco-form-modal.component";
-import { SnackbarService } from "../../../services/snackbar.service";
-import { BandeiraCartao } from "../../../models/bandeira-cartao.model";
-import { CartaoFormModalComponent } from "../../cartao-form-modal/cartao-form-modal.component";
-import { PedidoService } from "../../../services/pedido.service";
-import { PedidoPagamento } from "../../../models/pedido-pagamento";
-import { PagamentoService } from "../../../services/pagamento.service";
-import { ItemPedidoPagamento } from "../../../models/item-pedido-pagamento";
-import { ProcessadorService } from "../../../services/processador.service";
+import { NgIf, NgFor, TitleCasePipe, NgClass, JsonPipe, DecimalPipe } from '@angular/common';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule, MatRadioChange } from '@angular/material/radio';
+import {
+  MatStepper,
+  MatStepperModule,
+  StepState,
+} from '@angular/material/stepper';
+import { Router, RouterLink } from '@angular/router';
+import { ItemCarrinho } from '../../../interfaces/item-carrinho.interface';
+import { Cartao } from '../../../models/cartao.model';
+import { CarrinhoService } from '../../../services/carrinho.service';
+import { CartaoService } from '../../../services/cartao.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { Endereco } from '../../../models/endereco/endereco.model';
+import { EnderecoService } from '../../../services/endereco.service';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { EnderecoFormModalComponent } from '../../endereco-form-modal/endereco-form-modal.component';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { BandeiraCartao } from '../../../models/bandeira-cartao.model';
+import { CartaoFormModalComponent } from '../../cartao-form-modal/cartao-form-modal.component';
+import { PedidoService } from '../../../services/pedido.service';
+import { PedidoPagamento } from '../../../models/pedido-pagamento';
+import { PagamentoService } from '../../../services/pagamento.service';
+import { ItemPedidoPagamento } from '../../../models/item-pedido-pagamento';
+import { ProcessadorService } from '../../../services/processador.service';
+import { PedidoRequest } from '../../../interfaces/pedidorequest';
+import { ItemPedido } from '../../../models/item-pedido.model';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TipoCartao } from '../../../models/tipo-cartao.model';
 
 @Component({
   selector: 'app-pagamento',
@@ -35,24 +49,21 @@ import { ProcessadorService } from "../../../services/processador.service";
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
-    TitleCasePipe,
-    NgClass
+    DecimalPipe,
+    NgClass,
+    
   ],
   templateUrl: './pagamento-form.component.html',
-  styleUrl: './pagamento-form.component.css'
+  styleUrl: './pagamento-form.component.css',
 })
 export class PagamentoComponent implements OnInit {
-
-
   carrinhoItens: ItemCarrinho[] = [];
-  formaPagamento: string = "";
+  formaPagamento: string = '';
   selectedCard: number = 0;
   selectedEndereco: number = 0;
   cartoes: Cartao[] = [];
   enderecos: Endereco[] = [];
-
-  savePedidoId: number = 0;
-  savePagamentoId: number = 0;
+  checkoutForm!: FormGroup;
 
   constructor(
     private carrinhoService: CarrinhoService,
@@ -64,8 +75,17 @@ export class PagamentoComponent implements OnInit {
     private router: Router,
     private pagamentoService: PagamentoService,
     private processadorService: ProcessadorService,
+    private formBuilder: FormBuilder
   ) {
-
+    this.checkoutForm = this.formBuilder.group({
+      enderecoForm: this.formBuilder.group({
+        endereco: [null, [Validators.required]],
+      }),
+      pagamentoForm: this.formBuilder.group({
+        formaPagamento: [null, [Validators.required]],
+        cartao: [null],
+      }),
+    });
   }
 
   ngOnInit(): void {
@@ -73,11 +93,8 @@ export class PagamentoComponent implements OnInit {
       this.carrinhoItens = data;
     });
 
-    this.cartaoService.getByUsuario().subscribe((data) => {
-      this.cartoes = data;
-    });
-
     this.loadEnderecos();
+    this.loadCartoes();
   }
 
   loadEnderecos() {
@@ -86,7 +103,7 @@ export class PagamentoComponent implements OnInit {
     });
   }
 
-   getImagemUrl(item: ItemCarrinho): string {
+  getImagemUrl(item: ItemCarrinho): string {
     return this.processadorService.getUrlImage(item.id.toString(), item.imagem);
   }
 
@@ -97,7 +114,9 @@ export class PagamentoComponent implements OnInit {
   }
 
   calcularTotal(): number {
-    return this.carrinhoItens.map(a => a.preco * a.quantidade).reduce((a, c) => a + c);
+    return this.carrinhoItens
+      .map((a) => a.preco * a.quantidade)
+      .reduce((a, c) => a + c);
   }
 
   selectCard(event: MatRadioChange) {
@@ -148,6 +167,20 @@ export class PagamentoComponent implements OnInit {
     return parts[1] + '/' + parts[0];
   }
 
+  getBandeiraLabel(bandeira: BandeiraCartao): string {
+      return bandeira?.label || 'Desconhecida';
+    }
+  
+    getTipoLabel(tipo: TipoCartao): string {
+      
+      const map: { [key: string]: string } = {
+        Credito: 'Crédito',
+        Debito: 'Débito',
+      };
+  
+      return map[tipo?.label] || 'Não reconhecido';
+    }
+
   getTotalItens(): number {
     let count: number = 0;
 
@@ -163,10 +196,12 @@ export class PagamentoComponent implements OnInit {
   }
 
   adicionarEndereco() {
-    this.dialog.open(EnderecoFormModalComponent, {
-      width: '500px',
-      data: {} as Partial<Endereco>
-    }).afterClosed()
+    this.dialog
+      .open(EnderecoFormModalComponent, {
+        width: '500px',
+        data: {} as Partial<Endereco>,
+      })
+      .afterClosed()
       .subscribe((enderecoAtualizado: Endereco) => {
         if (!enderecoAtualizado) return;
         const operacao$ = enderecoAtualizado.id
@@ -186,10 +221,12 @@ export class PagamentoComponent implements OnInit {
   }
 
   adicionarCartao() {
-    this.dialog.open(CartaoFormModalComponent, {
-      width: '500px',
-      data: {} as Partial<Cartao>
-    }).afterClosed()
+    this.dialog
+      .open(CartaoFormModalComponent, {
+        width: '500px',
+        data: {} as Partial<Cartao>,
+      })
+      .afterClosed()
       .subscribe((novoCartao: Cartao) => {
         this.cartaoService.create(novoCartao).subscribe({
           next: () => {
@@ -199,95 +236,68 @@ export class PagamentoComponent implements OnInit {
           error: () => {
             this.snackbarService.showError('Erro ao salvar o cartao');
           },
-        })
-      })
+        });
+      });
   }
 
   selectEndereco(event: MatRadioChange) {
     this.selectedEndereco = event.value;
   }
 
-  finalizarPedido(event: MatStepper): void {
-    if (this.carrinhoItens && this.carrinhoItens.length === 0) {
-      this.snackbarService.showError('É necessário ter itens no carrinho');
-      return;
-    }
+  onSubmitPedido(): void {
+    this.checkoutForm.markAllAsTouched();
+    const tipoPagamento = this.checkoutForm.get(
+      'pagamentoForm.formaPagamento'
+    )?.value;
 
-    if (this.selectedEndereco <= 0) {
-      this.snackbarService.showError('É necessário selecionar um endereço');
-      return;
-    }
+    if (this.checkoutForm.valid) {
+      const data: PedidoRequest = {
+        idEndereco: this.checkoutForm.get('enderecoForm.endereco')?.value.id,
+        tipoPagamento: this.checkoutForm.get('pagamentoForm.formaPagamento')
+          ?.value,
+        idCartao: this.checkoutForm.get('pagamentoForm.cartao')?.value
+          ? this.checkoutForm.get('pagamentoForm.cartao')?.value.id
+          : null,
+        listaItemPedido: this.carrinhoItens.map(this.converterParaItemPedido),
+      };
 
-    const pedido = new PedidoPagamento();
-    pedido.idCartao = this.selectedCard;
-    pedido.idEndereco = this.selectedEndereco;
-    pedido.tipoPagamento = this.formaPagamento;
-    pedido.listaItemPedido = this.carrinhoItens.map(this.converterParaItemPedido);
+      this.pedidoService.create(data).subscribe({
+        next: (response) => {
+          console.log('Pedido criado:', response);
+          const pedidoId = response.id;
+          const pagamentoId = response.pagamento.id;
 
-    // Pagamento diferente de cartão
-    if (this.formaPagamento !== "cartao") {
-      this.pedidoService.create(pedido).subscribe({
-        next: (data: any) => {
-          this.snackbarService.showSuccess('Pedido realizado!');
-          this.carrinhoService.removerTudo();
-          this.savePedidoId = parseInt(data.id);
-          this.savePagamentoId = parseInt(data.pagamento.id);
+          console.log('Pedido ID:', pedidoId, 'Pagamento ID:', pagamentoId);
+          this.snackbarService.showSuccess('Pedido realizado com sucesso', {
+            label: 'Ver Pedido',
+            action: () => this.router.navigate(['/perfil/pedidos/', pedidoId]),
+          });
         },
-        error: (error) => {
-          this.snackbarService.showError('Erro ao processar pedido');
-          console.error('Erro ao criar pedido:', error);
-        }
+        error: (err) => {
+          console.log('Erro ao salvar o pedido', err);
+          this.snackbarService.showError('Erro ao salvar pedido');
+        },
       });
-      event.next();
-      return;
+    } else {
+      this.snackbarService.showError(
+        'Por favor, preencha todos os campos obrigatórios'
+      );
     }
-
-    // Validação específica para pagamento com cartão
-    if (this.selectedCard <= 0) {
-      this.snackbarService.showError('É necessário selecionar um cartão');
-      return;
-    }
-    // Pagamento com cartão
-    this.pedidoService.create(pedido).subscribe({
-      next: (data) => {
-        this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
-        this.router.navigateByUrl('/');
-      },
-      error: (error) => {
-        this.snackbarService.showError('Erro ao processar pagamento');
-        console.error('Erro ao processar pagamento:', error);
-      }
-    });
   }
 
-  converterParaItemPedido(item: ItemCarrinho): ItemPedidoPagamento {
-    const itemPedido = new ItemPedidoPagamento();
+  converterParaItemPedido(item: ItemCarrinho): ItemPedido {
+    const itemPedido = new ItemPedido();
     itemPedido.quantidade = item.quantidade;
     itemPedido.idProcessador = item.id;
 
     return itemPedido;
   }
 
-  confirmarPagamento() {
-    if(this.formaPagamento === "boleto") {
-      this.pagamentoService.boletoPayment(this.savePedidoId, this.savePagamentoId).subscribe({
-      next: () => {
-        this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
-        this.router.navigateByUrl('/');
-      }
-    })
-    }
+  
 
-    if(this.formaPagamento === "pix") {
-      this.pagamentoService.pixPayment(this.savePedidoId, this.savePagamentoId).subscribe({
-      next: () => {
-        this.snackbarService.showSuccess('Pagamento concluído');
-        this.carrinhoService.removerTudo();
-        this.router.navigateByUrl('/');
-      }
-    })
-    }
+  private finalizarCompra(mensagem: string): void {
+    this.snackbarService.showSuccess(mensagem);
+    this.carrinhoService.removerTudo();
+    this.router.navigateByUrl('/perfil/pedidos');
   }
 }
