@@ -8,6 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProcessadorService } from '../../../services/processador.service';
+import { CarrinhoService } from '../../../services/carrinho.service';
+import { ItemCarrinho } from '../../../interfaces/item-carrinho.interface';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-lista-desejos',
@@ -23,7 +26,11 @@ import { ProcessadorService } from '../../../services/processador.service';
   styleUrl: './lista-desejos.component.css',
 })
 export class ListaDesejosComponent {
-  constructor(private processadorService: ProcessadorService) {}
+  constructor(
+    private processadorService: ProcessadorService,
+    private carrinhoService: CarrinhoService,
+    private snackbarService: SnackbarService
+  ) {}
   //Preciso receber o usuario/cliente para obter a lista de desejos
   @Input() cliente!: Cliente;
   @Input() usuario!: Usuario;
@@ -35,11 +42,33 @@ export class ListaDesejosComponent {
   getImagemUrl(processador: Processador): string {
     return this.processadorService.getUrlImage(
       processador.id.toString(),
-      processador.imagens.find(img => img.principal)?.imagem || ''
+      processador.imagens.find((img) => img.principal)?.imagem || ''
     );
   }
 
   onRemoverDesejo(processador: Processador) {
     this.remover.emit(processador);
+  }
+
+  addToCart(produto: Processador, event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.processadorService.findById(produto.id.toString()).subscribe({
+      next: (proc) => {
+        this.carrinhoService.adicionar({
+          id: proc.id,
+          nome: proc.nome,
+          quantidade: 1,
+          preco: proc.preco,
+          imagem: proc.imagens.find((img) => img.principal)?.nomeImagem || '',
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao buscar processador:', err);
+        this.snackbarService.showError(
+          'Não foi possível adicionar ao carrinho.'
+        );
+      },
+    });
   }
 }

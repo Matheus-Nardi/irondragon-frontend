@@ -81,16 +81,13 @@
   justify-content: center;
   border-radius: 50% !important; /* Fully rounded circular buttons */
   border: none !important; /* Remove borders */
+
+  mat-icon{
+    color: white !important; /* Ensure icons are white */
+  }
 }
 
-/* Make all icons white */
-mat-icon {
-  color: white !important;
-}
 
-.material-icons {
-  color: white !important;
-}
 
 .resumo-compra {
   background: linear-gradient(135deg, #bbdefb 0%, #e3f2fd 100%);
@@ -248,10 +245,7 @@ mat-icon {
   border: none !important;
 }
 
-/* Make all mat-icons white by default */
-::ng-deep mat-icon {
-  color: white !important;
-}
+
 
 /* Override for the continue shopping button icon */
 ::ng-deep .btn-continuar mat-icon {

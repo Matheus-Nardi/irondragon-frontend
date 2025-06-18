@@ -37,6 +37,7 @@ import { ItemPedido } from '../../../models/item-pedido.model';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TipoCartao } from '../../../models/tipo-cartao.model';
 
+
 @Component({
   selector: 'app-pagamento',
   imports: [
@@ -51,8 +52,8 @@ import { TipoCartao } from '../../../models/tipo-cartao.model';
     MatFormFieldModule,
     DecimalPipe,
     NgClass,
-    
-  ],
+    TitleCasePipe,
+],
   templateUrl: './pagamento-form.component.html',
   styleUrl: './pagamento-form.component.css',
 })
@@ -64,7 +65,6 @@ export class PagamentoComponent implements OnInit {
   cartoes: Cartao[] = [];
   enderecos: Endereco[] = [];
   checkoutForm!: FormGroup;
-
   constructor(
     private carrinhoService: CarrinhoService,
     private cartaoService: CartaoService,

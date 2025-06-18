@@ -186,7 +186,6 @@
                     <span class="payment-title">Cartão de Crédito/Débito</span>
                     <span class="payment-subtitle">Visa, Mastercard, Elo e outros</span>
                   </div>
-                  
                 </div>
               </mat-radio-button>
 
@@ -199,7 +198,6 @@
                     <span class="payment-title">PIX</span>
                     <span class="payment-subtitle">Pagamento instantâneo</span>
                   </div>
-            
                 </div>
               </mat-radio-button>
 
@@ -212,7 +210,6 @@
                     <span class="payment-title">Boleto Bancário</span>
                     <span class="payment-subtitle">Vencimento em 3 dias úteis</span>
                   </div>
-                 
                 </div>
               </mat-radio-button>
             </mat-radio-group>
@@ -231,27 +228,26 @@
             <mat-radio-group class="cards-grid" formControlName="cartao">
               @for (cartao of cartoes; track $index) {
               <mat-radio-button class="card-option" [value]="cartao">
-                <div class="credit-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
-                  <div class="card-background"></div>
-                  <div class="card-content">
-                    <div class="card-top">
-                      <span class="card-brand">{{ getBandeiraLabel(cartao.bandeira) }}</span>
-                      <mat-icon class="card-brand-icon">{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
+                <div class="mini-card" [ngClass]="getBandeiraClass(cartao.bandeira)">
+                  <!-- Logo da bandeira -->
+                  <div class="brand-logo">
+                    <mat-icon>{{ getBandeiraIcon(cartao.bandeira) }}</mat-icon>
+                  </div>
+
+                  <!-- Número do cartão (mascarado) -->
+                  <div class="card-number">
+                    {{ formatCardNumber(cartao.numero) }}
+                  </div>
+
+                  <!-- Informações do cartão -->
+                  <div class="card-info">
+                    <div class="card-holder">
+                      <span class="label">TITULAR</span>
+                      <span class="value">{{ cartao.nomeTitular | titlecase }}</span>
                     </div>
-                    
-                    <div class="card-number">
-                      {{ formatCardNumber(cartao.numero) }}
-                    </div>
-                    
-                    <div class="card-bottom">
-                      <div class="card-holder">
-                        <span class="label">Titular</span>
-                        <span class="value">{{ cartao.nomeTitular }}</span>
-                      </div>
-                      <div class="card-expiry">
-                        <span class="label">Validade</span>
-                        <span class="value">{{ formatDate(cartao.validade) }}</span>
-                      </div>
+                    <div class="card-expiry">
+                      <span class="label">VALIDADE</span>
+                      <span class="value">{{ formatDate(cartao.validade) }}</span>
                     </div>
                   </div>
                 </div>

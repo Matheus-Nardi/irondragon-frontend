@@ -22,6 +22,7 @@ import { Endereco } from '../../../../models/endereco/endereco.model';
 import { DialogService } from '../../../../services/dialog.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PagamentoService } from '../../../../services/pagamento.service';
+import { SnackbarService } from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-pedidos-details',
@@ -52,7 +53,8 @@ export class PedidosDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private processadorService: ProcessadorService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private snackbarService: SnackbarService
   ) {}
 
   pedido!: Pedido;
@@ -167,7 +169,7 @@ export class PedidosDetailsComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.cancelarPedido(id, () => {
-            this.carregarPedido(id); // só recarrega após cancelamento ser concluído
+            this.carregarPedido(id);
           });
         }
       });
@@ -187,6 +189,8 @@ onPagarPedido(pedido: Pedido): void {
     default:
       console.warn('Tipo de pagamento não suportado:', pedido.pagamento.tipoPagamento);
       break;
+
+  
   }
 }
 
@@ -194,6 +198,7 @@ onPagarPedido(pedido: Pedido): void {
   this.pagamentoService.boletoPayment(idBoleto, idPedido).subscribe({
     next: (response) => {
       console.log('Boleto pago com sucesso:', response);
+      this.snackbarService.showSuccess('Pagamento realizado com sucesso');
       this.loadPedido(); // Recarregar pedido
     },
     error: (error) => {
@@ -207,6 +212,7 @@ private pagarComPix(idPedido: number, idPix: number): void {
   this.pagamentoService.pixPayment(idPix, idPedido).subscribe({
     next: (response) => {
       console.log('PIX pago com sucesso:', response);
+      this.snackbarService.showSuccess('Pagamento realizado com sucesso');
       this.loadPedido(); // Recarregar pedido
     },
     error: (error) => {

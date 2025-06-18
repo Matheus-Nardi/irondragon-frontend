@@ -21,6 +21,7 @@ import { EMPTY, forkJoin, from, of } from 'rxjs'; // Importar EMPTY e forkJoin
 import { switchMap, tap, catchError, finalize } from 'rxjs/operators'; // Importar operadores
 import { SnackbarService } from '../../../services/snackbar.service';
 import { CarrinhoService } from '../../../services/carrinho.service';
+import { NgIf } from '@angular/common';
 
 type Card = {
   id: number;
@@ -43,6 +44,7 @@ type Card = {
     MatButtonModule,
     MatPaginatorModule,
     RouterLink,
+    NgIf
   ],
   templateUrl: './processador-card-list.component.html',
   styleUrl: './processador-card-list.component.css',
@@ -213,8 +215,6 @@ export class ProcessadorCardListComponent implements OnInit {
   }
 
   loadCardsLastProcessadores() {
-    // Não precisa mais checar this.listaDesejos aqui, pois mapToCard já lida com isso.
-    // Apenas garante que há dados para mapear.
     if (this.lastLotesByProcessadores.length > 0) {
       const cards = this.lastLotesByProcessadores.map((lote) =>
         this.mapToCard(lote.processador)
@@ -239,7 +239,12 @@ export class ProcessadorCardListComponent implements OnInit {
   toggleFavorite(card: Card) {
     if (!this.cliente) {
       console.warn('Cliente não carregado, não é possível alterar favoritos.');
-      // TODO: talvez redirecionar para login ou mostrar uma mensagem.
+      this.snackbarService.showWarning('Você precisa estar logado para favoritar.', 
+        {
+          label: 'Login',
+          action: () => this.keycloakService.login('/'),
+        }
+      );
       return;
     }
 

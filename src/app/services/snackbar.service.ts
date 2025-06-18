@@ -43,4 +43,19 @@ export class SnackbarService {
       panelClass: ['snackbar-container', 'error']
     })
   }
+
+  showWarning(message: string, action?: SnackbarAction): void {
+    this.snackbar.openFromComponent(SnackbarComponent,{
+      data:{
+        message,
+        type: 'warning',
+        icon: 'warning',
+        action
+      },
+      duration: 4000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['snackbar-container', 'warning']
+    })
+  }
 }

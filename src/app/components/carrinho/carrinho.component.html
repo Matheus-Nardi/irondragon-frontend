@@ -37,13 +37,13 @@
         </div>
 
         <div class="acoes-finalizar">
+             <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/']">
+                <mat-icon>arrow_back</mat-icon>
+                <span>Continuar Comprando</span>
+            </button>
             <button mat-raised-button color="primary" class="btn-principal btn-finalizar" [routerLink]="['/pagamento']">
                 <mat-icon>shopping_cart_checkout</mat-icon>
                 <span>Realizar pagamento</span>
-            </button>
-            <button mat-stroked-button class="btn-principal btn-continuar" [routerLink]="['/']">
-                <mat-icon>arrow_back</mat-icon>
-                <span>Continuar Comprando</span>
             </button>
         </div>
     </ng-container>

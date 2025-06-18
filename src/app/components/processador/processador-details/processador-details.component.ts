@@ -17,6 +17,9 @@ import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClienteService } from '../../../services/cliente.service';
 import { CarrinhoService } from '../../../services/carrinho.service';
+import { KeycloakOperationService } from '../../../services/keycloak.service';
+import { Cliente } from '../../../models/cliente.model';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-processador-details',
@@ -41,6 +44,8 @@ import { CarrinhoService } from '../../../services/carrinho.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ProcessadorDetailsComponent implements OnInit {
+  cliente!: Cliente;
+  keycloakProfile?: Keycloak.KeycloakProfile;
   imageUrls: string[] = [];
   listaDesejos: Processador[] = [];
   processador!: Processador;
@@ -71,8 +76,10 @@ export class ProcessadorDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private processadorService: ProcessadorService,
+    private keycloakService: KeycloakOperationService,
     private clienteService: ClienteService,
     private snackBar: MatSnackBar,
+    private snackbarService: SnackbarService,
     private carrinhoService: CarrinhoService
   ) {}
 
@@ -86,7 +93,10 @@ export class ProcessadorDetailsComponent implements OnInit {
           this.processador = processador;
           console.log(processador);
           this.imageUrls = processador.imagens.map((img) =>
-            this.processadorService.getUrlImage(processador.id.toString(), img.imagem)
+            this.processadorService.getUrlImage(
+              processador.id.toString(),
+              img.imagem
+            )
           );
           this.loading = false;
           this.organizarEspecificacoes();
@@ -102,16 +112,16 @@ export class ProcessadorDetailsComponent implements OnInit {
     }
   }
 
-   loadListaDesejos() {
+  loadListaDesejos() {
     this.clienteService.getListaDesejos().subscribe((lista) => {
       this.listaDesejos = lista;
       console.log(this.listaDesejos);
 
       if (this.processador) {
-      this.processador.isFavorite = this.listaDesejos.some(
-        (p) => p.id === this.processador.id
-      );
-    }
+        this.processador.isFavorite = this.listaDesejos.some(
+          (p) => p.id === this.processador.id
+        );
+      }
     });
   }
 
@@ -159,9 +169,18 @@ export class ProcessadorDetailsComponent implements OnInit {
           label: 'Gráficos Integrados',
           value: `Sim - ${this.processador.placaIntegrada.nome}`,
         },
-        { label: 'DirectX', value: this.processador.placaIntegrada.directX.toString() },
-        { label: 'OpenGL', value: this.processador.placaIntegrada.openGl.toString() },
-        { label: 'Vulkan', value: this.processador.placaIntegrada.vulkan.toString() }
+        {
+          label: 'DirectX',
+          value: this.processador.placaIntegrada.directX.toString(),
+        },
+        {
+          label: 'OpenGL',
+          value: this.processador.placaIntegrada.openGl.toString(),
+        },
+        {
+          label: 'Vulkan',
+          value: this.processador.placaIntegrada.vulkan.toString(),
+        }
       );
     } else {
       this.specCategories[2].specs.push({
@@ -182,30 +201,42 @@ export class ProcessadorDetailsComponent implements OnInit {
     );
   }
 
-toggleFavorite() {
-  const isCurrentlyFavorite = this.processador.isFavorite;
-
-  const action$ = isCurrentlyFavorite
-    ? this.clienteService.removeFromListaDeDesejos(this.processador.id)
-    : this.clienteService.addToListaDeDesejos(this.processador.id);
-
-  action$.subscribe({
-    next: () => {
-      // Atualiza estado local com nova referência para Angular detectar mudança
-      this.processador = { ...this.processador, isFavorite: !isCurrentlyFavorite };
-
-      this.loadListaDesejos();
-
-      console.log(this.processador.isFavorite ? "Favoritou" : "Não é mais favorito");
-    },
-    error: (err) => {
-      console.error('Erro ao atualizar favorito:', err);
+  toggleFavorite() {
+    if (this.keycloakService.isLoggedIn() === false) {
+      console.warn('Cliente não carregado, não é possível alterar favoritos.');
+      this.snackbarService.showWarning(
+        'Você precisa estar logado para favoritar.',
+        {
+          label: 'Login',
+          action: () => this.keycloakService.login('/'),
+        }
+      );
+      return;
     }
-  });
-}
+    const isCurrentlyFavorite = this.processador.isFavorite;
+    const action$ = isCurrentlyFavorite
+      ? this.clienteService.removeFromListaDeDesejos(this.processador.id)
+      : this.clienteService.addToListaDeDesejos(this.processador.id);
 
+    action$.subscribe({
+      next: () => {
+        // Atualiza estado local com nova referência para Angular detectar mudança
+        this.processador = {
+          ...this.processador,
+          isFavorite: !isCurrentlyFavorite,
+        };
 
+        this.loadListaDesejos();
 
+        console.log(
+          this.processador.isFavorite ? 'Favoritou' : 'Não é mais favorito'
+        );
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar favorito:', err);
+      },
+    });
+  }
 
   addToCart(processador: Processador): void {
     this.snackBar.open(
@@ -221,7 +252,8 @@ toggleFavorite() {
       nome: processador.nome,
       quantidade: this.quantity,
       preco: processador.preco,
-      imagem: processador.imagens.find((img) => img.principal)?.nomeImagem || '',
+      imagem:
+        processador.imagens.find((img) => img.principal)?.nomeImagem || '',
     });
   }
 

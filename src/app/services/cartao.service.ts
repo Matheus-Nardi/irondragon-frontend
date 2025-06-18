@@ -21,7 +21,7 @@ export class CartaoService {
         cpf: cartao.cpf,
         validade: cartao.validade,
         cvc: cartao.cvc,
-        tipoCartao: cartao.tipo.id
+        tipoCartao: cartao.tipo
       };
       return this.httpClient.put<Cartao>(
         `${this.configService.getApiBaseUrl()}/cartoes/${cartao.id}`,

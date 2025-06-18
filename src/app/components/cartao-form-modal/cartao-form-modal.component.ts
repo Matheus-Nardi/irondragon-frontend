@@ -66,7 +66,6 @@ export class CartaoFormModalComponent implements OnInit {
         this.cartao.cpf || '',
         [
           Validators.required,
-          Validators.pattern(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/),
         ],
       ],
       numero: [
@@ -97,6 +96,7 @@ export class CartaoFormModalComponent implements OnInit {
       const cartaoForm = this.formCartao.value;
 
       const cartao = new Cartao();
+      cartao.id = cartaoForm.id;
       cartao.nomeTitular = cartaoForm.nomeTitular;
       cartao.cpf = cartaoForm.cpf;
       cartao.cvc = cartaoForm.cvc;

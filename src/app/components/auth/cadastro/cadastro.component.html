@@ -125,7 +125,7 @@
             formControlName="dataNascimento"
             autocomplete="off"
           />
-          <mat-hint>DD-MM-YYYY</mat-hint>
+          <mat-hint>DD/MM/AAAA</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker"
@@ -239,7 +239,7 @@
     <div class="form-field">
       <mat-form-field appearance="outline" class="form-field">
         <mat-icon matPrefix> lock </mat-icon>
-        <mat-label>senha</mat-label>
+        <mat-label>Senha</mat-label>
         <input
           matInput
           [type]="mostrarSenha ? 'text' : 'password'"
@@ -250,6 +250,7 @@
         <button
           (click)="toggleSenha()"
           matSuffix
+          type="button"
           mat-icon-button
           aria-label="Ver senha"
           matTooltip="Ver senha"
@@ -288,6 +289,7 @@
         <button
           (click)="toggleSenha()"
           matSuffix
+          type="button"
           mat-icon-button
           aria-label="Ver senha"
           matTooltip="Ver senha"
@@ -335,7 +337,7 @@
 
     <div class="form-redirect">
       <span>Já possui uma conta ?</span>
-      <span class="login">Entrar</span>
+      <span class="login" (click)="login()">Entrar</span>
     </div>
   </div>
 </form>

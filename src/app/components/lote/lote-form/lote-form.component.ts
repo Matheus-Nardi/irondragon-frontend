@@ -82,6 +82,8 @@ export class LoteFormComponent implements OnInit {
       this.initilizeForm();
     });
     this.processadorService.findAll().subscribe((data) => {
+      console.log('todos os processadores', data);
+      
       this.processadores = data.results;
       this.initilizeForm();
     });

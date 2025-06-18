@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { PageResponse } from '../interfaces/pageresponse.interface';
 import { Funcionario } from '../models/funcionario.model';
 import { ConfigService } from './config.service';
@@ -28,10 +28,23 @@ export class UsuarioService {
   }
 
   create(usuario: Usuario): Observable<Usuario> {
-    return this.httpClient.post<Usuario>(
-      `${this.configService.getApiBaseUrl()}usuarios`,
-      usuario
-    );
+    return this.httpClient
+      .post<Usuario>(
+        `${this.configService.getApiBaseUrl()}usuarios`,
+        usuario
+      )
+      .pipe(
+        catchError((error) => {
+          if (error.status === 400 && error.error?.errors) {
+          const fieldErrors = error.error.errors.reduce((acc: any, err: any) => {
+            acc[err.fieldName] = err.message;
+            return acc;
+          }, {});
+          return throwError(() => fieldErrors); 
+        }
+        return throwError(() => new Error('Erro ao criar usuário'));
+        })
+      );
   }
 
   getPerfil(): Observable<Usuario> {
@@ -47,17 +60,23 @@ export class UsuarioService {
     );
   }
 
-   getUrlImage(id:string, nomeImagem: string): string{
-      return `${this.configService.getApiBaseUrl()}/usuarios/${id}/download/imagem/${nomeImagem}`
-    }
-  
-  
-    uploadImage(id: number, nomeImagem: string, imagem: File): Observable<any> {
-      const formData: FormData = new FormData();
-      formData.append('id', id.toString());
-      formData.append('nomeImagem', imagem.name);
-      formData.append('imagem', imagem, imagem.name);
-      
-      return this.httpClient.patch<Usuario>(`${this.configService.getApiBaseUrl()}/usuarios/${id}/upload/imagem`, formData);
-    }
+  getUrlImage(id: string, nomeImagem: string): string {
+    return `${this.configService.getApiBaseUrl()}/usuarios/${id}/download/imagem/${nomeImagem}`;
+  }
+
+  uploadImage(
+    id: number,
+    nomeImagem: string,
+    imagem: File
+  ): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('nomeImagem', imagem.name);
+    formData.append('imagem', imagem, imagem.name);
+
+    return this.httpClient.patch<Usuario>(
+      `${this.configService.getApiBaseUrl()}/usuarios/${id}/upload/imagem`,
+      formData
+    );
+  }
 }

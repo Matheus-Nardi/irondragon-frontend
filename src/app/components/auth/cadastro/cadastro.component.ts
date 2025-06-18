@@ -35,7 +35,7 @@ import { KeycloakOperationService } from '../../../services/keycloak.service';
     MatButtonModule,
     MatTooltipModule,
     MatDatepickerModule,
-    DatePipe
+    DatePipe,
   ],
   templateUrl: './cadastro.component.html',
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }, DatePipe],
@@ -50,7 +50,7 @@ export class CadastroComponent {
     private snackbarService: SnackbarService,
     private usuarioService: UsuarioService,
     private router: Router,
-    private keycloakService: KeycloakOperationService,
+    private keycloakService: KeycloakOperationService
   ) {
     this.formGroup = this.formBuilder.group(
       {
@@ -82,21 +82,29 @@ export class CadastroComponent {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       const usuario = this.formGroup.value;
-       console.log(usuario);
+      console.log(usuario);
       this.usuarioService.create(usuario).subscribe({
-      
         next: () => {
           console.log('Cadastro realizado com sucesso');
           this.snackbarService.showSuccess('Cadastro realizado com sucesso');
           this.keycloakService.login('/');
         },
 
-        error: (error) => {
-          console.log('Cadastro não foi realizado com sucesso' , error);
-          this.snackbarService.showError('Cadastro inválido');
+        error: (fieldErrors) => {
+          console.log('Cadastro não foi realizado com sucesso', fieldErrors);
+          Object.keys(fieldErrors).forEach((fieldName) => {
+            this.formGroup
+              .get(fieldName)
+              ?.setErrors({ apiError: fieldErrors[fieldName] });
+          });
+          this.snackbarService.showError('Erro ao cadastrar usuário');
         },
       });
     }
+  }
+
+  login() {
+    this.keycloakService.login('/');
   }
 
   private confirmarSenhasIguais() {

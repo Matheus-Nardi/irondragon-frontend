@@ -14,6 +14,8 @@ import { KeycloakOperationService } from '../../../services/keycloak.service';
 import { KeycloakProfile } from 'keycloak-js';
 import { Router, RouterLink } from '@angular/router';
 import { CarrinhoService } from '../../../services/carrinho.service';
+import { UsuarioService } from '../../../services/usuario.service';
+import { Usuario } from '../../../models/usuario.model';
 
 @Component({
   selector: 'app-header',
@@ -35,19 +37,40 @@ import { CarrinhoService } from '../../../services/carrinho.service';
 })
 export class HeaderComponent implements OnInit{
   isAuthenticated = false;
-  userProfile?: KeycloakProfile;
+  keycloakProfile?: KeycloakProfile;
+  usuario!: Usuario;
   cartLength: number = 0;
   roles: string[] = [];
   
   constructor(
     private sidebarService: SidebarService,
     private keycloakService: KeycloakOperationService,
-    private carrinhoService: CarrinhoService
+    private carrinhoService: CarrinhoService,
+    private usuarioService: UsuarioService,
   ) {}
 
   ngOnInit(): void {
+    this.keycloakService.getUserProfile().then((profile) => {
+      this.keycloakProfile = profile;
+      console.log('Keycloak profile:', profile);
+      this.roles = this.keycloakService.getUserRoles()
+      if (profile?.email) {
+        this.loadUsuario(profile);
+      }
+    });
     this.loadUserInfo();
     this.getCartLength();
+  }
+
+    private loadUsuario(profile: any) {
+    this.usuarioService.findByUsername(profile.email).subscribe({
+      next: (usuario) => {
+        this.usuario = usuario;
+      },
+      error: (error) => {
+        console.log('Erro na requisição', error);
+      },
+    });
   }
 
   isAdminOrSuperUser(): boolean {
@@ -59,7 +82,7 @@ export class HeaderComponent implements OnInit{
     this.roles = this.keycloakService.getUserRoles();
 
     if (this.isAuthenticated) {
-      this.userProfile = await this.keycloakService.getUserProfile();
+      this.keycloakProfile = await this.keycloakService.getUserProfile();
       this.getCartLength();
     }
   }
@@ -77,11 +100,11 @@ export class HeaderComponent implements OnInit{
   }
 
   getUsername(): string {
-    return this.userProfile?.firstName || 'Usuário';
+    return this.usuario?.nome || 'Usuário';
   }
 
   getEmail(): string {
-    return this.userProfile?.email || '';
+    return this.usuario?.email || '';
   }
 
   getCartLength() {

@@ -184,6 +184,11 @@ export class ProfileComponent implements OnInit {
     this.usuarioService.findByUsername(profile.email).subscribe({
       next: (usuario) => {
         this.usuario = usuario;
+        if (this.cliente) {
+        this.cliente.usuario = usuario;
+      }
+        console.log('Usuário: ', usuario);
+        
         this.imagemUrl = this.usuarioService.getUrlImage(
           this.usuario.id.toString(),
           this.usuario.nomeImagem
@@ -238,7 +243,8 @@ export class ProfileComponent implements OnInit {
     this.usuarioService.updateInfoBasica(update).subscribe({
       next: () => {
         this.snackbarService.showSuccess('Informações atualizadas com sucesso');
-        this.loadCliente(this.keycloakProfile); // recarrega os dados
+        this.loadUsuario(this.keycloakProfile); 
+         window.location.reload();
       },
       error: () => {
         this.snackbarService.showError('Erro ao atualizar informações');
@@ -276,7 +282,8 @@ export class ProfileComponent implements OnInit {
 
   abrirModalCartao(cartao: Cartao | null) {
     const cartaoParaModal = cartao ? { ...cartao } : ({} as Cartao);
-
+    console.log('Cartão :', cartaoParaModal);
+    
     this.matDialog
       .open(CartaoFormModalComponent, {
         width: 'auto',
@@ -285,11 +292,14 @@ export class ProfileComponent implements OnInit {
       .afterClosed()
       .subscribe((cartaoAtualizado: Cartao) => {
         if (!cartaoAtualizado) return;
-
+        console.log("ID", cartaoAtualizado.id);
+        
         const operacao$ = cartaoAtualizado.id
           ? this.cartaoService.update(cartaoAtualizado)
           : this.cartaoService.create(cartaoAtualizado);
 
+     
+        
         operacao$.subscribe({
           next: () => {
             this.snackbarService.showSuccess('Cartão salvo com sucesso');

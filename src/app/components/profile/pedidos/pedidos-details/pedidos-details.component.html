@@ -92,8 +92,8 @@
               <span class="payment-method">{{
                 pedido.pagamento.tipoPagamento
               }}</span>
-              <span class="payment-method">{{
-                pedido.pagamento.dataValidade | date : "dd/MM/yyyy"
+              <span class="payment-method"> Validade: {{
+                pedido.pagamento.dataValidade | date : "dd/MM/yyyy HH:mm"
               }}</span>
               <span class="payment-amount">{{
                 pedido.pagamento.valor | currency : "BRL" : "symbol" : "1.2-2"

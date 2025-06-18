@@ -38,7 +38,7 @@
           [matMenuTriggerFor]="userMenu"
         >
           <div class="user-info">
-            <span class="user-name">{{ userProfile?.firstName }}</span>
+            <span class="user-name">{{ getUsername()}}</span>
           </div>
           <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
         </button>
@@ -46,8 +46,8 @@
         <mat-menu #userMenu="matMenu" class="user-menu">
           <div class="user-menu-header">
             <div class="user-menu-info">
-              <span class="user-menu-name">{{ userProfile?.firstName }} {{ userProfile?.lastName }}</span>
-              <span class="user-menu-email">{{ userProfile?.email }}</span>
+              <span class="user-menu-name">{{ getUsername() }}</span>
+              <span class="user-menu-email">{{ getEmail() }}</span>
             </div>
           </div>
           

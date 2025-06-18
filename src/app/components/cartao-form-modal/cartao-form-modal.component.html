@@ -32,7 +32,6 @@
         placeholder="Nome completo como no cartão"
       />
       <mat-icon matPrefix>person</mat-icon>
-      <mat-hint>Digite o nome exatamente como aparece no cartão</mat-hint>
       <mat-error
         *ngIf="
           formCartao.get('nomeTitular')?.errors &&
@@ -57,7 +56,6 @@
         placeholder="000.000.000-00"
       />
       <mat-icon matPrefix>badge</mat-icon>
-      <mat-hint>CPF deve ser o mesmo do titular do cartão</mat-hint>
       <mat-error
         *ngIf="
           formCartao.get('cpf')?.errors &&
@@ -90,7 +88,6 @@
         placeholder="0000 0000 0000 0000"
       />
       <mat-icon matPrefix>credit_card</mat-icon>
-      <mat-hint>Digite os 16 dígitos do cartão</mat-hint>
       <mat-error
         *ngIf="
           formCartao.get('numero')?.errors &&
@@ -114,7 +111,6 @@
           formControlName="validade"
           autocomplete="off"
         />
-        <mat-hint>MM/AA</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker startView="multi-year"></mat-datepicker>
         <mat-icon matPrefix>event</mat-icon>
@@ -143,7 +139,6 @@
           type="password"
         />
         <mat-icon matPrefix>lock</mat-icon>
-        <mat-hint>3 ou 4 dígitos</mat-hint>
         <mat-error
           *ngIf="
             formCartao.get('cvc')?.errors &&
@@ -169,7 +164,6 @@
         </mat-option>
       </mat-select>
       <mat-icon matPrefix>payment</mat-icon>
-      <mat-hint>Selecione o tipo do seu cartão</mat-hint>
       <mat-error
         *ngIf="
           formCartao.get('tipoCartao')?.errors &&

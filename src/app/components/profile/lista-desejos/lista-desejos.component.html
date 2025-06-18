@@ -43,7 +43,7 @@
             <div class="wishlist-item-footer">
               <span class="wishlist-item-price">R$ {{ produto.preco }}</span>
               <div class="wishlist-item-actions">
-                <button mat-icon-button color="primary" matTooltip="Adicionar ao carrinho">
+                <button mat-icon-button color="primary" matTooltip="Adicionar ao carrinho" (click)="addToCart(produto, $event)">
                   <mat-icon>shopping_cart</mat-icon>
                 </button>
                 <button mat-icon-button color="warn" class="delete-btn" matTooltip="Remover dos favoritos" (click)="onRemoverDesejo(produto)">
