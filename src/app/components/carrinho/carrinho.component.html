@@ -2,7 +2,7 @@
     <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
         <div *ngFor="let item of carrinhoItens; let i = index" class="item-carrinho" [attr.data-item-id]="item.id">
             <div class="item-info">
-                <img [src]="getImagemUrl(item)" [alt]="'Imagem de ' + item.nome" class="item-imagem">
+                <img [src]="getImagemProcessador(item.id)" [alt]="'Imagem de ' + item.nome" class="item-imagem">
                 <div class="item-detalhes">
                     <h3 class="item-nome">{{ item.nome }}</h3>
                     <p class="item-preco">Preço: R$ {{ item.preco }}</p>

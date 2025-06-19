@@ -12,23 +12,40 @@ import { ItemPedido } from '../../models/item-pedido.model';
   selector: 'app-carrinho',
   imports: [NgFor, NgIf, RouterLink, MatIconModule],
   templateUrl: './carrinho.component.html',
-  styleUrl: './carrinho.component.css'
+  styleUrl: './carrinho.component.css',
 })
 export class CarrinhoComponent {
   carrinhoItens: ItemCarrinho[] = [];
-
+  processadorImagens: { [id: number]: string } = {};
   constructor(
     private carrinhoService: CarrinhoService,
     private processadorService: ProcessadorService,
     private router: Router
-  ) {
+  ) {}
 
-  }
+
   ngOnInit(): void {
-    this.carrinhoService.carrinho$.subscribe(itens => {
+    this.carrinhoService.carrinho$.subscribe((itens) => {
       this.carrinhoItens = itens;
-      console.log(this.carrinhoItens);
+      itens.forEach((item) => {
+          this.processadorService
+            .findById(item.id.toString())
+            .subscribe({
+              next: (processadorData) => {
+                this.processadorImagens[item.id] =
+                  this.processadorService.getUrlImage(
+                    processadorData.id.toString(),
+                    processadorData.imagens.find((img) => img.principal)
+                      ?.imagem || ''
+                  );
+              },
 
+              error: (error) => {
+                console.error('Erro ao carregar processador:', error);
+              },
+            });
+      });
+      console.log(this.carrinhoItens);
     });
   }
 
@@ -45,7 +62,9 @@ export class CarrinhoComponent {
   }
 
   calcularTotal(): number {
-    return this.carrinhoItens.map(a => a.preco * a.quantidade).reduce((a, c) => a + c);
+    return this.carrinhoItens
+      .map((a) => a.preco * a.quantidade)
+      .reduce((a, c) => a + c);
   }
 
   getTotalItens(): number {
@@ -58,11 +77,7 @@ export class CarrinhoComponent {
     return count;
   }
 
-  finalizarCompra() {
-
-  }
-
-  getImagemUrl(item: ItemCarrinho): string {
-    return this.processadorService.getUrlImage(item.id.toString(), item.imagem);
+  getImagemProcessador(idProcessador: number): string {
+    return this.processadorImagens[idProcessador] || '';
   }
 }

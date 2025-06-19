@@ -59,6 +59,7 @@ import { TipoCartao } from '../../../models/tipo-cartao.model';
 })
 export class PagamentoComponent implements OnInit {
   carrinhoItens: ItemCarrinho[] = [];
+   processadorImagens: { [id: number]: string } = {};
   formaPagamento: string = '';
   selectedCard: number = 0;
   selectedEndereco: number = 0;
@@ -91,6 +92,24 @@ export class PagamentoComponent implements OnInit {
   ngOnInit(): void {
     this.carrinhoService.carrinho$.subscribe((data) => {
       this.carrinhoItens = data;
+       data.forEach((item) => {
+          this.processadorService
+            .findById(item.id.toString())
+            .subscribe({
+              next: (processadorData) => {
+                this.processadorImagens[item.id] =
+                  this.processadorService.getUrlImage(
+                    processadorData.id.toString(),
+                    processadorData.imagens.find((img) => img.principal)
+                      ?.imagem || ''
+                  );
+              },
+
+              error: (error) => {
+                console.error('Erro ao carregar processador:', error);
+              },
+            });
+      });
     });
 
     this.loadEnderecos();
@@ -103,8 +122,8 @@ export class PagamentoComponent implements OnInit {
     });
   }
 
-  getImagemUrl(item: ItemCarrinho): string {
-    return this.processadorService.getUrlImage(item.id.toString(), item.imagem);
+getImagemProcessador(idProcessador: number): string {
+    return this.processadorImagens[idProcessador] || '';
   }
 
   loadCartoes() {

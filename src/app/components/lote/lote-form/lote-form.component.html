@@ -1,10 +1,17 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-container">
-      <button mat-icon-button class="back-button" routerLink="/admin/lotes" matTooltip="Voltar para a lista">
+      <button
+        mat-icon-button
+        class="back-button"
+        routerLink="/admin/lotes"
+        matTooltip="Voltar para a lista"
+      >
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1 class="page-title">{{ formGroup.get('id')?.value ? 'Editar' : 'Novo' }} Lote</h1>
+      <h1 class="page-title">
+        {{ formGroup.get("id")?.value ? "Editar" : "Novo" }} Lote
+      </h1>
     </div>
   </div>
 
@@ -45,7 +52,8 @@
             }
             <mat-error
               *ngIf="
-                formGroup.get('codigo')?.touched && formGroup.get('codigo')?.errors
+                formGroup.get('codigo')?.touched &&
+                formGroup.get('codigo')?.errors
               "
             >
               {{ getErrorMessage("codigo", formGroup.get("codigo")?.errors) }}
@@ -81,7 +89,8 @@
             }
             <mat-error
               *ngIf="
-                formGroup.get('estoque')?.touched && formGroup.get('estoque')?.errors
+                formGroup.get('estoque')?.touched &&
+                formGroup.get('estoque')?.errors
               "
             >
               {{ getErrorMessage("estoque", formGroup.get("estoque")?.errors) }}
@@ -96,9 +105,17 @@
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Data do lote</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="data" autocomplete="off" />
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="data"
+              autocomplete="off"
+            />
             <mat-hint>DD/MM/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error
               *ngIf="
@@ -115,22 +132,58 @@
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field">
+          <mat-form-field class="form-field" appearance="outline">
             <mat-label>Processador</mat-label>
-            <mat-select formControlName="processador" placeholder="Processador" id="processador_id">
-              @for (processador of processadores; track processador.id) {
-              <mat-option [value]="processador">{{ processador.nome }}</mat-option>
+            <input
+              type="text"
+              placeholder="Digite para buscar um processador"
+              matInput
+              formControlName="inputProcessadorControl"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayProcessador"
+              (optionSelected)="onProcessadorSelected($event.option.value)"
+            >
+              @for (processador of filteredProcessadores | async; track
+              processador.id) {
+              <mat-option [value]="processador">
+                {{ processador.nome }}
+              </mat-option>
               }
-            </mat-select>
-            <mat-error
-              *ngIf="
-                formGroup.get('processador')?.errors && formGroup.get('processador')?.touched
+            </mat-autocomplete>
+            <button
+              *ngIf="formGroup.get('processador')?.value"
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              matTooltip="Limpar campo"
+              (click)="
+                formGroup.get('processador')?.setValue(null);
+                formGroup.get('inputProcessadorControl')?.setValue('')
               "
             >
-              {{ getErrorMessage("processador", formGroup.get("processador")?.errors) }}
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formGroup.get('processador')?.errors &&
+                formGroup.get('processador')?.touched
+              "
+            >
+              {{
+                getErrorMessage(
+                  "processador",
+                  formGroup.get("processador")?.errors
+                )
+              }}
 
               @if(formGroup.get('processador')?.hasError('apiError')) {
-              <span>{{ formGroup.get("processador")?.getError("apiError") }}</span>
+              <span>{{
+                formGroup.get("processador")?.getError("apiError")
+              }}</span>
               }
             </mat-error>
           </mat-form-field>
@@ -139,20 +192,34 @@
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Fornecedor</mat-label>
-            <mat-select formControlName="fornecedor" placeholder="Fornecedor" id="fornecedor_id">
+            <mat-select
+              formControlName="fornecedor"
+              placeholder="Fornecedor"
+              id="fornecedor_id"
+            >
               @for (fornecedor of fornecedores; track fornecedor.id) {
-              <mat-option [value]="fornecedor">{{ fornecedor.nome }}</mat-option>
+              <mat-option [value]="fornecedor">{{
+                fornecedor.nome
+              }}</mat-option>
               }
             </mat-select>
             <mat-error
               *ngIf="
-                formGroup.get('fornecedor')?.errors && formGroup.get('fornecedor')?.touched
+                formGroup.get('fornecedor')?.errors &&
+                formGroup.get('fornecedor')?.touched
               "
             >
-              {{ getErrorMessage("fornecedor", formGroup.get("fornecedor")?.errors) }}
+              {{
+                getErrorMessage(
+                  "fornecedor",
+                  formGroup.get("fornecedor")?.errors
+                )
+              }}
 
               @if(formGroup.get('fornecedor')?.hasError('apiError')) {
-              <span>{{ formGroup.get("fornecedor")?.getError("apiError") }}</span>
+              <span>{{
+                formGroup.get("fornecedor")?.getError("apiError")
+              }}</span>
               }
             </mat-error>
           </mat-form-field>
@@ -161,7 +228,12 @@
 
       <div class="form-actions">
         <div class="action-buttons">
-          <button mat-stroked-button type="button" routerLink="/admin/lotes" class="cancel-button">
+          <button
+            mat-stroked-button
+            type="button"
+            routerLink="/admin/lotes"
+            class="cancel-button"
+          >
             <mat-icon>close</mat-icon>
             <span>Cancelar</span>
           </button>
@@ -177,13 +249,17 @@
             <mat-icon>delete</mat-icon>
             <span>Excluir</span>
           </button>
-          <button mat-raised-button color="primary" type="submit" class="save-button">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="save-button"
+          >
             <mat-icon>save</mat-icon>
             <span>Salvar</span>
           </button>
         </div>
       </div>
     </form>
-
   </div>
 </div>

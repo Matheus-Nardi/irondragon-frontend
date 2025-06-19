@@ -25,7 +25,7 @@
               <div class="items-list">
                 <div *ngFor="let item of carrinhoItens; let i = index" class="checkout-item">
                   <div class="item-image-wrapper">
-                    <img [src]="getImagemUrl(item)" [alt]="'Imagem de ' + item.nome" class="item-image" />
+                    <img [src]="getImagemProcessador(item.id)" [alt]="'Imagem de ' + item.nome" class="item-image" />
                   </div>
                   
                   <div class="item-details">

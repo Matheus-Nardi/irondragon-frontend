@@ -1,35 +1,32 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
-  Form,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { map, Observable, startWith } from 'rxjs';
 import { Fornecedor } from '../../../models/fornecedor.model';
 import { Processador } from '../../../models/processador/processador.model';
-import { LoteService } from '../../../services/lote.service';
 import { FornecedorService } from '../../../services/fornecedor.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { LoteService } from '../../../services/lote.service';
 import { ProcessadorService } from '../../../services/processador.service';
-import { Lote } from '../../../models/lote.model';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import {
-  MAT_DATE_LOCALE,
-  MatNativeDateModule,
-  provideNativeDateAdapter,
-} from '@angular/material/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
   selector: 'app-lote-form',
@@ -47,6 +44,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatAutocompleteModule,
   ],
 
   templateUrl: './lote-form.component.html',
@@ -54,9 +52,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './lote-form.component.css',
 })
 export class LoteFormComponent implements OnInit {
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+  pageSize = 50;
+  page = 0;
+
   formGroup: FormGroup;
   fornecedores: Fornecedor[] = [];
   processadores: Processador[] = [];
+  filteredProcessadores!: Observable<Processador[]>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,38 +77,74 @@ export class LoteFormComponent implements OnInit {
       data: ['', Validators.required],
       fornecedor: [null, Validators.required],
       processador: [null, Validators.required],
+      inputProcessadorControl: new FormControl(''),
     });
   }
+
   ngOnInit(): void {
+    this.setupAutocomplete();
+
     this.fornecedorService.findAll().subscribe((data) => {
       this.fornecedores = data.results;
-      this.initilizeForm();
+      this.tryInitializeForm();
     });
-    this.processadorService.findAll().subscribe((data) => {
-      console.log('todos os processadores', data);
-      
-      this.processadores = data.results;
-      this.initilizeForm();
-    });
+
+    this.processadorService
+      .findAll(this.page, this.pageSize)
+      .subscribe((data) => {
+        this.processadores = data.results;
+        this.tryInitializeForm();
+      });
   }
 
-  initilizeForm(): void {
+  setupAutocomplete(): void {
+    this.filteredProcessadores = this.formGroup
+      .get('inputProcessadorControl')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value) => (typeof value === 'string' ? value.toLowerCase() : '')),
+        map((nome) => this._filterProcessadores(nome))
+      );
+  }
+
+  private _filterProcessadores(value: string): Processador[] {
+    const filterValue = value.toLowerCase();
+    return this.processadores.filter((p) =>
+      p.nome.toLowerCase().includes(filterValue)
+    );
+  }
+
+  displayProcessador(processador: Processador): string {
+    return processador?.nome ?? '';
+  }
+
+  onProcessadorSelected(processador: Processador) {
+    this.formGroup.get('processador')?.setValue(processador);
+  }
+
+  tryInitializeForm(): void {
+    if (this.fornecedores.length === 0 || this.processadores.length === 0) {
+      return; // Aguarda os dois carregamentos
+    }
+
     const lote = this.activateRoute.snapshot.data['lote'];
+    if (!lote) return;
 
     const processador = this.processadores.find(
-      (p) => p.id === (lote?.processador?.id || null)
+      (p) => p.id === lote?.processador?.id
     );
     const fornecedor = this.fornecedores.find(
-      (f) => f.id === (lote?.fornecedor?.id || null)
+      (f) => f.id === lote?.fornecedor?.id
     );
 
-    this.formGroup = this.formBuilder.group({
-      id: [lote && lote.id ? lote.id : null],
-      codigo: [lote && lote.codigo ? lote.codigo : '', Validators.required],
-      estoque: [lote && lote.estoque ? lote.estoque : '', Validators.required],
-      data: [lote && lote.data ? lote.data : '', Validators.required],
-      fornecedor: [fornecedor, Validators.required],
-      processador: [processador, Validators.required],
+    this.formGroup.patchValue({
+      id: lote.id || null,
+      codigo: lote.codigo || '',
+      estoque: lote.estoque || '',
+      data: lote.data || '',
+      fornecedor: fornecedor || null,
+      processador: processador || null,
+      inputProcessadorControl: processador ? processador.nome : '',
     });
   }
 
@@ -179,7 +218,7 @@ export class LoteFormComponent implements OnInit {
       required: 'A data deve ser informada.',
       apiError: ' ',
     },
-    estoque:{
+    estoque: {
       required: 'O estoque deve ser informado.',
       apiError: ' ',
     },
@@ -190,7 +229,7 @@ export class LoteFormComponent implements OnInit {
     processador: {
       required: 'O processador deve ser informado.',
       apiError: ' ',
-    }
+    },
   };
 
   excluir() {
