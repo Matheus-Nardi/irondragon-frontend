@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Component, type OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -39,6 +39,7 @@ type Card = {
     threads: number;
   };
   isFavorite?: boolean;
+  quantidade: number;
 };
 
 type Filtro = {
@@ -70,6 +71,7 @@ type Filtro = {
     MatPaginatorModule,
     MatSliderModule,
     ReactiveFormsModule,
+    NgClass
   ],
   templateUrl: './processadores-filtros.component.html',
   styleUrl: './processadores-filtros.component.css',
@@ -160,6 +162,7 @@ export class ProcessadoresFiltrosComponent implements OnInit {
         threads: processador.threads,
       },
       isFavorite: false,
+      quantidade: processador.quantidade ?? 0
     };
   }
 

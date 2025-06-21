@@ -14,6 +14,7 @@ export class Processador {
     nucleos!: number;
     desbloqueado!: boolean;
     preco!: number;
+    quantidade?: number;
     placaIntegrada?: PlacaIntegrada;
     memoriaCache!: MemoriaCache;
     frequencia!: Frequencia;

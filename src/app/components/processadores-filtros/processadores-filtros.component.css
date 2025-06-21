@@ -636,3 +636,9 @@
   background-color: var(--mat-sys-primary);
   border-radius: 3px;
 }
+
+.disable-cursor {
+  opacity: 0.5;
+  pointer-events: none;
+}
+

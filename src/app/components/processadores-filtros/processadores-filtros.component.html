@@ -9,22 +9,15 @@
       <p class="page-subtitle">Encontre o processador ideal para seu setup</p>
     </div>
 
-   
+
     <div class="header-controls" [formGroup]="filtroForm">
       <div class="results-info">
-        <span class="results-count"
-          >{{ totalRecords }} produtos encontrados</span
-        >
+        <span class="results-count">{{ totalRecords }} produtos encontrados</span>
       </div>
 
       <div class="view-controls">
         <!-- Botão para mostrar/ocultar filtros (mobile) -->
-        <button
-          mat-icon-button
-          class="filter-toggle"
-          (click)="toggleFilters()"
-          [class.active]="showFilters"
-        >
+        <button mat-icon-button class="filter-toggle" (click)="toggleFilters()" [class.active]="showFilters">
           <mat-icon>tune</mat-icon>
         </button>
 
@@ -49,40 +42,24 @@
             <mat-icon>filter_list</mat-icon>
             Filtros
           </h2>
-          <button
-            mat-button
-            color="primary"
-            class="clear-filters"
-            (click)="clearFilters()"
-          >
+          <button mat-button color="primary" class="clear-filters" (click)="clearFilters()">
             <mat-icon>clear</mat-icon>
             Limpar
           </button>
         </div>
 
-          <mat-form-field class="example-form-field search-nome" appearance="outline">
-            <mat-label>Pesquisar por nome</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="nome"
-              placeholder="Digite o nome do processador"
-            />
-            <mat-icon matPrefix>search</mat-icon>
-            <button
-              *ngIf="filtroForm.get('nome')?.value"
-              matSuffix
-              mat-icon-button
-              aria-label="Limpar"
-              (click)="filtroForm.get('nome')?.setValue('')"
-              type="button"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-form-field>
-        
+        <mat-form-field class="example-form-field search-nome" appearance="outline">
+          <mat-label>Pesquisar por nome</mat-label>
+          <input matInput type="text" formControlName="nome" placeholder="Digite o nome do processador" />
+          <mat-icon matPrefix>search</mat-icon>
+          <button *ngIf="filtroForm.get('nome')?.value" matSuffix mat-icon-button aria-label="Limpar"
+            (click)="filtroForm.get('nome')?.setValue('')" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
         <div class="filters-content">
-          
+
           <!-- Filtro por Fabricante -->
           <mat-expansion-panel class="filter-panel" [expanded]="true">
             <mat-expansion-panel-header>
@@ -93,10 +70,7 @@
             </mat-expansion-panel-header>
 
             <div class="filter-options">
-              <mat-radio-group
-                formControlName="fabricante"
-                class="manufacturer-radio-group"
-              >
+              <mat-radio-group formControlName="fabricante" class="manufacturer-radio-group">
                 <mat-radio-button value="todos" class="filter-radio">
                   Todos
                 </mat-radio-button>
@@ -127,12 +101,7 @@
               <div class="price-inputs">
                 <mat-form-field appearance="outline" class="price-input">
                   <mat-label>Mín</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    formControlName="precoMin"
-                    placeholder="0"
-                  />
+                  <input matInput type="number" formControlName="precoMin" placeholder="0" />
                   <span matTextPrefix>R$ </span>
                 </mat-form-field>
 
@@ -140,50 +109,30 @@
 
                 <mat-form-field appearance="outline" class="price-input">
                   <mat-label>Máx</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    formControlName="precoMax"
-                    placeholder="5000"
-                  />
+                  <input matInput type="number" formControlName="precoMax" placeholder="5000" />
                   <span matTextPrefix>R$ </span>
                 </mat-form-field>
               </div>
 
               <!-- Slider de preço -->
               <div class="price-slider">
-                <mat-slider
-                  min="0"
-                  max="5000"
-                  step="100"
-                  class="price-range-slider"
-                >
-                  <input
-                    [value]="filtroForm.get('precoMin')?.value"
-                    matSliderStartThumb
-                    (valueChange)="filtroForm.get('precoMin')?.setValue($event)"
-                  />
-                  <input
-                    [value]="filtroForm.get('precoMax')?.value"
-                    matSliderEndThumb
-                    (valueChange)="filtroForm.get('precoMax')?.setValue($event)"
-                  />
+                <mat-slider min="0" max="5000" step="100" class="price-range-slider">
+                  <input [value]="filtroForm.get('precoMin')?.value" matSliderStartThumb
+                    (valueChange)="filtroForm.get('precoMin')?.setValue($event)" />
+                  <input [value]="filtroForm.get('precoMax')?.value" matSliderEndThumb
+                    (valueChange)="filtroForm.get('precoMax')?.setValue($event)" />
                 </mat-slider>
               </div>
 
               <div class="price-display">
-                <span
-                  >R$
+                <span>R$
                   {{
-                    filtroForm.get("precoMin")?.value | number : "1.0-0"
-                  }}</span
-                >
-                <span
-                  >R$
+                  filtroForm.get("precoMin")?.value | number : "1.0-0"
+                  }}</span>
+                <span>R$
                   {{
-                    filtroForm.get("precoMax")?.value | number : "1.0-0"
-                  }}</span
-                >
+                  filtroForm.get("precoMax")?.value | number : "1.0-0"
+                  }}</span>
               </div>
             </div>
           </mat-expansion-panel>
@@ -234,10 +183,7 @@
             </mat-expansion-panel-header>
 
             <div class="filter-options">
-              <mat-radio-group
-                formControlName="graficosIntegrados"
-                class="graphics-radio-group"
-              >
+              <mat-radio-group formControlName="graficosIntegrados" class="graphics-radio-group">
                 <mat-radio-button value="todos" class="filter-radio">
                   Todos
                 </mat-radio-button>
@@ -274,35 +220,26 @@
         </div>
         <div class="filter-chips">
           <mat-chip-set>
-            <mat-chip
-              *ngIf="filtroForm.get('nome')?.value"
-              (removed)="filtroForm.get('nome')?.setValue('')"
-            >
+            <mat-chip *ngIf="filtroForm.get('nome')?.value" (removed)="filtroForm.get('nome')?.setValue('')">
               "{{ filtroForm.get('nome')?.value }}"
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
-            <mat-chip
-              *ngIf="filtroForm.get('fabricante')?.value !== 'todos'"
-              (removed)="filtroForm.get('fabricante')?.setValue('todos')"
-            >
+            <mat-chip *ngIf="filtroForm.get('fabricante')?.value !== 'todos'"
+              (removed)="filtroForm.get('fabricante')?.setValue('todos')">
               {{
-                filtroForm.get("fabricante")?.value === "intel"
-                  ? "Intel"
-                  : "AMD"
+              filtroForm.get("fabricante")?.value === "intel"
+              ? "Intel"
+              : "AMD"
               }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
-            <mat-chip
-              *ngIf="
+            <mat-chip *ngIf="
                 filtroForm.get('precoMin')?.value > 0 ||
                 filtroForm.get('precoMax')?.value < 5000
-              "
-            >
+              ">
               R$ {{ filtroForm.get("precoMin")?.value }} - R$
               {{ filtroForm.get("precoMax")?.value }}
-              <mat-icon matChipRemove (click)="clearPriceFilter()"
-                >cancel</mat-icon
-              >
+              <mat-icon matChipRemove (click)="clearPriceFilter()">cancel</mat-icon>
             </mat-chip>
             <!-- Chips para sockets -->
             <ng-container *ngFor="let socket of getSelectedSockets()">
@@ -318,12 +255,10 @@
       <!-- Grid de produtos -->
       <div class="products-grid" *ngIf="cards().length > 0; else noProducts">
         @for (card of cards(); track $index) {
-        <div class="card" (click)="navegarParaDetalhes(card)">
-          <button
-            class="wishlist-button"
-            aria-label="Adicionar à lista de desejos"
-            (click)="toggleFavorite(card); $event.stopPropagation()"
-          >
+        <div class="card" (click)="navegarParaDetalhes(card)"
+        [ngClass]="{'disable-cursor' : card.quantidade <= 0}">
+          <button class="wishlist-button" aria-label="Adicionar à lista de desejos"
+            (click)="toggleFavorite(card); $event.stopPropagation()">
             <mat-icon>
               {{ card.isFavorite ? "favorite" : "favorite_border" }}
             </mat-icon>
@@ -341,9 +276,15 @@
             </div>
 
             <p class="price">R$ {{ card.preco }}</p>
+            @if(card.quantidade > 0) {
             <button class="buy-button" (click)="addToCart(card, $event)">
               <mat-icon>shopping_cart</mat-icon> COMPRAR
             </button>
+            } @else {
+            <button class="buy-button">
+              <mat-icon>shopping_cart</mat-icon> INDISPONIVEL
+            </button>
+            }
           </div>
         </div>
         }
@@ -364,14 +305,8 @@
 
       <!-- Paginação -->
       <div class="pagination-container" *ngIf="cards().length > 0">
-        <mat-paginator
-          [pageSizeOptions]="[12, 24, 48, 96]"
-          [pageSize]="pageSize"
-          [length]="totalRecords"
-          (page)="paginar($event)"
-          aria-label="Selecione a página"
-          showFirstLastButtons
-        >
+        <mat-paginator [pageSizeOptions]="[12, 24, 48, 96]" [pageSize]="pageSize" [length]="totalRecords"
+          (page)="paginar($event)" aria-label="Selecione a página" showFirstLastButtons>
         </mat-paginator>
       </div>
     </main>

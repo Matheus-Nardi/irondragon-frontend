@@ -1,26 +1,18 @@
 <section class="products-section">
-   <h2 class="section-title">
+  <h2 class="section-title">
     <mat-icon class="section-icon">rocket</mat-icon>
     Acabaram de chegar
   </h2>
 
-  <swiper-container
-    [attr.slides-per-view]="
-      cardsLastLotes().length >= 4 ? 4 : cardsLastLotes().length"
-    space-between="30"
-    navigation="true"
-    loop="true"
-    class="custom-swiper"
-  >
+  <swiper-container [attr.slides-per-view]="
+      cardsLastLotes().length >= 4 ? 4 : cardsLastLotes().length" space-between="30" navigation="true" loop="true"
+    class="custom-swiper">
     @for (card of cardsLastLotes(); track card.id) {
     <swiper-slide>
-      <div class="card" (click)="navegarParaDetalhes(card)">
-       
-        <button
-          class="wishlist-button"
-          aria-label="Adicionar à lista de desejos"
-          (click)="toggleFavorite(card); $event.stopPropagation()"
-        >
+      <div class="card" (click)="navegarParaDetalhes(card)" [ngClass]="{'disable-cursor' : card.quantidade <= 0}">
+
+        <button class="wishlist-button" aria-label="Adicionar à lista de desejos"
+          (click)="toggleFavorite(card); $event.stopPropagation()">
           <mat-icon>
             {{ card.isFavorite ? "favorite" : "favorite_border" }}
           </mat-icon>
@@ -37,9 +29,15 @@
             <span>{{ card.specs.threads }} Threads</span>
           </div>
           <p class="price">R$ {{ card.preco }}</p>
+          @if(card.quantidade > 0) {
           <button class="buy-button" (click)="addToCart(card, $event)">
             <mat-icon>shopping_cart</mat-icon> COMPRAR
           </button>
+          } @else {
+          <button class="buy-button">
+            <mat-icon>shopping_cart</mat-icon> INDISPONIVEL
+          </button>
+          }
         </div>
       </div>
     </swiper-slide>
@@ -49,28 +47,20 @@
   <!-- Espaçamento adicional entre as seções -->
   <div class="section-divider"></div>
 
-   <h2 class="section-title" *ngIf="cardsMaisVendidos().length > 5">
+  <h2 class="section-title" *ngIf="cardsMaisVendidos().length > 5">
     <mat-icon class="section-icon">bolt</mat-icon>
-   Mais vendidos
+    Mais vendidos
   </h2>
 
-   <swiper-container
-    [attr.slides-per-view]="
-      cardsMaisVendidos().length >= 4 ? 4 : cardsMaisVendidos().length"
-    space-between="30"
-    navigation="true"
-    loop="true"
-    class="custom-swiper"
-  >
+  <swiper-container [attr.slides-per-view]="
+      cardsMaisVendidos().length >= 4 ? 4 : cardsMaisVendidos().length" space-between="30" navigation="true"
+    loop="true" class="custom-swiper">
     @for (card of cardsMaisVendidos(); track card.id) {
     <swiper-slide>
-      <div class="card" (click)="navegarParaDetalhes(card)">
-       
-        <button
-          class="wishlist-button"
-          aria-label="Adicionar à lista de desejos"
-          (click)="toggleFavorite(card); $event.stopPropagation()"
-        >
+      <div class="card" (click)="navegarParaDetalhes(card)" [ngClass]="{'disable-cursor' : card.quantidade <= 0}">
+
+        <button class="wishlist-button" aria-label="Adicionar à lista de desejos"
+          (click)="toggleFavorite(card); $event.stopPropagation()">
           <mat-icon>
             {{ card.isFavorite ? "favorite" : "favorite_border" }}
           </mat-icon>
@@ -87,9 +77,15 @@
             <span>{{ card.specs.threads }} Threads</span>
           </div>
           <p class="price">R$ {{ card.preco }}</p>
+          @if(card.quantidade > 0) {
           <button class="buy-button" (click)="addToCart(card, $event)">
             <mat-icon>shopping_cart</mat-icon> COMPRAR
           </button>
+          } @else {
+          <button class="buy-button">
+            <mat-icon>shopping_cart</mat-icon> INDISPONIVEL
+          </button>
+          }
         </div>
       </div>
     </swiper-slide>
