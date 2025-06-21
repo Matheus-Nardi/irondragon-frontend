@@ -421,3 +421,8 @@
     display: none;
   }
 }
+
+.disable-cursor {
+  opacity: 0.5;
+  pointer-events: none;
+}

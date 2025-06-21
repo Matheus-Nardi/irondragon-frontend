@@ -21,7 +21,7 @@ import { EMPTY, forkJoin, from, of } from 'rxjs'; // Importar EMPTY e forkJoin
 import { switchMap, tap, catchError, finalize } from 'rxjs/operators'; // Importar operadores
 import { SnackbarService } from '../../../services/snackbar.service';
 import { CarrinhoService } from '../../../services/carrinho.service';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 type Card = {
   id: number;
@@ -34,6 +34,7 @@ type Card = {
     threads: number;
   };
   isFavorite?: boolean;
+  quantidade: number;
 };
 @Component({
   selector: 'app-processador-card-list',
@@ -44,7 +45,8 @@ type Card = {
     MatButtonModule,
     MatPaginatorModule,
     RouterLink,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './processador-card-list.component.html',
   styleUrl: './processador-card-list.component.css',
@@ -211,6 +213,7 @@ export class ProcessadorCardListComponent implements OnInit {
         threads: processador.threads,
       },
       isFavorite: isFavorite,
+      quantidade: processador.quantidade ?? 0
     };
   }
 

@@ -27,20 +27,12 @@
       <!-- Product Gallery -->
       <div class="product-gallery">
         <div class="main-image-container">
-        
+
           <div class="main-image">
-            <swiper-container
-              slides-per-view="1"
-              space-between="10"
-              [navigation]="true"
-              pagination="true"
-              style="width: 100%; height: 300px; margin-top: 2em"
-            >
+            <swiper-container slides-per-view="1" space-between="10" [navigation]="true" pagination="true"
+              style="width: 100%; height: 300px; margin-top: 2em">
               <swiper-slide *ngFor="let imageUrl of imageUrls">
-                <img
-                  [src]="imageUrl"
-                  [alt]="processador.nome"
-                />
+                <img [src]="imageUrl" [alt]="processador.nome" />
               </swiper-slide>
             </swiper-container>
           </div>
@@ -92,35 +84,34 @@
             </div>
           </div>
 
+          @if((processador.quantidade ?? 0) > 0) {
           <div class="action-buttons">
-            <button
-              mat-flat-button
-              color="primary"
-              class="add-to-cart-btn"
-              (click)="addToCart(processador)"
-            >
+            <button mat-flat-button color="primary" class="add-to-cart-btn" (click)="addToCart(processador)">
               <mat-icon>shopping_cart</mat-icon>
               Adicionar ao Carrinho
             </button>
           </div>
+          } @else {
+            <div class="action-buttons disable-cursor">
+            <button mat-flat-button color="primary" class="add-to-cart-btn">
+              <mat-icon>shopping_cart</mat-icon>
+              Indisponivel
+            </button>
+          </div>
+          }
 
           <div class="secondary-actions">
-            <button
-              mat-stroked-button
-              [color]="processador.isFavorite ? 'warn' : ''"
-              class="favorite-btn"
-              (click)="toggleFavorite()"
-              [matTooltip]="
+            <button mat-stroked-button [color]="processador.isFavorite ? 'warn' : ''" class="favorite-btn"
+              (click)="toggleFavorite()" [matTooltip]="
                 processador.isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'
-              "
-            >
+              ">
               <mat-icon>{{
                 processador.isFavorite ? "favorite" : "favorite_border"
-              }}</mat-icon>
+                }}</mat-icon>
               {{
-                processador.isFavorite
-                  ? "Adicionado aos Favoritos"
-                  : "Adicionar aos Favoritos"
+              processador.isFavorite
+              ? "Adicionado aos Favoritos"
+              : "Adicionar aos Favoritos"
               }}
             </button>
           </div>
@@ -135,11 +126,7 @@
 
     <!-- Product Details Tabs -->
     <div class="product-details-tabs">
-      <mat-tab-group
-        animationDuration="300ms"
-        mat-stretch-tabs="false"
-        mat-align-tabs="start"
-      >
+      <mat-tab-group animationDuration="300ms" mat-stretch-tabs="false" mat-align-tabs="start">
         <!-- Especificações Tab -->
         <mat-tab>
           <ng-template mat-tab-label>
